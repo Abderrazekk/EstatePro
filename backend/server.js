@@ -16,7 +16,8 @@ require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 const app = express();
 app.use(
   cors({
-    origin: "https://estate-pro-henna.vercel.app",
+    origin: ["http://localhost:5173", "https://estate-pro-henna.vercel.app"],
+    credentials: true,
   }),
 );
 app.use(express.json());

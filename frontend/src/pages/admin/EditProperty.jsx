@@ -16,7 +16,7 @@ const EditProperty = () => {
         setProperty(res.data);
       } catch (error) {
         console.error(error);
-        alert("Failed to load property");
+        alert("Impossible de charger la maison d'hôte");
       } finally {
         setLoading(false);
       }
@@ -25,7 +25,7 @@ const EditProperty = () => {
   }, [id]);
 
   const handleDeleteImage = async (imageId) => {
-    if (!window.confirm("Delete this image?")) return;
+    if (!window.confirm("Supprimer cette photo ?")) return;
     try {
       await axios.delete(`/api/properties/${id}/images/${imageId}`);
       setProperty((prev) => ({
@@ -33,7 +33,7 @@ const EditProperty = () => {
         images: prev.images.filter((img) => img._id !== imageId),
       }));
     } catch (error) {
-      alert("Failed to delete image");
+      alert("Erreur lors de la suppression de l'image");
     }
   };
 
@@ -48,7 +48,7 @@ const EditProperty = () => {
         })),
       }));
     } catch (error) {
-      alert("Failed to set featured image");
+      alert("Erreur lors de la sélection de l'image principale");
     }
   };
 
@@ -60,44 +60,50 @@ const EditProperty = () => {
       navigate("/admin/properties");
     } catch (error) {
       console.error(error);
-      alert("Update failed");
+      alert("Mise à jour échouée");
     }
   };
 
-  if (loading) return <div className="p-8">Loading...</div>;
-  if (!property) return <div className="p-8">Property not found.</div>;
+  if (loading) return <div className="p-8">Chargement...</div>;
+  if (!property) return <div className="p-8">Maison d'Hôte introuvable.</div>;
 
   return (
     <div>
       {/* Existing Images Management */}
-      <div className="bg-white p-6 rounded shadow mb-6">
-        <h2 className="text-xl font-bold mb-4">Property Images</h2>
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
+        <h2 className="text-xl font-bold mb-4">Photos Actuelles</h2>
         {property.images.length === 0 ? (
-          <p>No images yet.</p>
+          <p className="text-gray-500">Aucune photo enregistrée.</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {property.images.map((img) => (
               <div
                 key={img._id}
-                className="relative border rounded overflow-hidden group"
+                className="relative border rounded-lg overflow-hidden group"
               >
                 <img
                   src={img.url}
                   alt=""
                   className="w-full h-32 object-cover"
                 />
-                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-1 flex justify-between opacity-0 group-hover:opacity-100 transition">
+                <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-2 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
+                    type="button"
                     onClick={() => handleSetFeatured(img._id)}
-                    className={`text-xs px-2 py-1 rounded ${img.isFeatured ? "bg-green-500 text-white" : "bg-gray-200"}`}
+                    className={`text-xs px-2 py-1 rounded ${
+                      img.isFeatured
+                        ? "bg-green-500 text-white"
+                        : "bg-white text-gray-800"
+                    }`}
                   >
-                    {img.isFeatured ? "Featured" : "Set Featured"}
+                    {img.isFeatured ? "Principale" : "Définir Principale"}
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleDeleteImage(img._id)}
-                    className="text-xs bg-red-500 text-white px-2 py-1 rounded"
+                    className="text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                   >
-                    Delete
+                    Supprimer
                   </button>
                 </div>
               </div>
@@ -106,7 +112,6 @@ const EditProperty = () => {
         )}
       </div>
 
-      {/* Edit Form (new images/video + fields) */}
       <PropertyForm
         initialData={property}
         onSubmit={handleSubmit}

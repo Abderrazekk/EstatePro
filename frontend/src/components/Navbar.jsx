@@ -1,6 +1,19 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import {
+  Menu,
+  X,
+  Home,
+  Building,
+  Heart,
+  MessageSquare,
+  User,
+  LogOut,
+  LogIn,
+  UserPlus,
+  AlertTriangle,
+} from "lucide-react";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -19,17 +32,17 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-stone-200/80 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             {/* Logo (left) */}
             <Link
               to="/"
-              className="flex items-center gap-1 text-2xl font-bold shrink-0"
+              className="flex items-center gap-1 text-2xl font-extrabold tracking-tight shrink-0"
               onClick={closeMobile}
             >
-              <span className="text-gray-900">Estate</span>
-              <span className="text-blue-500">Pro</span>
+              <span className="text-gray-900">Dar</span>
+              <span className="text-stone-400">Hôte.</span>
             </Link>
 
             {/* Centered desktop navigation links */}
@@ -37,34 +50,34 @@ const Navbar = () => {
               <div className="flex items-center gap-8">
                 <Link
                   to="/"
-                  className="text-gray-600 hover:text-blue-600 transition font-medium"
+                  className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
                 >
                   Home
                 </Link>
                 <Link
                   to="/properties"
-                  className="text-gray-600 hover:text-blue-600 transition font-medium"
+                  className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
                 >
-                  Browse Properties
+                  Our Homes
                 </Link>
 
                 {user && (
                   <>
                     <Link
                       to="/wishlist"
-                      className="text-gray-600 hover:text-blue-600 transition font-medium"
+                      className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
                     >
                       Wishlist
                     </Link>
                     <Link
                       to="/enquiries"
-                      className="text-gray-600 hover:text-blue-600 transition font-medium"
+                      className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
                     >
                       My Enquiries
                     </Link>
                     <Link
                       to="/profile"
-                      className="text-gray-600 hover:text-blue-600 transition font-medium"
+                      className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
                     >
                       Profile
                     </Link>
@@ -78,21 +91,21 @@ const Navbar = () => {
               {user ? (
                 <button
                   onClick={() => setShowLogoutConfirm(true)}
-                  className="px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-full hover:bg-red-50 transition"
+                  className="px-5 py-2.5 text-sm font-bold text-stone-800 bg-stone-100 border border-stone-200 rounded-full hover:bg-stone-200 transition-all"
                 >
-                  Logout
+                  Sign Out
                 </button>
               ) : (
                 <>
                   <Link
                     to="/login"
-                    className="px-5 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-full hover:bg-gray-100 transition"
+                    className="px-5 py-2.5 text-sm font-bold text-gray-900 hover:bg-stone-100 rounded-full transition-all"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="px-5 py-2 text-sm font-medium text-white bg-blue-500 rounded-full hover:bg-blue-600 transition shadow-md shadow-blue-200"
+                    className="px-6 py-2.5 text-sm font-bold text-white bg-gray-900 rounded-full hover:bg-stone-800 transition-all shadow-sm"
                   >
                     Register
                   </Link>
@@ -100,158 +113,176 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Mobile hamburger */}
+            {/* Mobile hamburger button */}
             <div className="md:hidden flex items-center">
               <button
                 onClick={toggleMobile}
-                className="text-gray-600 hover:text-blue-600 focus:outline-none"
+                aria-label="Toggle navigation menu"
+                className="p-2 text-gray-900 hover:bg-stone-100 rounded-2xl focus:outline-none transition-colors border border-stone-200"
               >
                 {mobileOpen ? (
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <X className="w-5 h-5" />
                 ) : (
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
+                  <Menu className="w-5 h-5" />
                 )}
               </button>
             </div>
           </div>
         </div>
-
-        {/* Mobile menu (unchanged) */}
-        {mobileOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 px-4 pb-4">
-            <div className="flex flex-col gap-3 mt-3">
-              <Link
-                to="/"
-                onClick={closeMobile}
-                className="text-gray-600 font-medium py-2"
-              >
-                Home
-              </Link>
-              <Link
-                to="/properties"
-                onClick={closeMobile}
-                className="text-gray-600 font-medium py-2"
-              >
-                Browse Properties
-              </Link>
-
-              {user ? (
-                <>
-                  <Link
-                    to="/wishlist"
-                    onClick={closeMobile}
-                    className="text-gray-600 font-medium py-2"
-                  >
-                    Wishlist
-                  </Link>
-                  <Link
-                    to="/enquiries"
-                    onClick={closeMobile}
-                    className="text-gray-600 font-medium py-2"
-                  >
-                    My Enquiries
-                  </Link>
-                  <Link
-                    to="/profile"
-                    onClick={closeMobile}
-                    className="text-gray-600 font-medium py-2"
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={() => {
-                      closeMobile();
-                      setShowLogoutConfirm(true);
-                    }}
-                    className="mt-2 w-full text-left px-4 py-2 text-red-600 border border-red-200 rounded-full font-medium hover:bg-red-50 transition"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <div className="flex flex-col gap-2 mt-2">
-                  <Link
-                    to="/login"
-                    onClick={closeMobile}
-                    className="w-full text-center px-5 py-2 text-gray-700 border border-gray-300 rounded-full font-medium hover:bg-gray-100 transition"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={closeMobile}
-                    className="w-full text-center px-5 py-2 text-white bg-blue-500 rounded-full font-medium hover:bg-blue-600 transition shadow-md shadow-blue-200"
-                  >
-                    Register
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </nav>
 
-      {/* Logout Confirmation Modal (unchanged) */}
-      {showLogoutConfirm && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 text-center">
-            <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center rounded-full bg-red-50">
-              <svg
-                className="w-6 h-6 text-red-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+      {/* Mobile Drawer Overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-stone-950/60 backdrop-blur-sm z-50 md:hidden transition-opacity duration-300"
+          onClick={closeMobile}
+        />
+      )}
+
+      {/* Mobile Left-Side Drawer */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-white flex flex-col justify-between border-r border-stone-200 shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div>
+          {/* Drawer Top Header */}
+          <div className="flex items-center justify-between p-6 border-b border-stone-100">
+            <Link
+              to="/"
+              onClick={closeMobile}
+              className="flex items-center gap-1 text-2xl font-extrabold tracking-tight"
+            >
+              <span className="text-gray-900">Dar</span>
+              <span className="text-stone-400">Hôte.</span>
+            </Link>
+            <button
+              onClick={closeMobile}
+              className="p-2 text-stone-400 hover:text-gray-900 rounded-full hover:bg-stone-100 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="p-4 space-y-1.5">
+            <Link
+              to="/"
+              onClick={closeMobile}
+              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
+            >
+              <Home className="w-4 h-4 text-stone-400" />
+              <span>Home</span>
+            </Link>
+            <Link
+              to="/properties"
+              onClick={closeMobile}
+              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
+            >
+              <Building className="w-4 h-4 text-stone-400" />
+              <span>Our Homes</span>
+            </Link>
+
+            {user && (
+              <>
+                <Link
+                  to="/wishlist"
+                  onClick={closeMobile}
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
+                >
+                  <Heart className="w-4 h-4 text-stone-400" />
+                  <span>Wishlist</span>
+                </Link>
+                <Link
+                  to="/enquiries"
+                  onClick={closeMobile}
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
+                >
+                  <MessageSquare className="w-4 h-4 text-stone-400" />
+                  <span>My Enquiries</span>
+                </Link>
+                <Link
+                  to="/profile"
+                  onClick={closeMobile}
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
+                >
+                  <User className="w-4 h-4 text-stone-400" />
+                  <span>Profile</span>
+                </Link>
+              </>
+            )}
+          </nav>
+        </div>
+
+        {/* Drawer Bottom Actions */}
+        <div className="p-4 border-t border-stone-100 bg-stone-50/50">
+          {user ? (
+            <button
+              onClick={() => {
+                closeMobile();
+                setShowLogoutConfirm(true);
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-stone-100 hover:bg-rose-50 text-stone-700 hover:text-rose-600 border border-stone-200 rounded-2xl text-sm font-bold transition-all"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Sign Out</span>
+            </button>
+          ) : (
+            <div className="space-y-2">
+              <Link
+                to="/login"
+                onClick={closeMobile}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-white hover:bg-stone-100 border border-stone-200 text-gray-900 rounded-2xl text-sm font-bold transition-all"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
+                <LogIn className="w-4 h-4" />
+                <span>Sign In</span>
+              </Link>
+              <Link
+                to="/register"
+                onClick={closeMobile}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-gray-900 hover:bg-stone-800 text-white rounded-2xl text-sm font-bold transition-all shadow-md"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>Register</span>
+              </Link>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Sign out
-            </h3>
-            <p className="text-gray-500 mb-6">
-              Are you sure you want to log out? You can always log back in.
-            </p>
-            <div className="flex gap-3 justify-center">
+          )}
+        </div>
+      </aside>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-md animate-fade-in">
+          <div
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full border border-stone-200 shadow-2xl space-y-6 text-center"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="w-14 h-14 bg-stone-100 rounded-full flex items-center justify-center mx-auto text-stone-900 border border-stone-200">
+              <AlertTriangle className="w-6 h-6 text-stone-800" />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-xl font-extrabold text-stone-900 tracking-tight">
+                Confirm Sign Out
+              </h3>
+              <p className="text-sm text-stone-500 font-light leading-relaxed">
+                Are you sure you want to log out? You can sign back in anytime.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
               <button
                 onClick={() => setShowLogoutConfirm(false)}
-                className="px-5 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-full hover:bg-gray-100 transition"
+                className="w-full py-3 px-4 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-full text-sm transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleLogout}
-                className="px-5 py-2 text-sm font-medium text-white bg-red-500 rounded-full hover:bg-red-600 transition shadow-md shadow-red-200"
+                className="w-full py-3 px-4 bg-stone-900 hover:bg-rose-600 text-white font-bold rounded-full text-sm transition-colors shadow-md"
               >
-                Logout
+                Sign Out
               </button>
             </div>
           </div>

@@ -12,8 +12,8 @@ const AddProperty = () => {
       });
       navigate("/admin/properties");
     } catch (error) {
-      console.error("Error creating property:", error);
-      alert("Failed to create property");
+      console.error("Error creating guest house:", error);
+      alert("Erreur lors de la création de la maison d'hôte");
     }
   };
 

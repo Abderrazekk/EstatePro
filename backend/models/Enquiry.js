@@ -16,18 +16,23 @@ const enquirySchema = new mongoose.Schema(
       type: String,
       required: [true, "Please add a message"],
     },
-    meetingDate: {
+    // Reservation specific fields
+    checkIn: {
       type: Date,
-      default: null,
+      required: true,
     },
-    meetingTime: {
-      type: String,
-      default: null,
+    checkOut: {
+      type: Date,
+      required: true,
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
     },
     status: {
       type: String,
-      enum: ["unread", "read", "confirmed", "refused"], // ✅ added 'refused'
-      default: "unread",
+      enum: ["pending", "read", "confirmed", "refused"],
+      default: "pending",
     },
     rejectionReason: {
       type: String,

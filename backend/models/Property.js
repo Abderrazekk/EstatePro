@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const propertySchema = new mongoose.Schema(
   {
@@ -11,55 +11,66 @@ const propertySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
+    pricePerNight: {
       type: Number,
       required: true,
       min: 0,
     },
     location: {
-      type: String,
+      type: String, // e.g., "Sidi Bou Saïd", "Djerba", "Tozeur", "Hammamet"
       required: true,
     },
     address: {
-      street: { type: String, default: '' },
-      city: { type: String, default: '' },
-      state: { type: String, default: '' },
-      zipCode: { type: String, default: '' },
-      country: { type: String, default: '' },
-      formattedAddress: { type: String, default: '' },
+      street: { type: String, default: "" },
+      city: { type: String, default: "" },
+      state: { type: String, default: "" },
+      zipCode: { type: String, default: "" },
+      country: { type: String, default: "Tunisia" },
+      formattedAddress: { type: String, default: "" },
     },
     coordinates: {
-      lat: { type: Number, default: 0 },
-      lng: { type: Number, default: 0 },
+      lat: { type: Number, default: 36.8065 }, // Default centered in Tunisia
+      lng: { type: Number, default: 10.1815 },
     },
     type: {
       type: String,
-      enum: ['House', 'Apartment', 'Condo', 'Villa', 'Townhouse', 'Commercial'],
+      enum: [
+        "Maison d'Hôte",
+        "Dar Traditionnelle",
+        "Villa de Charme",
+        "Gîte Rural",
+        "Chambre d'Hôte",
+      ],
+      default: "Maison d'Hôte",
       required: true,
     },
     status: {
       type: String,
-      enum: ['For Sale', 'For Rent', 'Sold', 'Rented'],
-      default: 'For Sale',
+      enum: ["Available", "Maintenance", "Unavailable"],
+      default: "Available",
     },
-    beds: {
+    maxGuests: {
       type: Number,
       required: true,
-      min: 0,
+      min: 1,
+      default: 2,
     },
-    baths: {
+    bedrooms: {
       type: Number,
       required: true,
-      min: 0,
+      min: 1,
+      default: 1,
     },
-    sqft: {
+    bathrooms: {
       type: Number,
       required: true,
-      min: 0,
+      min: 1,
+      default: 1,
     },
-    yearBuilt: {
+    minNights: {
       type: Number,
-      default: null,
+      default: 1,
+      min: 1,
     },
     images: [
       {
@@ -70,22 +81,22 @@ const propertySchema = new mongoose.Schema(
       },
     ],
     video: {
-      url: { type: String, default: '' },
-      publicId: { type: String, default: '' },
-      thumbnail: { type: String, default: '' },
+      url: { type: String, default: "" },
+      publicId: { type: String, default: "" },
+      thumbnail: { type: String, default: "" },
       duration: { type: Number, default: 0 },
     },
-    features: [String],
-    amenities: [String],
-    agent: {
-      name: { type: String, default: '' },
-      email: { type: String, default: '' },
-      phone: { type: String, default: '' },
-      image: { type: String, default: '' },
+    features: [String], // e.g., ["Vue sur mer", "Patio traditionnel", "Jardin"]
+    amenities: [String], // e.g., ["Piscine", "Petit-déjeuner inclus", "Wi-Fi", "Climatisation", "Table d'hôte"]
+    host: {
+      name: { type: String, default: "" },
+      email: { type: String, default: "" },
+      phone: { type: String, default: "" },
+      image: { type: String, default: "" },
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     isFeatured: {
@@ -101,7 +112,7 @@ const propertySchema = new mongoose.Schema(
       default: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.model('Property', propertySchema);
+module.exports = mongoose.model("Property", propertySchema);

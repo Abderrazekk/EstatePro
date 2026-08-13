@@ -51,7 +51,7 @@ const ManageProperties = () => {
             <tr>
               <th className="p-2 text-left">Image</th>
               <th className="p-2 text-left">Title</th>
-              <th className="p-2 text-left">Price (TND)</th>
+              <th className="p-2 text-left">pricePerNight (TND)</th>
               <th className="p-2 text-left">Status</th>
               <th className="p-2 text-left">Actions</th>
             </tr>
@@ -71,7 +71,7 @@ const ManageProperties = () => {
                   )}
                 </td>
                 <td className="p-2">{prop.title}</td>
-                <td className="p-2">{prop.price.toLocaleString()} TND</td>
+                <td className="p-2">{prop.pricePerNight.toLocaleString()} TND</td>
                 <td className="p-2">{prop.status}</td>
                 <td className="p-2 flex gap-2">
                   <Link

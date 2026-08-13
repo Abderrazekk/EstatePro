@@ -1,28 +1,63 @@
 const Enquiry = require("../models/Enquiry");
 
-// @desc    Create enquiry (client)
+// @desc    Create reservation request
 // @route   POST /api/enquiries
 // @access  Private (client)
 exports.createEnquiry = async (req, res) => {
   try {
-    const { propertyId, message, meetingDate, meetingTime } = req.body;
+    const { propertyId, message, checkIn, checkOut, totalPrice } = req.body;
 
-    // Validate required fields
-    if (!propertyId || !message) {
+    if (!propertyId || !checkIn || !checkOut || !totalPrice) {
       return res
         .status(400)
-        .json({ message: "Property and message are required" });
+        .json({ message: "All booking fields are required" });
+    }
+
+    // Check if dates overlap with an already CONFIRMED reservation
+    const overlapping = await Enquiry.findOne({
+      property: propertyId,
+      status: "confirmed",
+      $or: [
+        {
+          checkIn: { $lt: new Date(checkOut) },
+          checkOut: { $gt: new Date(checkIn) },
+        },
+      ],
+    });
+
+    if (overlapping) {
+      return res
+        .status(400)
+        .json({ message: "These dates are already booked." });
     }
 
     const enquiry = await Enquiry.create({
       client: req.user._id,
       property: propertyId,
       message,
-      meetingDate: meetingDate || null,
-      meetingTime: meetingTime || null,
+      checkIn,
+      checkOut,
+      totalPrice,
     });
 
     res.status(201).json(enquiry);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get booked dates for a specific property
+// @route   GET /api/enquiries/property/:propertyId/booked-dates
+// @access  Public
+exports.getBookedDates = async (req, res) => {
+  try {
+    const { propertyId } = req.params;
+    const confirmedBookings = await Enquiry.find({
+      property: propertyId,
+      status: "confirmed",
+    }).select("checkIn checkOut -_id");
+
+    res.json(confirmedBookings);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

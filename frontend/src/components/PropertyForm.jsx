@@ -6,30 +6,30 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    price: "",
+    pricePerNight: "",
     location: "",
-    type: "House",
-    status: "For Sale",
-    beds: 0,
-    baths: 0,
-    sqft: 0,
-    yearBuilt: "",
+    type: "Maison d'Hôte",
+    status: "Available",
+    maxGuests: 2,
+    bedrooms: 1,
+    bathrooms: 1,
+    minNights: 1,
     features: [],
     amenities: [],
-    agentName: "",
-    agentEmail: "",
-    agentPhone: "",
+    hostName: "",
+    hostEmail: "",
+    hostPhone: "",
     "address.street": "",
     "address.city": "",
     "address.state": "",
     "address.zipCode": "",
-    "address.country": "",
+    "address.country": "Tunisia",
     isFeatured: false,
     isPublished: true,
   });
   const [images, setImages] = useState([]);
   const [video, setVideo] = useState(null);
-  const [position, setPosition] = useState({ lat: 40.7128, lng: -74.006 });
+  const [position, setPosition] = useState({ lat: 36.8065, lng: 10.1815 });
   const [previewImages, setPreviewImages] = useState([]);
   const [featureInput, setFeatureInput] = useState("");
   const [amenityInput, setAmenityInput] = useState("");
@@ -39,24 +39,24 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
       setFormData({
         title: initialData.title || "",
         description: initialData.description || "",
-        price: initialData.price || "",
+        pricePerNight: initialData.pricePerNight || "",
         location: initialData.location || "",
-        type: initialData.type || "House",
-        status: initialData.status || "For Sale",
-        beds: initialData.beds || 0,
-        baths: initialData.baths || 0,
-        sqft: initialData.sqft || 0,
-        yearBuilt: initialData.yearBuilt || "",
+        type: initialData.type || "Maison d'Hôte",
+        status: initialData.status || "Available",
+        maxGuests: initialData.maxGuests || 2,
+        bedrooms: initialData.bedrooms || 1,
+        bathrooms: initialData.bathrooms || 1,
+        minNights: initialData.minNights || 1,
         features: initialData.features || [],
         amenities: initialData.amenities || [],
-        agentName: initialData.agent?.name || "",
-        agentEmail: initialData.agent?.email || "",
-        agentPhone: initialData.agent?.phone || "",
+        hostName: initialData.host?.name || "",
+        hostEmail: initialData.host?.email || "",
+        hostPhone: initialData.host?.phone || "",
         "address.street": initialData.address?.street || "",
         "address.city": initialData.address?.city || "",
         "address.state": initialData.address?.state || "",
         "address.zipCode": initialData.address?.zipCode || "",
-        "address.country": initialData.address?.country || "",
+        "address.country": initialData.address?.country || "Tunisia",
         isFeatured: initialData.isFeatured || false,
         isPublished:
           initialData.isPublished !== undefined
@@ -64,10 +64,10 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             : true,
       });
       setPosition({
-        lat: initialData.coordinates?.lat || 40.7128,
-        lng: initialData.coordinates?.lng || -74.006,
+        lat: initialData.coordinates?.lat || 36.8065,
+        lng: initialData.coordinates?.lng || 10.1815,
       });
-      setPreviewImages([]); // don't show existing images in dropzone
+      setPreviewImages([]);
       setImages([]);
     }
   }, [initialData]);
@@ -116,6 +116,7 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
       features: prev.features.filter((_, i) => i !== index),
     }));
   };
+
   const addAmenity = () => {
     if (amenityInput.trim()) {
       setFormData((prev) => ({
@@ -154,174 +155,190 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 bg-white p-6 rounded shadow"
+      className="space-y-6 bg-white p-6 rounded-xl shadow-sm border border-gray-100"
     >
-      <h2 className="text-2xl font-bold">
-        {isEdit ? "Edit Property" : "Add New Property"}
+      <h2 className="text-2xl font-bold text-gray-900">
+        {isEdit ? "Modifier la Maison d'Hôte" : "Ajouter une Maison d'Hôte"}
       </h2>
 
-      {/* Basic fields */}
+      {/* Main Details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block mb-1">Title</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Titre
+          </label>
           <input
             name="title"
+            placeholder="ex: Dar Sidi Bou Saïd"
             value={formData.title}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
         <div>
-          <label className="block mb-1">Price (TND)</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Prix par Nuitée (TND)
+          </label>
           <input
             type="number"
-            name="price"
-            value={formData.price}
+            name="pricePerNight"
+            placeholder="ex: 250"
+            value={formData.pricePerNight}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
         <div className="col-span-2">
-          <label className="block mb-1">Description</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Description
+          </label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             required
             rows="4"
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
         <div>
-          <label className="block mb-1">Location (city/area)</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Gouvernorat / Région
+          </label>
           <input
             name="location"
+            placeholder="ex: Djerba, Nabeul, Tozeur..."
             value={formData.location}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
         <div>
-          <label className="block mb-1">Property Type</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Type de Logement
+          </label>
           <select
             name="type"
             value={formData.type}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded-lg"
           >
-            <option>House</option>
-            <option>Apartment</option>
-            <option>Condo</option>
-            <option>Villa</option>
-            <option>Townhouse</option>
-            <option>Commercial</option>
+            <option>Maison d'Hôte</option>
+            <option>Dar Traditionnelle</option>
+            <option>Villa de Charme</option>
+            <option>Gîte Rural</option>
+            <option>Chambre d'Hôte</option>
           </select>
         </div>
         <div>
-          <label className="block mb-1">Status</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Statut
+          </label>
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded-lg"
           >
-            <option>For Sale</option>
-            <option>For Rent</option>
-            <option>Sold</option>
-            <option>Rented</option>
+            <option value="Available">Disponible</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Unavailable">Indisponible</option>
           </select>
         </div>
         <div>
-          <label className="block mb-1">Bedrooms</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Capacité (Nombre Max de Personnes)
+          </label>
           <input
             type="number"
-            name="beds"
-            value={formData.beds}
+            name="maxGuests"
+            value={formData.maxGuests}
             onChange={handleChange}
-            min="0"
-            className="w-full border px-3 py-2 rounded"
+            min="1"
+            className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
         <div>
-          <label className="block mb-1">Bathrooms</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Nombre de Chambres
+          </label>
           <input
             type="number"
-            name="baths"
-            value={formData.baths}
+            name="bedrooms"
+            value={formData.bedrooms}
             onChange={handleChange}
-            min="0"
-            className="w-full border px-3 py-2 rounded"
+            min="1"
+            className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
         <div>
-          <label className="block mb-1">Area (m²)</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Salles de Bain
+          </label>
           <input
             type="number"
-            name="sqft"
-            value={formData.sqft}
+            name="bathrooms"
+            value={formData.bathrooms}
             onChange={handleChange}
-            min="0"
-            className="w-full border px-3 py-2 rounded"
+            min="1"
+            className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
         <div>
-          <label className="block mb-1">Year Built</label>
+          <label className="block mb-1 font-medium text-sm text-gray-700">
+            Nuitées Minimum
+          </label>
           <input
             type="number"
-            name="yearBuilt"
-            value={formData.yearBuilt}
+            name="minNights"
+            value={formData.minNights}
             onChange={handleChange}
-            min="0"
-            className="w-full border px-3 py-2 rounded"
+            min="1"
+            className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
       </div>
 
-      {/* Address fields */}
+      {/* Address */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
-          placeholder="Street"
+          placeholder="Rue / Adresse"
           name="address.street"
           value={formData["address.street"]}
           onChange={handleChange}
-          className="border px-3 py-2 rounded"
+          className="border px-3 py-2 rounded-lg"
         />
         <input
-          placeholder="City"
+          placeholder="Ville"
           name="address.city"
           value={formData["address.city"]}
           onChange={handleChange}
-          className="border px-3 py-2 rounded"
+          className="border px-3 py-2 rounded-lg"
         />
         <input
-          placeholder="State"
+          placeholder="Gouvernorat"
           name="address.state"
           value={formData["address.state"]}
           onChange={handleChange}
-          className="border px-3 py-2 rounded"
+          className="border px-3 py-2 rounded-lg"
         />
         <input
-          placeholder="Zip Code"
+          placeholder="Code Postal"
           name="address.zipCode"
           value={formData["address.zipCode"]}
           onChange={handleChange}
-          className="border px-3 py-2 rounded"
-        />
-        <input
-          placeholder="Country"
-          name="address.country"
-          value={formData["address.country"]}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded"
+          className="border px-3 py-2 rounded-lg"
         />
       </div>
 
       {/* Map picker */}
       <div>
-        <label className="block mb-1">Pinpoint Location on Map</label>
+        <label className="block mb-1 font-medium text-sm text-gray-700">
+          Localisation Carte
+        </label>
         <MapPicker
           position={position}
           setPosition={setPosition}
@@ -329,74 +346,80 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
         />
       </div>
 
-      {/* Images upload (new only) */}
+      {/* Images Upload */}
       <div>
-        <label className="block mb-1">
-          Images (max 10) {isEdit && "(add new images)"}
+        <label className="block mb-1 font-medium text-sm text-gray-700">
+          Photos (max 10) {isEdit && "(Ajouter de nouvelles photos)"}
         </label>
         <div
           {...getImageRootProps()}
-          className="border-dashed border-2 p-4 text-center cursor-pointer"
+          className="border-dashed border-2 border-gray-300 p-6 rounded-lg text-center cursor-pointer hover:border-blue-500 transition-colors"
         >
           <input {...getImageInputProps()} />
-          <p>Drag & drop images here, or click to select</p>
+          <p className="text-gray-500">
+            Glissez-déposez vos images ici, ou cliquez pour sélectionner
+          </p>
         </div>
-        <div className="flex gap-2 mt-2">
+        <div className="flex gap-2 mt-3 overflow-x-auto">
           {previewImages.map((src, idx) => (
             <img
               key={idx}
               src={src}
-              alt="new preview"
-              className="h-20 w-20 object-cover rounded"
+              alt="Aperçu"
+              className="h-20 w-20 object-cover rounded-lg border"
             />
           ))}
         </div>
       </div>
 
-      {/* Video upload */}
+      {/* Video Upload */}
       <div>
-        <label className="block mb-1">
-          Video (optional) {isEdit && "(replace existing)"}
+        <label className="block mb-1 font-medium text-sm text-gray-700">
+          Vidéo (Optionnel)
         </label>
         <div
           {...getVideoRootProps()}
-          className="border-dashed border-2 p-4 text-center cursor-pointer"
+          className="border-dashed border-2 border-gray-300 p-4 rounded-lg text-center cursor-pointer"
         >
           <input {...getVideoInputProps()} />
-          <p>Drag & drop a video here</p>
+          <p className="text-sm text-gray-500">
+            Déposer une vidéo de présentation
+          </p>
         </div>
-        {video && <p className="text-sm mt-1">{video.name}</p>}
+        {video && <p className="text-xs text-blue-600 mt-1">{video.name}</p>}
       </div>
 
       {/* Features */}
       <div>
-        <label className="block mb-1">Features</label>
+        <label className="block mb-1 font-medium text-sm text-gray-700">
+          Caractéristiques Spéciales
+        </label>
         <div className="flex gap-2 mb-2">
           <input
             value={featureInput}
             onChange={(e) => setFeatureInput(e.target.value)}
-            className="border px-3 py-2 rounded flex-1"
-            placeholder="e.g. Pool"
+            className="border px-3 py-2 rounded-lg flex-1 text-sm"
+            placeholder="ex: Vue sur mer, Architecture arabo-andalouse..."
           />
           <button
             type="button"
             onClick={addFeature}
-            className="bg-blue-600 text-white px-4 rounded"
+            className="bg-blue-600 text-white px-4 rounded-lg text-sm font-medium hover:bg-blue-700"
           >
-            Add
+            Ajouter
           </button>
         </div>
         <ul className="flex flex-wrap gap-2">
           {formData.features.map((feat, idx) => (
             <li
               key={idx}
-              className="bg-gray-200 px-3 py-1 rounded flex items-center gap-2"
+              className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
             >
-              {feat}{" "}
+              {feat}
               <button
                 type="button"
                 onClick={() => removeFeature(idx)}
-                className="text-red-500"
+                className="text-red-500 font-bold"
               >
                 &times;
               </button>
@@ -407,33 +430,35 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
 
       {/* Amenities */}
       <div>
-        <label className="block mb-1">Amenities</label>
+        <label className="block mb-1 font-medium text-sm text-gray-700">
+          Équipements & Services
+        </label>
         <div className="flex gap-2 mb-2">
           <input
             value={amenityInput}
             onChange={(e) => setAmenityInput(e.target.value)}
-            className="border px-3 py-2 rounded flex-1"
-            placeholder="e.g. Gym"
+            className="border px-3 py-2 rounded-lg flex-1 text-sm"
+            placeholder="ex: Piscine, Petit-déjeuner inclus, Wi-Fi, Climatisation..."
           />
           <button
             type="button"
             onClick={addAmenity}
-            className="bg-blue-600 text-white px-4 rounded"
+            className="bg-blue-600 text-white px-4 rounded-lg text-sm font-medium hover:bg-blue-700"
           >
-            Add
+            Ajouter
           </button>
         </div>
         <ul className="flex flex-wrap gap-2">
           {formData.amenities.map((am, idx) => (
             <li
               key={idx}
-              className="bg-gray-200 px-3 py-1 rounded flex items-center gap-2"
+              className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
             >
-              {am}{" "}
+              {am}
               <button
                 type="button"
                 onClick={() => removeAmenity(idx)}
-                className="text-red-500"
+                className="text-red-500 font-bold"
               >
                 &times;
               </button>
@@ -442,58 +467,65 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
         </ul>
       </div>
 
-      {/* Agent info */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <input
-          placeholder="Agent Name"
-          name="agentName"
-          value={formData.agentName}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded"
-        />
-        <input
-          placeholder="Agent Email"
-          name="agentEmail"
-          value={formData.agentEmail}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded"
-        />
-        <input
-          placeholder="Agent Phone"
-          name="agentPhone"
-          value={formData.agentPhone}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded"
-        />
+      {/* Host Information */}
+      <div className="border-t pt-4">
+        <h3 className="text-base font-semibold mb-3">
+          Informations de l'Hôte / Propriétaire
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input
+            placeholder="Nom de l'Hôte"
+            name="hostName"
+            value={formData.hostName}
+            onChange={handleChange}
+            className="border px-3 py-2 rounded-lg"
+          />
+          <input
+            placeholder="Email de l'Hôte"
+            name="hostEmail"
+            value={formData.hostEmail}
+            onChange={handleChange}
+            className="border px-3 py-2 rounded-lg"
+          />
+          <input
+            placeholder="Téléphone (+216)"
+            name="hostPhone"
+            value={formData.hostPhone}
+            onChange={handleChange}
+            className="border px-3 py-2 rounded-lg"
+          />
+        </div>
       </div>
 
-      {/* Checkboxes */}
-      <div className="flex gap-4">
-        <label className="flex items-center gap-2">
+      {/* Toggles */}
+      <div className="flex gap-6 pt-2">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
           <input
             type="checkbox"
             name="isFeatured"
             checked={formData.isFeatured}
             onChange={handleChange}
+            className="rounded text-blue-600 focus:ring-blue-500"
           />
-          Featured Property
+          Mettre en avant (Featured)
         </label>
-        <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
           <input
             type="checkbox"
             name="isPublished"
             checked={formData.isPublished}
             onChange={handleChange}
+            className="rounded text-blue-600 focus:ring-blue-500"
           />
-          Published
+          Publié sur le site
         </label>
       </div>
 
       <button
         type="submit"
-        className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+        className="w-full bg-blue-600 text-white font-medium px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
       >
-        {isEdit ? "Update Property" : "Add Property"}
+        {isEdit ? "Mettre à jour la Maison d'Hôte" : "Publier la Maison d'Hôte"}
       </button>
     </form>
   );

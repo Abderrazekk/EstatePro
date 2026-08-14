@@ -21,7 +21,13 @@ import PropertyDetail from "./pages/PropertyDetail";
 import Wishlist from "./pages/Wishlist";
 import AdminEnquiries from "./pages/admin/AdminEnquiries";
 import MyEnquiries from "./pages/client/MyEnquiries";
-import ManageSponsors from "./pages/admin/ManageSponsors"; // <-- New import
+import ManageSponsors from "./pages/admin/ManageSponsors";
+
+// --- New Pages Imports ---
+import ContactConcierge from "./pages/ContactConcierge";
+import FaqHelpCenter from "./pages/FaqHelpCenter";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 function App() {
   return (
@@ -33,6 +39,13 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/properties" element={<PropertiesList />} />
         <Route path="/property/:id" element={<PropertyDetail />} />
+
+        {/* Footer Support Routes */}
+        <Route path="/contact" element={<ContactConcierge />} />
+        <Route path="/faq" element={<FaqHelpCenter />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
+
         <Route
           path="/wishlist"
           element={
@@ -76,8 +89,7 @@ function App() {
           <Route path="properties/:id/edit" element={<EditProperty />} />
           <Route path="clients" element={<ManageClients />} />
           <Route path="enquiries" element={<AdminEnquiries />} />
-          <Route path="sponsors" element={<ManageSponsors />} />{" "}
-          {/* <-- New route */}
+          <Route path="sponsors" element={<ManageSponsors />} />
         </Route>
 
         {/* Catch-all */}

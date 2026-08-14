@@ -3,8 +3,9 @@ import { useAuth } from "../context/AuthContext";
 import HeartIcon from "./HeartIcon";
 import { Users, Bed, Bath, MapPin } from "lucide-react";
 
-const PropertyCard = ({ property }) => {
+const PropertyCard = ({ property, layout = "grid" }) => {
   const { user, toggleWishlist } = useAuth();
+  const isList = layout === "list";
 
   const featuredImage =
     property.images.find((img) => img.isFeatured) || property.images[0];
@@ -21,10 +22,16 @@ const PropertyCard = ({ property }) => {
   return (
     <Link
       to={`/property/${property._id}`}
-      className="group block bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-gray-200 hover:-translate-y-1"
+      className={`group flex bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-gray-200 hover:-translate-y-1 ${
+        isList ? "flex-col md:flex-row" : "flex-col h-full"
+      }`}
     >
       {/* Image container */}
-      <div className="relative h-64 bg-gray-100 overflow-hidden">
+      <div
+        className={`relative bg-gray-100 overflow-hidden shrink-0 ${
+          isList ? "h-64 md:h-auto md:w-5/12 lg:w-1/3" : "h-64 w-full"
+        }`}
+      >
         {/* Subtle gradient overlay for better badge visibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent z-10"></div>
 
@@ -32,10 +39,10 @@ const PropertyCard = ({ property }) => {
           <img
             src={featuredImage.url}
             alt={property.title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-300">
+          <div className="absolute inset-0 w-full h-full flex items-center justify-center text-gray-300">
             <svg
               className="w-12 h-12"
               fill="none"
@@ -68,7 +75,7 @@ const PropertyCard = ({ property }) => {
       </div>
 
       {/* Content */}
-      <div className="p-6">
+      <div className={`p-6 flex flex-col flex-1 ${isList ? "md:p-8" : ""}`}>
         {/* Title */}
         <h3 className="text-xl font-bold text-gray-900 truncate mb-2 group-hover:text-gray-600 transition-colors">
           {property.title}
@@ -80,7 +87,14 @@ const PropertyCard = ({ property }) => {
           {property.location}
         </p>
 
-        {/* Guest House Capacity Stats - FIXED DESIGN */}
+        {/* Description Snippet (Only shows on the List/Rectangle view) */}
+        {isList && property.description && (
+          <p className="hidden md:block text-sm text-gray-500 mb-6 line-clamp-2 leading-relaxed">
+            {property.description}
+          </p>
+        )}
+
+        {/* Guest House Capacity Stats */}
         <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-gray-600 mb-5">
           <div className="flex items-center gap-1.5 bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100 whitespace-nowrap">
             <Users className="w-4 h-4 text-gray-900 shrink-0" />

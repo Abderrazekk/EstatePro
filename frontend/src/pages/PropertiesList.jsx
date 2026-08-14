@@ -11,6 +11,8 @@ import {
   ChevronRight,
   MapPin,
   Sparkles,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
 const PropertiesList = () => {
@@ -19,6 +21,12 @@ const PropertiesList = () => {
   const [pages, setPages] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  // Mobile filter toggle state
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+  // Column layout state (3, 4, or 5)
+  const [gridCols, setGridCols] = useState(3);
 
   // Filters tuned specifically for Maison d'Hôte listings
   const [search, setSearch] = useState("");
@@ -31,7 +39,7 @@ const PropertiesList = () => {
   const fetchProperties = useCallback(async () => {
     setLoading(true);
     try {
-      const params = { page, limit: 9 };
+      const params = { page, limit: 12 };
       if (search) params.search = search;
       if (type) params.type = type;
       if (status) params.status = status;
@@ -68,11 +76,27 @@ const PropertiesList = () => {
   const hasActiveFilters =
     search || type || status || minPrice || maxPrice || location;
 
+  // Dynamic grid class based on user selection (3, 4, or 5)
+  // Base class 'grid-cols-1' ensures mobile is always 1 column
+  const getGridClass = () => {
+    switch (gridCols) {
+      case 3:
+        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+      case 4:
+        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+      case 5:
+        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5";
+      default:
+        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-stone-50/50 selection:bg-stone-200 selection:text-stone-900">
       <Navbar />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+      {/* Main container spanned to full width */}
+      <main className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-12">
         {/* Header */}
         <div className="mb-12 text-center">
           <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-stone-500 bg-white border border-stone-200 px-4 py-2 rounded-full shadow-sm mb-4">
@@ -87,151 +111,209 @@ const PropertiesList = () => {
             {total === 1 ? "exceptional residence" : "exceptional residences"}{" "}
             waiting for your stay
           </p>
+
+          {/* Grid Column Selector (3, 4, or 5) */}
+          {/* Added 'hidden lg:flex' so it completely disappears on mobile/tablets */}
+          <div className="mt-8 hidden lg:flex items-center justify-center gap-3">
+            <span className="text-xs font-bold uppercase tracking-widest text-stone-400 mr-2">
+              Layout:
+            </span>
+            {[3, 4, 5].map((num) => (
+              <button
+                key={num}
+                onClick={() => setGridCols(num)}
+                title={`${num} Cards Inline`}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                  gridCols === num
+                    ? "bg-gray-900 text-white shadow-lg scale-110"
+                    : "bg-white text-stone-500 border border-stone-200 hover:bg-stone-50 hover:text-gray-900"
+                }`}
+              >
+                {num}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Sidebar Filters */}
-          <aside className="w-full lg:w-80 shrink-0 sticky top-24">
+          <aside className="w-full lg:w-80 shrink-0 lg:sticky lg:top-24 z-10">
             <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-xl shadow-stone-200/40">
-              <div className="flex items-center justify-between pb-4 mb-6 border-b border-stone-100">
+              {/* Header / Mobile Toggle */}
+              <div
+                className={`flex items-center justify-between cursor-pointer lg:cursor-default transition-all duration-300 ${
+                  isMobileFilterOpen
+                    ? "pb-4 mb-6 border-b border-stone-100"
+                    : "pb-0 mb-0 lg:pb-4 lg:mb-6 border-transparent lg:border-b lg:border-stone-100"
+                }`}
+                onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+              >
                 <div className="flex items-center gap-2 text-gray-900 font-bold">
                   <SlidersHorizontal className="w-4 h-4" />
                   <span>Filter Stays</span>
+                  <div className="lg:hidden ml-1 flex items-center justify-center bg-stone-50 rounded-full w-7 h-7 border border-stone-200">
+                    {isMobileFilterOpen ? (
+                      <ChevronUp className="w-4 h-4 text-stone-600" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4 text-stone-600" />
+                    )}
+                  </div>
                 </div>
+
                 {hasActiveFilters && (
                   <button
-                    onClick={clearFilters}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      clearFilters();
+                    }}
                     className="text-xs text-stone-500 hover:text-gray-900 font-semibold flex items-center gap-1 transition-colors"
                   >
                     <RotateCcw className="w-3 h-3" />
-                    Reset
+                    <span
+                      className={!isMobileFilterOpen ? "hidden lg:inline" : ""}
+                    >
+                      Reset
+                    </span>
                   </button>
                 )}
               </div>
 
-              {/* Search */}
-              <div className="mb-5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
-                  Search Keyword
-                </label>
-                <div className="relative">
-                  <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    placeholder="Name, area, style..."
-                    value={search}
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                      setPage(1);
-                    }}
-                    className="w-full pl-10 pr-3 py-3 bg-stone-50/50 border border-stone-200 rounded-2xl text-sm text-gray-900 placeholder-stone-400 focus:bg-white focus:ring-2 focus:ring-gray-900 transition"
-                  />
+              {/* Filter Content */}
+              <div className={isMobileFilterOpen ? "block" : "hidden lg:block"}>
+                {/* Search */}
+                <div className="mb-5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
+                    Search Keyword
+                  </label>
+                  <div className="relative">
+                    <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      placeholder="Name, area, style..."
+                      value={search}
+                      onChange={(e) => {
+                        setSearch(e.target.value);
+                        setPage(1);
+                      }}
+                      className="w-full pl-10 pr-3 py-3 bg-stone-50/50 border border-stone-200 rounded-2xl text-sm text-gray-900 placeholder-stone-400 focus:bg-white focus:ring-2 focus:ring-gray-900 transition"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {/* Property Type */}
-              <div className="mb-5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
-                  Residence Type
-                </label>
-                <select
-                  value={type}
-                  onChange={(e) => {
-                    setType(e.target.value);
-                    setPage(1);
-                  }}
-                  className="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-gray-900 focus:bg-white focus:ring-2 focus:ring-gray-900 transition cursor-pointer"
-                >
-                  <option value="">All Types</option>
-                  <option value="Maison d'hôte">Maison d'Hôte</option>
-                  <option value="Dar">Traditional Dar</option>
-                  <option value="Villa">Private Villa</option>
-                  <option value="Gîte Rural">Gîte Rural</option>
-                  <option value="Eco-Lodge">Eco-Lodge</option>
-                </select>
-              </div>
-
-              {/* Booking Status / Rental Option */}
-              <div className="mb-5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
-                  Rental Type
-                </label>
-                <select
-                  value={status}
-                  onChange={(e) => {
-                    setStatus(e.target.value);
-                    setPage(1);
-                  }}
-                  className="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-gray-900 focus:bg-white focus:ring-2 focus:ring-gray-900 transition cursor-pointer"
-                >
-                  <option value="">All Arrangements</option>
-                  <option value="Per Night">Per Night</option>
-                  <option value="Per Week">Per Week</option>
-                  <option value="Full Exclusive Hire">
-                    Full Exclusive Hire
-                  </option>
-                  <option value="For Sale">For Sale</option>
-                </select>
-              </div>
-
-              {/* Location Selector */}
-              <div className="mb-5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
-                  Region / City
-                </label>
-                <div className="relative">
-                  <MapPin className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    list="tunisia-regions"
-                    placeholder="e.g. Sidi Bou Said, Djerba..."
-                    value={location}
+                {/* Property Type */}
+                <div className="mb-5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
+                    Residence Type
+                  </label>
+                  <select
+                    value={type}
                     onChange={(e) => {
-                      setLocation(e.target.value);
+                      setType(e.target.value);
                       setPage(1);
                     }}
-                    className="w-full pl-10 pr-3 py-3 bg-stone-50/50 border border-stone-200 rounded-2xl text-sm text-gray-900 placeholder-stone-400 focus:bg-white focus:ring-2 focus:ring-gray-900 transition"
-                  />
-                  <datalist id="tunisia-regions">
-                    <option value="Sidi Bou Said" />
-                    <option value="Djerba" />
-                    <option value="Hammamet" />
-                    <option value="Tozeur" />
-                    <option value="Tunis Medina" />
-                    <option value="Bizerte" />
-                    <option value="Tabarka" />
-                    <option value="Mahdia" />
-                    <option value="Kélibia" />
-                  </datalist>
+                    className="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-gray-900 focus:bg-white focus:ring-2 focus:ring-gray-900 transition cursor-pointer"
+                  >
+                    <option value="">All Types</option>
+                    <option value="Maison d'hôte">Maison d'Hôte</option>
+                    <option value="Dar">Traditional Dar</option>
+                    <option value="Villa">Private Villa</option>
+                    <option value="Gîte Rural">Gîte Rural</option>
+                    <option value="Eco-Lodge">Eco-Lodge</option>
+                  </select>
                 </div>
-              </div>
 
-              {/* Price Range */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
-                  Nightly Rate (TND)
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="number"
-                    placeholder="Min TND"
-                    value={minPrice}
+                {/* Booking Status / Rental Option */}
+                <div className="mb-5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
+                    Rental Type
+                  </label>
+                  <select
+                    value={status}
                     onChange={(e) => {
-                      setMinPrice(e.target.value);
+                      setStatus(e.target.value);
                       setPage(1);
                     }}
-                    className="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-gray-900 placeholder-stone-400 focus:bg-white focus:ring-2 focus:ring-gray-900 transition"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Max TND"
-                    value={maxPrice}
-                    onChange={(e) => {
-                      setMaxPrice(e.target.value);
-                      setPage(1);
-                    }}
-                    className="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-gray-900 placeholder-stone-400 focus:bg-white focus:ring-2 focus:ring-gray-900 transition"
-                  />
+                    className="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-gray-900 focus:bg-white focus:ring-2 focus:ring-gray-900 transition cursor-pointer"
+                  >
+                    <option value="">All Arrangements</option>
+                    <option value="Per Night">Per Night</option>
+                    <option value="Per Week">Per Week</option>
+                    <option value="Full Exclusive Hire">
+                      Full Exclusive Hire
+                    </option>
+                    <option value="For Sale">For Sale</option>
+                  </select>
+                </div>
+
+                {/* Location Selector */}
+                <div className="mb-5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
+                    Region / City
+                  </label>
+                  <div className="relative">
+                    <MapPin className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      list="tunisia-regions"
+                      placeholder="e.g. Sidi Bou Said, Djerba..."
+                      value={location}
+                      onChange={(e) => {
+                        setLocation(e.target.value);
+                        setPage(1);
+                      }}
+                      className="w-full pl-10 pr-3 py-3 bg-stone-50/50 border border-stone-200 rounded-2xl text-sm text-gray-900 placeholder-stone-400 focus:bg-white focus:ring-2 focus:ring-gray-900 transition"
+                    />
+                    <datalist id="tunisia-regions">
+                      <option value="Sidi Bou Said" />
+                      <option value="Djerba" />
+                      <option value="Hammamet" />
+                      <option value="Tozeur" />
+                      <option value="Tunis Medina" />
+                      <option value="Bizerte" />
+                      <option value="Tabarka" />
+                      <option value="Mahdia" />
+                      <option value="Kélibia" />
+                    </datalist>
+                  </div>
+                </div>
+
+                {/* Price Range */}
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
+                    Nightly Rate (TND)
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      placeholder="Min TND"
+                      value={minPrice}
+                      onChange={(e) => {
+                        setMinPrice(e.target.value);
+                        setPage(1);
+                      }}
+                      className="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-gray-900 placeholder-stone-400 focus:bg-white focus:ring-2 focus:ring-gray-900 transition"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Max TND"
+                      value={maxPrice}
+                      onChange={(e) => {
+                        setMaxPrice(e.target.value);
+                        setPage(1);
+                      }}
+                      className="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-gray-900 placeholder-stone-400 focus:bg-white focus:ring-2 focus:ring-gray-900 transition"
+                    />
+                  </div>
+                </div>
+
+                {/* Mobile Action Button */}
+                <div className="lg:hidden mt-6">
+                  <button
+                    onClick={() => setIsMobileFilterOpen(false)}
+                    className="w-full bg-gray-900 text-white rounded-2xl py-3 text-sm font-bold shadow-md active:scale-95 transition-transform"
+                  >
+                    View Properties
+                  </button>
                 </div>
               </div>
             </div>
@@ -263,7 +345,8 @@ const PropertiesList = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Dynamically applied Grid Classes here */}
+                <div className={`grid gap-6 ${getGridClass()}`}>
                   {properties.map((property) => (
                     <PropertyCard key={property._id} property={property} />
                   ))}

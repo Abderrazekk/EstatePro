@@ -1,3 +1,4 @@
+// frontend/src/layouts/AdminLayout.jsx
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -11,6 +12,7 @@ import {
   X,
   ShieldCheck,
   AlertTriangle,
+  Image, // Added for Sponsors link
 } from "lucide-react";
 
 const AdminLayout = () => {
@@ -22,8 +24,8 @@ const AdminLayout = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogoutConfirm = () => {
-    logout(); //[cite: 11]
-    navigate("/"); //[cite: 11]
+    logout();
+    navigate("/");
   };
 
   const navItems = [
@@ -47,6 +49,11 @@ const AdminLayout = () => {
       label: "Enquiries",
       path: "/admin/enquiries",
       icon: MessageSquare,
+    },
+    {
+      label: "Manage Sponsors",
+      path: "/admin/sponsors",
+      icon: Image,
     },
   ];
 

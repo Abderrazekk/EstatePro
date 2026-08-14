@@ -14,13 +14,14 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageProperties from "./pages/admin/ManageProperties";
-import AddProperty from "./pages/admin/AddProperty"; // <-- ensure this exists
-import EditProperty from "./pages/admin/EditProperty"; // <-- ensure this exists
+import AddProperty from "./pages/admin/AddProperty";
+import EditProperty from "./pages/admin/EditProperty";
 import ManageClients from "./pages/admin/ManageClients";
 import PropertyDetail from "./pages/PropertyDetail";
 import Wishlist from "./pages/Wishlist";
 import AdminEnquiries from "./pages/admin/AdminEnquiries";
 import MyEnquiries from "./pages/client/MyEnquiries";
+import ManageSponsors from "./pages/admin/ManageSponsors"; // <-- New import
 
 function App() {
   return (
@@ -75,6 +76,8 @@ function App() {
           <Route path="properties/:id/edit" element={<EditProperty />} />
           <Route path="clients" element={<ManageClients />} />
           <Route path="enquiries" element={<AdminEnquiries />} />
+          <Route path="sponsors" element={<ManageSponsors />} />{" "}
+          {/* <-- New route */}
         </Route>
 
         {/* Catch-all */}

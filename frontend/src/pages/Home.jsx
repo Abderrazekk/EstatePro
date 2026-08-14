@@ -1,5 +1,7 @@
+// frontend/src/pages/Home.jsx
 import Hero from "../components/Hero";
 import FeaturedProperties from "../components/FeaturedProperties";
+import Sponsors from "../components/Sponsors"; // Imported Sponsors component
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -37,6 +39,9 @@ const Home = () => {
 
         {/* Featured Properties */}
         <FeaturedProperties />
+
+        {/* Dynamic Infinite Moving Sponsors Marquee */}
+        <Sponsors />
 
         {/* Why choose us – Refined DarHôte Elegance */}
         <section className="py-24 bg-stone-50 overflow-hidden relative">

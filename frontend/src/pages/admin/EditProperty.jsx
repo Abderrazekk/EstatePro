@@ -112,6 +112,24 @@ const EditProperty = () => {
         )}
       </div>
 
+      {/* Existing Video Management */}
+      {property.video && property.video.url && (
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
+          <h2 className="text-xl font-bold mb-4">Vidéo Actuelle</h2>
+          <div className="relative w-full md:w-1/2 rounded-lg overflow-hidden bg-black aspect-video">
+            <video
+              src={property.video.url}
+              controls
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <p className="text-sm text-gray-500 mt-2">
+            * Pour remplacer cette vidéo, téléchargez-en une nouvelle
+            ci-dessous.
+          </p>
+        </div>
+      )}
+
       <PropertyForm
         initialData={property}
         onSubmit={handleSubmit}

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -7,7 +7,19 @@ import HeartIcon from "../components/HeartIcon";
 import ContactAgentModal from "../components/ContactAgentModal";
 import PropertyMap from "../components/PropertyMap";
 import { useAuth } from "../context/AuthContext";
-import { Users, BedDouble, Bath, Moon } from "lucide-react";
+import {
+  Users,
+  BedDouble,
+  Bath,
+  Moon,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  Share,
+  Check,
+  MapPin,
+  ArrowRight,
+} from "lucide-react";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,32 +27,67 @@ import "react-datepicker/dist/react-datepicker.css";
 const PropertyDetail = () => {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
+  const [similarProperties, setSimilarProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [bookedDates, setBookedDates] = useState([]);
+  const [copied, setCopied] = useState(false);
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const { user, toggleWishlist } = useAuth();
 
+  // Refs for scrolling the thumbnails
+  const thumbScrollRef = useRef(null);
+  const thumbRefs = useRef([]);
+
   useEffect(() => {
-    const fetchProperty = async () => {
+    const fetchPropertyAndSimilar = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(`/api/properties/${id}`);
-        setProperty(res.data);
-        if (res.data.images?.length > 0) setActiveImage(res.data.images[0].url);
+        const propData = res.data;
+        setProperty(propData);
+        if (propData.images?.length > 0) setActiveImage(propData.images[0].url);
+
+        // Fetch similar properties based on location or type
+        try {
+          const similarRes = await axios.get(`/api/properties`);
+          const allProps = similarRes.data.properties || similarRes.data;
+
+          // Filter out current property and match by location or type, limit to 4
+          const filtered = allProps
+            .filter(
+              (p) =>
+                p._id !== id &&
+                (p.location === propData.location || p.type === propData.type),
+            )
+            .slice(0, 4);
+
+          // If we don't have enough matches from location/type, just fill with any other properties up to 4
+          if (filtered.length < 4) {
+            const remaining = allProps.filter(
+              (p) => p._id !== id && !filtered.some((f) => f._id === p._id),
+            );
+            filtered.push(...remaining.slice(0, 4 - filtered.length));
+          }
+
+          setSimilarProperties(filtered);
+        } catch (simErr) {
+          console.error("Failed to fetch similar properties", simErr);
+        }
       } catch (error) {
         console.error(error);
       } finally {
         setLoading(false);
       }
     };
-    fetchProperty();
+    fetchPropertyAndSimilar();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
-  // Fetch booked dates for the calendar & apply time-boundary fix
   useEffect(() => {
     const fetchBookedDates = async () => {
       try {
@@ -51,7 +98,6 @@ const PropertyDetail = () => {
           const start = new Date(booking.checkIn);
           const end = new Date(booking.checkOut);
 
-          // Force times to cover the absolute start and end of the days
           start.setHours(0, 0, 0, 0);
           end.setHours(23, 59, 59, 999);
 
@@ -65,32 +111,94 @@ const PropertyDetail = () => {
     fetchBookedDates();
   }, [id]);
 
+  // Handle Keyboard Navigation for Lightbox
   useEffect(() => {
     if (!lightboxOpen || !property) return;
     const handleKey = (e) => {
       if (e.key === "Escape") setLightboxOpen(false);
-      if (e.key === "ArrowRight")
-        setLightboxIndex((i) => (i + 1) % property.images.length);
-      if (e.key === "ArrowLeft")
-        setLightboxIndex(
-          (i) => (i - 1 + property.images.length) % property.images.length,
-        );
+      if (e.key === "ArrowRight") nextLightboxImage();
+      if (e.key === "ArrowLeft") prevLightboxImage();
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [lightboxOpen, property]);
+
+  const images = property?.images ?? [];
+
+  // Automatically scroll the thumbnail list to keep the active image centered
+  useEffect(() => {
+    const index = images.findIndex((img) => img.url === activeImage);
+    if (index !== -1 && thumbRefs.current[index]) {
+      thumbRefs.current[index].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [activeImage, images]);
+
+  // --- Main Image & Lightbox Navigation Logic ---
+  const openLightboxAt = (url) => {
+    const idx = images.findIndex((img) => img.url === url);
+    setLightboxIndex(idx === -1 ? 0 : idx);
+    setLightboxOpen(true);
+  };
+
+  const nextLightboxImage = (e) => {
+    if (e) e.stopPropagation();
+    setLightboxIndex((i) => (i + 1) % images.length);
+  };
+
+  const prevLightboxImage = (e) => {
+    if (e) e.stopPropagation();
+    setLightboxIndex((i) => (i - 1 + images.length) % images.length);
+  };
+
+  const handleMainImageNav = (direction) => {
+    const currentIndex = images.findIndex((img) => img.url === activeImage);
+    if (currentIndex === -1) return;
+
+    let nextIndex;
+    if (direction === "next") {
+      nextIndex = (currentIndex + 1) % images.length;
+    } else {
+      nextIndex = (currentIndex - 1 + images.length) % images.length;
+    }
+    setActiveImage(images[nextIndex].url);
+  };
+
+  // --- Thumbnail Scroll Logic ---
+  const scrollThumbnails = (direction) => {
+    if (thumbScrollRef.current) {
+      const scrollAmount = thumbScrollRef.current.clientWidth / 2;
+      thumbScrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // --- Share Logic ---
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+    } catch (err) {
+      console.error("Erreur lors de la copie du lien", err);
+    }
+  };
 
   if (loading)
     return (
       <div className="min-h-screen flex flex-col bg-white">
         <Navbar />
         <main className="flex-1 max-w-6xl mx-auto px-4 py-8 w-full animate-pulse">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
-            <div className="md:col-span-2 h-96 bg-gray-100 rounded-lg" />
-            <div className="grid grid-cols-2 gap-3">
-              <div className="h-[184px] bg-gray-100 rounded-lg" />
-              <div className="h-[184px] bg-gray-100 rounded-lg" />
-            </div>
+          <div className="h-[50vh] bg-gray-100 rounded-2xl mb-4" />
+          <div className="flex gap-3 overflow-hidden mb-8">
+            <div className="h-24 w-32 bg-gray-100 rounded-xl shrink-0" />
+            <div className="h-24 w-32 bg-gray-100 rounded-xl shrink-0" />
+            <div className="h-24 w-32 bg-gray-100 rounded-xl shrink-0" />
           </div>
           <div className="h-7 w-2/3 bg-gray-100 rounded mb-3" />
         </main>
@@ -115,17 +223,11 @@ const PropertyDetail = () => {
     );
 
   const isWishlisted =
-    user?.wishlist?.some((id) => id === property._id) ?? false;
-  const images = property.images ?? [];
-  const openLightboxAt = (url) => {
-    const idx = images.findIndex((img) => img.url === url);
-    setLightboxIndex(idx === -1 ? 0 : idx);
-    setLightboxOpen(true);
-  };
+    user?.wishlist?.some((wishlistId) => wishlistId === property._id) ?? false;
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* Custom Styles for Modern Classy Calendar */}
+      {/* Custom Styles for Modern Classy Calendar & Scrollbar */}
       <style>{`
         .custom-calendar-wrapper .react-datepicker {
           font-family: inherit;
@@ -212,89 +314,166 @@ const PropertyDetail = () => {
       <Navbar />
 
       <main className="flex-1 max-w-6xl mx-auto px-4 py-8 w-full">
-        {/* Gallery */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
-          <div className="md:col-span-2">
+        {/* Modern Gallery Section */}
+        <div className="mb-8 flex flex-col gap-3">
+          {/* Main Large Image */}
+          <div className="w-full h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-2xl bg-gray-100 border border-gray-100">
             <img
               src={
                 activeImage ||
                 images[0]?.url ||
-                "https://via.placeholder.com/800x600"
+                "https://via.placeholder.com/1200x800"
               }
               alt={property.title}
               onClick={() => activeImage && openLightboxAt(activeImage)}
-              className="w-full h-96 object-cover rounded-xl cursor-zoom-in shadow-sm"
+              className="w-full h-full object-cover cursor-zoom-in transition-transform duration-700 group-hover:scale-105"
             />
+
+            {/* Main Image Navigation Arrows */}
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleMainImageNav("prev");
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-gray-900 p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-x-4 group-hover:translate-x-0 z-10"
+                >
+                  <ChevronLeft size={24} />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleMainImageNav("next");
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-gray-900 p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 z-10"
+                >
+                  <ChevronRight size={24} />
+                </button>
+              </>
+            )}
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                openLightboxAt(activeImage || images[0]?.url);
+              }}
+              className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-900 shadow-lg hover:bg-white transition-colors z-10"
+            >
+              Afficher toutes les photos
+            </button>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            {images.slice(0, 4).map((img, idx) => {
-              const isLast = idx === 3 && images.length > 4;
-              return (
-                <div key={img._id} className="relative">
-                  <img
-                    src={img.url}
-                    alt=""
-                    onClick={() =>
-                      isLast ? openLightboxAt(img.url) : setActiveImage(img.url)
-                    }
-                    className={`w-full h-[184px] object-cover rounded-xl cursor-pointer ring-2 transition-all ${
-                      activeImage === img.url && !isLast
-                        ? "ring-blue-600"
-                        : "ring-transparent"
-                    }`}
-                  />
-                  {isLast && (
-                    <button
-                      onClick={() => openLightboxAt(img.url)}
-                      className="absolute inset-0 rounded-xl bg-black/50 text-white text-sm font-medium flex items-center justify-center hover:bg-black/60 transition-colors"
-                    >
-                      +{images.length - 4} photos
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+
+          {/* Scrollable Thumbnails Strip with Left/Right Arrows */}
+          {images.length > 1 && (
+            <div className="relative group/thumbs flex items-center mt-1">
+              <button
+                onClick={() => scrollThumbnails("left")}
+                className="absolute -left-3 z-10 bg-white border border-gray-100 text-gray-800 p-2 rounded-full shadow-md opacity-0 group-hover/thumbs:opacity-100 transition-opacity hover:bg-gray-50"
+              >
+                <ChevronLeft size={20} />
+              </button>
+
+              <div
+                ref={thumbScrollRef}
+                className="flex gap-3 overflow-x-auto pb-2 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth px-1"
+              >
+                {images.map((img, idx) => (
+                  <div
+                    key={img._id || idx}
+                    ref={(el) => (thumbRefs.current[idx] = el)}
+                    className="snap-start shrink-0 relative rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => setActiveImage(img.url)}
+                  >
+                    <img
+                      src={img.url}
+                      alt=""
+                      className={`h-24 w-32 md:h-28 md:w-40 object-cover transition-all duration-300 ${
+                        activeImage === img.url
+                          ? "scale-110 opacity-100"
+                          : "opacity-60 group-hover:opacity-100"
+                      }`}
+                    />
+                    {activeImage === img.url && (
+                      <div className="absolute inset-0 ring-4 ring-inset ring-blue-600 rounded-xl pointer-events-none" />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => scrollThumbnails("right")}
+                className="absolute -right-3 z-10 bg-white border border-gray-100 text-gray-800 p-2 rounded-full shadow-md opacity-0 group-hover/thumbs:opacity-100 transition-opacity hover:bg-gray-50"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Title & Price */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 pb-6 border-b border-gray-100">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-3 mb-2">
               <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-600">
                 {property.type}
               </span>
-              {user && (
-                <HeartIcon
-                  filled={isWishlisted}
-                  onClick={() => toggleWishlist(property._id)}
-                />
-              )}
+
+              {/* Actions: Share & Wishlist */}
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={handleShare}
+                  className="relative p-2 rounded-full hover:bg-gray-50 text-gray-500 hover:text-gray-900 transition-colors"
+                  title="Partager ce logement"
+                >
+                  {copied ? (
+                    <Check size={20} className="text-green-600" />
+                  ) : (
+                    <Share size={20} />
+                  )}
+                  {copied && (
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap">
+                      Lien copié !
+                    </span>
+                  )}
+                </button>
+                {user && (
+                  <div className="p-1">
+                    <HeartIcon
+                      filled={isWishlisted}
+                      onClick={() => toggleWishlist(property._id)}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 tracking-tight">
               {property.title}
             </h1>
-            <p className="text-gray-500 mt-1">{property.location}, Tunisie</p>
+            <p className="text-gray-500 mt-2 text-lg font-medium">
+              {property.location}, Tunisie
+            </p>
           </div>
-          <div className="sm:text-right shrink-0">
-            <p className="text-2xl md:text-3xl font-bold text-gray-900">
+          <div className="sm:text-right shrink-0 mt-2 sm:mt-0">
+            <p className="text-3xl md:text-4xl font-bold text-gray-900">
               {property.pricePerNight?.toLocaleString()}{" "}
               <span className="text-xl">TND</span>
-              <span className="text-sm font-normal text-gray-500 block sm:inline sm:ml-2">
+              <span className="text-sm font-medium text-gray-500 block sm:inline sm:ml-2">
                 / nuit
               </span>
             </p>
             <button
               onClick={() => setShowModal(true)}
-              className="mt-3 bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 rounded-xl text-sm font-semibold transition-colors w-full sm:w-auto shadow-sm"
+              className="mt-4 bg-gray-900 hover:bg-gray-800 text-white px-8 py-3.5 rounded-xl text-base font-semibold transition-colors w-full sm:w-auto shadow-sm"
             >
               Réserver maintenant
             </button>
           </div>
         </div>
 
-        {/* Details & Sidebar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-b border-gray-100">
+        {/* Details Icons */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-8 border-b border-gray-100">
           <Stat
             icon={Users}
             label="Capacité Max"
@@ -317,24 +496,71 @@ const PropertyDetail = () => {
           />
         </div>
 
-        <div className="flex flex-col md:flex-row gap-12 pt-8">
+        <div className="flex flex-col md:flex-row gap-12 pt-10">
           <div className="md:w-2/3">
             <Section title="À propos du logement">
-              <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+              <p className="text-gray-600 leading-relaxed whitespace-pre-line text-lg">
                 {property.description}
               </p>
             </Section>
 
+            {/* Features & Amenities Section */}
+            {(property.features?.length > 0 ||
+              property.amenities?.length > 0) && (
+              <Section title="Équipements et Caractéristiques">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 mt-4">
+                  {property.features?.map((feature, index) => (
+                    <div
+                      key={`feat-${index}`}
+                      className="flex items-center gap-4 text-gray-700"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <span className="text-sm font-bold">✦</span>
+                      </div>
+                      <span className="text-base font-medium">{feature}</span>
+                    </div>
+                  ))}
+                  {property.amenities?.map((amenity, index) => (
+                    <div
+                      key={`amen-${index}`}
+                      className="flex items-center gap-4 text-gray-700"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
+                        <span className="text-sm font-bold">✓</span>
+                      </div>
+                      <span className="text-base font-medium">{amenity}</span>
+                    </div>
+                  ))}
+                </div>
+              </Section>
+            )}
+
+            {/* Video Player Section */}
+            {property.video?.url && (
+              <Section title="Visite Vidéo">
+                <div className="relative w-full rounded-2xl overflow-hidden bg-black shadow-md aspect-video border border-gray-100">
+                  <video
+                    src={property.video.url}
+                    controls
+                    preload="metadata"
+                    className="w-full h-full object-contain"
+                  >
+                    Votre navigateur ne supporte pas la lecture de vidéos.
+                  </video>
+                </div>
+              </Section>
+            )}
+
             <Section title="Localisation">
-              <div className="relative z-0 isolate rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+              <div className="relative z-0 isolate rounded-2xl overflow-hidden border border-gray-100 shadow-sm h-80">
                 <PropertyMap
                   lat={property.coordinates?.lat}
                   lng={property.coordinates?.lng}
                 />
               </div>
               {property.address?.formattedAddress && (
-                <p className="text-sm text-gray-500 mt-3">
-                  {property.address.formattedAddress}
+                <p className="text-sm font-medium text-gray-500 mt-4 flex items-center gap-2">
+                  📍 {property.address.formattedAddress}
                 </p>
               )}
             </Section>
@@ -345,7 +571,7 @@ const PropertyDetail = () => {
             <div className="sticky top-8 space-y-6">
               {/* Premium Calendar Container */}
               <div className="border border-gray-100 rounded-3xl p-6 bg-white shadow-sm ring-1 ring-gray-900/5">
-                <h3 className="text-base font-bold text-gray-900 mb-5">
+                <h3 className="text-lg font-bold text-gray-900 mb-5">
                   Disponibilité
                 </h3>
                 <div className="custom-calendar-wrapper w-full">
@@ -356,13 +582,13 @@ const PropertyDetail = () => {
                     excludeDateIntervals={bookedDates}
                   />
                 </div>
-                <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500 font-medium">
                   <span className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-gray-200"></div>{" "}
+                    <div className="w-3 h-3 rounded-full bg-gray-200"></div>{" "}
                     Réservé
                   </span>
                   <span className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full border border-gray-300"></div>{" "}
+                    <div className="w-3 h-3 rounded-full border-2 border-gray-300"></div>{" "}
                     Libre
                   </span>
                 </div>
@@ -370,31 +596,33 @@ const PropertyDetail = () => {
 
               {/* Host Info */}
               <div className="border border-gray-100 rounded-3xl p-6 bg-gray-50/50">
-                <h3 className="text-base font-bold text-gray-900 mb-4">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">
                   Hôte de la maison
                 </h3>
                 {property.host?.name ? (
                   <div>
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className="w-12 h-12 rounded-full bg-gray-900 text-white font-bold text-lg flex items-center justify-center shadow-sm">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-14 h-14 rounded-full bg-gray-900 text-white font-bold text-xl flex items-center justify-center shadow-sm">
                         {property.host.name.charAt(0)}
                       </div>
                       <div>
-                        <p className="text-gray-900 font-semibold">
+                        <p className="text-gray-900 font-bold text-lg">
                           {property.host.name}
                         </p>
-                        <p className="text-sm text-gray-500">Hôte vérifié</p>
+                        <p className="text-sm font-medium text-green-600 flex items-center gap-1">
+                          ✓ Hôte vérifié
+                        </p>
                       </div>
                     </div>
                     <button
                       onClick={() => setShowModal(true)}
-                      className="w-full bg-white border border-gray-200 text-gray-900 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors shadow-sm"
+                      className="w-full bg-white border border-gray-200 text-gray-900 py-3 rounded-xl text-base font-semibold hover:bg-gray-50 transition-colors shadow-sm"
                     >
                       Contacter l'hôte
                     </button>
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-gray-500 text-sm font-medium">
                     Aucune information sur l'hôte.
                   </p>
                 )}
@@ -402,6 +630,103 @@ const PropertyDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* --- SIMILAR HOMES SECTION --- */}
+        {similarProperties.length > 0 && (
+          <div className="mt-20 pt-12 border-t border-gray-100">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                  Logements similaires
+                </h2>
+                <p className="text-gray-500 mt-1 text-base">
+                  Découvrez d'autres sélections qui pourraient vous plaire
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {similarProperties.map((item) => {
+                const itemImg =
+                  item.images?.[0]?.url ||
+                  "https://via.placeholder.com/600x400";
+                const isItemWishlisted =
+                  user?.wishlist?.some((wId) => wId === item._id) ?? false;
+
+                return (
+                  <div
+                    key={item._id}
+                    className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
+                  >
+                    {/* Card Image Container */}
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100">
+                      <Link to={`/properties/${item._id}`}>
+                        <img
+                          src={itemImg}
+                          alt={item.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </Link>
+
+                      {/* Type Badge */}
+                      <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                        {item.type}
+                      </span>
+
+                      {/* Wishlist Heart Icon */}
+                      {user && (
+                        <div className="absolute top-3 right-3 z-10">
+                          <HeartIcon
+                            filled={isItemWishlisted}
+                            onClick={() => toggleWishlist(item._id)}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="p-4 flex flex-col flex-1 justify-between">
+                      <div>
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500 font-medium mb-1">
+                          <MapPin
+                            size={14}
+                            className="text-blue-600 shrink-0"
+                          />
+                          <span className="truncate">
+                            {item.location}, Tunisie
+                          </span>
+                        </div>
+                        <Link to={`/properties/${item._id}`}>
+                          <h3 className="font-bold text-gray-900 text-base line-clamp-1 group-hover:text-blue-600 transition-colors">
+                            {item.title}
+                          </h3>
+                        </Link>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
+                        <div>
+                          <span className="text-lg font-bold text-gray-900">
+                            {item.pricePerNight?.toLocaleString()} TND
+                          </span>
+                          <span className="text-xs text-gray-500 block">
+                            par nuit
+                          </span>
+                        </div>
+                        <Link
+                          to={`/properties/${item._id}`}
+                          className="bg-gray-50 hover:bg-blue-600 hover:text-white text-gray-900 p-2.5 rounded-xl transition-colors shadow-sm"
+                          title="Voir le logement"
+                        >
+                          <ArrowRight size={18} />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </main>
 
       {/* MODAL IS HERE: Passing bookedDates prop down */}
@@ -414,20 +739,62 @@ const PropertyDetail = () => {
         />
       )}
 
-      {/* Lightbox Modal */}
+      {/* Classy Lightbox Modal */}
       {lightboxOpen && images.length > 0 && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center px-4">
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center"
+          onClick={() => setLightboxOpen(false)}
+        >
+          {/* Close Button */}
           <button
             onClick={() => setLightboxOpen(false)}
-            className="absolute top-6 right-6 text-white/70 hover:text-white text-sm font-medium transition-colors"
+            className="absolute top-6 right-6 text-white/70 hover:text-white p-2 transition-colors z-50 bg-black/20 hover:bg-black/40 rounded-full"
           >
-            Fermer
+            <X size={32} />
           </button>
-          <img
-            src={images[lightboxIndex]?.url}
-            alt=""
-            className="max-h-[85vh] max-w-full object-contain rounded-lg shadow-2xl"
-          />
+
+          {/* Navigation Arrows */}
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={prevLightboxImage}
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md transition-all z-50 group"
+              >
+                <ChevronLeft
+                  size={36}
+                  className="group-hover:-translate-x-1 transition-transform"
+                />
+              </button>
+              <button
+                onClick={nextLightboxImage}
+                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md transition-all z-50 group"
+              >
+                <ChevronRight
+                  size={36}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </button>
+            </>
+          )}
+
+          {/* Main Image Container */}
+          <div
+            className="relative w-full max-w-6xl px-16 md:px-24 flex items-center justify-center h-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={images[lightboxIndex]?.url}
+              alt=""
+              className="max-h-[85vh] max-w-full object-contain rounded-lg shadow-2xl transition-opacity duration-300"
+            />
+          </div>
+
+          {/* Image Counter */}
+          {images.length > 1 && (
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white font-medium text-sm tracking-widest bg-black/50 px-6 py-2.5 rounded-full backdrop-blur-md">
+              {lightboxIndex + 1} / {images.length}
+            </div>
+          )}
         </div>
       )}
 
@@ -437,22 +804,22 @@ const PropertyDetail = () => {
 };
 
 const Stat = ({ icon: Icon, label, value }) => (
-  <div className="flex items-center gap-3">
+  <div className="flex items-center gap-4">
     {Icon && (
-      <div className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 text-gray-700 flex items-center justify-center shrink-0">
-        <Icon size={18} strokeWidth={2} />
+      <div className="w-12 h-12 rounded-xl bg-gray-50 border border-gray-100 text-gray-700 flex items-center justify-center shrink-0">
+        <Icon size={22} strokeWidth={2} />
       </div>
     )}
     <div>
-      <p className="text-sm font-bold text-gray-900 leading-tight">{value}</p>
-      <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+      <p className="text-base font-bold text-gray-900 leading-tight">{value}</p>
+      <p className="text-sm font-medium text-gray-500 mt-0.5">{label}</p>
     </div>
   </div>
 );
 
 const Section = ({ title, children, last }) => (
-  <div className={last ? "mb-0" : "mb-10"}>
-    <h2 className="text-xl font-bold text-gray-900 mb-4">{title}</h2>
+  <div className={last ? "mb-0" : "mb-12"}>
+    <h2 className="text-2xl font-bold text-gray-900 mb-6">{title}</h2>
     {children}
   </div>
 );

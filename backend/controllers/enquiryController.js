@@ -68,8 +68,9 @@ exports.getBookedDates = async (req, res) => {
 // @access  Private/Admin
 exports.getEnquiries = async (req, res) => {
   try {
+    // Added 'phone' to the populate method
     const enquiries = await Enquiry.find({})
-      .populate("client", "name email")
+      .populate("client", "name email phone")
       .populate("property", "title")
       .sort({ createdAt: -1 });
 

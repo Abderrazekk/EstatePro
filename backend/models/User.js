@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
         "Please add a valid email",
       ],
     },
+    phone: {
+      type: String,
+      required: [true, "Please add a phone number"],
+    },
     password: {
       type: String,
       required: [true, "Please add a password"],
@@ -45,7 +49,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// ✅ Fixed pre-save hook (no `next`)
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);

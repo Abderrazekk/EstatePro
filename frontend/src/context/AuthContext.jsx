@@ -48,10 +48,12 @@ export const AuthProvider = ({ children }) => {
     return userData;
   };
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, phone, password) => {
+    // Added phone parameter
     const res = await axios.post("/api/auth/register", {
       name,
       email,
+      phone, // Added to payload
       password,
     });
     const { token, ...userData } = res.data;

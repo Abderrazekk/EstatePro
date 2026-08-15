@@ -3,11 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { User, Mail, Lock, AlertCircle, ArrowRight } from "lucide-react";
+import { User, Mail, Lock, Phone, AlertCircle, ArrowRight } from "lucide-react";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +25,7 @@ const Register = () => {
     setError("");
     setIsSubmitting(true);
     try {
-      await register(name, email, password);
+      await register(name, email, phone, password);
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
@@ -90,6 +91,24 @@ const Register = () => {
                     required
                     className="w-full pl-12 pr-4 py-3.5 bg-stone-50/50 border border-stone-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition font-medium text-gray-900 placeholder-stone-400 text-sm"
                     placeholder="John Doe"
+                  />
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
+                  Phone Number
+                </label>
+                <div className="relative">
+                  <Phone className="w-5 h-5 text-stone-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    className="w-full pl-12 pr-4 py-3.5 bg-stone-50/50 border border-stone-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition font-medium text-gray-900 placeholder-stone-400 text-sm"
+                    placeholder="+216 12 345 678"
                   />
                 </div>
               </div>

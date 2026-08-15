@@ -53,6 +53,7 @@ exports.updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (req.body.name) user.name = req.body.name;
+    if (req.body.phone) user.phone = req.body.phone; // Added phone update
 
     if (req.file) {
       if (user.avatar && user.avatar !== "default-avatar.png") {
@@ -77,6 +78,7 @@ exports.updateProfile = async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      phone: updatedUser.phone, // Return updated phone
       role: updatedUser.role,
       avatar: updatedUser.avatar,
       wishlist: updatedUser.wishlist,

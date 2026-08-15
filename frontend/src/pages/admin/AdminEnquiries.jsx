@@ -67,6 +67,11 @@ const AdminEnquiries = () => {
                 <td className="p-3">
                   <p className="font-medium">{enq.client?.name}</p>
                   <p className="text-sm text-gray-500">{enq.client?.email}</p>
+                  {enq.client?.phone && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      📞 {enq.client.phone}
+                    </p>
+                  )}
                 </td>
                 <td className="p-3">{enq.property?.title || "N/A"}</td>
                 <td className="p-3">

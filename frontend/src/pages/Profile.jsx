@@ -7,6 +7,7 @@ import {
   Camera,
   User,
   Mail,
+  Phone,
   CheckCircle,
   AlertCircle,
   Sparkles,
@@ -15,6 +16,7 @@ import {
 const Profile = () => {
   const { user, refreshUser } = useAuth();
   const [name, setName] = useState(user?.name || "");
+  const [phone, setPhone] = useState(user?.phone || "");
   const [avatar, setAvatar] = useState(null);
   const [preview, setPreview] = useState(user?.avatar || "");
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -35,6 +37,7 @@ const Profile = () => {
 
     const formData = new FormData();
     formData.append("name", name);
+    formData.append("phone", phone);
     if (avatar) formData.append("avatar", avatar);
 
     try {
@@ -147,6 +150,23 @@ const Profile = () => {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3.5 bg-stone-50/50 border border-stone-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition font-medium text-gray-900"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Phone Input */}
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2">
+                  Phone Number
+                </label>
+                <div className="relative">
+                  <Phone className="w-5 h-5 text-stone-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     className="w-full pl-12 pr-4 py-3.5 bg-stone-50/50 border border-stone-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition font-medium text-gray-900"
                     required
                   />

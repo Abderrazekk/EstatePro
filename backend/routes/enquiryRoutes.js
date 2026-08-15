@@ -6,7 +6,8 @@ const {
   getEnquiries,
   getMyEnquiries,
   updateEnquiry,
-  getBookedDates, // <-- IMPORT THIS
+  getBookedDates,
+  deleteEnquiry, // <-- NEW: IMPORT DELETE FUNCTION
 } = require("../controllers/enquiryController");
 
 const router = express.Router();
@@ -21,5 +22,6 @@ router.get("/mine", protect, getMyEnquiries);
 // Admin routes
 router.get("/", protect, admin, getEnquiries);
 router.put("/:id", protect, admin, updateEnquiry);
+router.delete("/:id", protect, admin, deleteEnquiry); // <-- NEW: DELETE ROUTE
 
 module.exports = router;

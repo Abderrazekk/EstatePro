@@ -18,13 +18,17 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: [true, "Please add a phone number"],
+      // Made optional for Google Auth (can prompt user to update later)
+      default: "Not provided",
     },
     password: {
       type: String,
-      required: [true, "Please add a password"],
+      // Removed required constraint to allow Google login without a password
       minlength: 6,
       select: false,
+    },
+    googleId: {
+      type: String,
     },
     role: {
       type: String,
@@ -50,12 +54,22 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  // If the password hasn't been modified (like during Google Auth where they might not have a standard password), skip hashing
+  if (!this.isModified("password")) {
+    return;
+  }
+
+  // Hash the password
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (error) {
+    throw error;
+  }
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
+  if (!this.password) return false;
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

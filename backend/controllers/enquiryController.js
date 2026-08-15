@@ -5,15 +5,15 @@ const Enquiry = require("../models/Enquiry");
 // @access  Private (client)
 exports.createEnquiry = async (req, res) => {
   try {
-    const { propertyId, message, checkIn, checkOut, totalPrice } = req.body;
+    const { propertyId, message, phone, checkIn, checkOut, totalPrice } =
+      req.body;
 
-    if (!propertyId || !checkIn || !checkOut || !totalPrice) {
+    if (!propertyId || !checkIn || !checkOut || !totalPrice || !phone) {
       return res
         .status(400)
-        .json({ message: "All booking fields are required" });
+        .json({ message: "All booking fields and phone number are required" });
     }
 
-    // Check if dates overlap with an already CONFIRMED reservation
     const overlapping = await Enquiry.findOne({
       property: propertyId,
       status: "confirmed",
@@ -35,6 +35,7 @@ exports.createEnquiry = async (req, res) => {
       client: req.user._id,
       property: propertyId,
       message,
+      contactPhone: phone,
       checkIn,
       checkOut,
       totalPrice,
@@ -68,10 +69,9 @@ exports.getBookedDates = async (req, res) => {
 // @access  Private/Admin
 exports.getEnquiries = async (req, res) => {
   try {
-    // Added 'phone' to the populate method
     const enquiries = await Enquiry.find({})
       .populate("client", "name email phone")
-      .populate("property", "title")
+      .populate("property", "title images location")
       .sort({ createdAt: -1 });
 
     res.json(enquiries);
@@ -110,6 +110,24 @@ exports.getMyEnquiries = async (req, res) => {
       .populate("property", "title images status price location")
       .sort({ createdAt: -1 });
     res.json(enquiries);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// NEW: @desc    Delete enquiry
+// @route   DELETE /api/enquiries/:id
+// @access  Private/Admin
+exports.deleteEnquiry = async (req, res) => {
+  try {
+    const enquiry = await Enquiry.findById(req.params.id);
+
+    if (!enquiry) {
+      return res.status(404).json({ message: "Enquiry not found" });
+    }
+
+    await enquiry.deleteOne();
+    res.json({ message: "Enquiry successfully deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

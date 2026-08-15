@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 
-  // Load user if token exists
   useEffect(() => {
     const loadUser = async () => {
       if (!token) {
@@ -27,7 +26,6 @@ export const AuthProvider = ({ children }) => {
         setUser(res.data);
       } catch (err) {
         console.error("Failed to load user", err);
-        // If suspended (403) or token invalid, force logout
         localStorage.removeItem("token");
         setToken(null);
         setUser(null);
@@ -49,13 +47,23 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, phone, password) => {
-    // Added phone parameter
     const res = await axios.post("/api/auth/register", {
       name,
       email,
-      phone, // Added to payload
+      phone,
       password,
     });
+    const { token, ...userData } = res.data;
+    localStorage.setItem("token", token);
+    setToken(token);
+    setUser(userData);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    return userData;
+  };
+
+  // NEW: Google Login
+  const googleLogin = async (googleToken) => {
+    const res = await axios.post("/api/auth/google", { token: googleToken });
     const { token, ...userData } = res.data;
     localStorage.setItem("token", token);
     setToken(token);
@@ -71,13 +79,11 @@ export const AuthProvider = ({ children }) => {
     delete axios.defaults.headers.common["Authorization"];
   };
 
-  // Toggle wishlist: returns updated wishlist array
   const toggleWishlist = async (propertyId) => {
     const res = await axios.post(`/api/users/wishlist/${propertyId}`);
     setUser((prev) => ({ ...prev, wishlist: res.data.wishlist }));
   };
 
-  // Refresh user data after profile update
   const refreshUser = async () => {
     const res = await axios.get("/api/auth/me");
     setUser(res.data);
@@ -91,6 +97,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         register,
+        googleLogin, // Exported here
         logout,
         toggleWishlist,
         refreshUser,

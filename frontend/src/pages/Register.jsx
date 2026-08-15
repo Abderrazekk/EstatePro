@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { User, Mail, Lock, Phone, AlertCircle, ArrowRight } from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -13,7 +14,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { register } = useAuth();
+  const { register, googleLogin } = useAuth(); // Destructure googleLogin
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -34,23 +35,22 @@ const Register = () => {
     }
   };
 
+  // NEW: Google Success Handler
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      await googleLogin(credentialResponse.credential);
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Google registration failed");
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-stone-50/50 selection:bg-stone-200 selection:text-stone-900">
-      <style>{`
-        @keyframes fade-in-up {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-      `}</style>
-
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center px-4 py-16 animate-fade-in-up">
         <div className="w-full max-w-lg">
-          {/* Logo / Branding */}
           <div className="text-center mb-8">
             <Link
               to="/"
@@ -67,7 +67,6 @@ const Register = () => {
             </p>
           </div>
 
-          {/* Card */}
           <div className="bg-white rounded-3xl shadow-xl shadow-stone-200/50 p-8 sm:p-10 border border-stone-200/80">
             {error && (
               <div className="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-2xl text-sm font-medium flex items-center gap-2.5">
@@ -77,7 +76,7 @@ const Register = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name */}
+              {/* User, Phone, Email, Passwords inputs... */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
                   Full Name
@@ -94,8 +93,6 @@ const Register = () => {
                   />
                 </div>
               </div>
-
-              {/* Phone */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
                   Phone Number
@@ -112,8 +109,6 @@ const Register = () => {
                   />
                 </div>
               </div>
-
-              {/* Email */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
                   Email Address
@@ -130,8 +125,6 @@ const Register = () => {
                   />
                 </div>
               </div>
-
-              {/* Password */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
                   Password
@@ -148,8 +141,6 @@ const Register = () => {
                   />
                 </div>
               </div>
-
-              {/* Confirm Password */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-900 mb-2">
                   Confirm Password
@@ -167,7 +158,6 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -179,6 +169,26 @@ const Register = () => {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </form>
+
+            {/* Google Divider */}
+            <div className="mt-8 flex items-center gap-4">
+              <div className="flex-1 h-px bg-stone-200"></div>
+              <span className="text-xs font-medium text-stone-400 uppercase tracking-wider">
+                Or continue with
+              </span>
+              <div className="flex-1 h-px bg-stone-200"></div>
+            </div>
+
+            {/* Google Registration Button */}
+            <div className="mt-6 flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setError("Google Authentication Failed")}
+                useOneTap
+                shape="pill"
+                text="signup_with"
+              />
+            </div>
           </div>
 
           <p className="text-center text-stone-500 mt-8 text-sm">

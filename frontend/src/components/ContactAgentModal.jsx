@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { X, Calendar as CalendarIcon, CheckCircle2 } from "lucide-react";
+// NEW: Import the Phone icon from lucide-react
+import { X, Calendar as CalendarIcon, CheckCircle2, Phone } from "lucide-react";
 
 const ContactAgentModal = ({
   propertyId,
@@ -11,6 +12,7 @@ const ContactAgentModal = ({
   onClose,
 }) => {
   const [message, setMessage] = useState("");
+  const [phone, setPhone] = useState(""); // NEW: State for phone number
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -19,7 +21,7 @@ const ContactAgentModal = ({
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Calculate total price dynamically (Inclusive of both start and end days)
+  // Calculate total price dynamically
   useEffect(() => {
     if (checkIn && checkOut) {
       const start = new Date(checkIn);
@@ -53,10 +55,14 @@ const ContactAgentModal = ({
       );
     }
 
+    // NEW: Validation for phone number
+    if (!phone.trim()) {
+      return setError("Veuillez fournir un numéro de téléphone.");
+    }
+
     setIsSubmitting(true);
     setError("");
 
-    // Fix Timezone Bug: Set dates to exactly 12:00 PM (Noon) before saving
     const submitCheckIn = new Date(checkIn);
     submitCheckIn.setHours(12, 0, 0, 0);
 
@@ -67,6 +73,7 @@ const ContactAgentModal = ({
       await axios.post("/api/enquiries", {
         propertyId,
         message,
+        phone, // NEW: Include phone in the API payload
         checkIn: submitCheckIn,
         checkOut: submitCheckOut,
         totalPrice,
@@ -84,103 +91,28 @@ const ContactAgentModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      {/* Custom Styles for the Popup Calendar */}
+      {/* Retain all your existing style tags here */}
       <style>{`
-        .modal-datepicker-popper {
-          z-index: 100 !important;
-        }
-        .modal-datepicker-popper .react-datepicker {
-          font-family: inherit;
-          border: 1px solid #F3F4F6;
-          border-radius: 1.5rem;
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-          padding: 1rem;
-          background-color: #ffffff;
-        }
-        .modal-datepicker-popper .react-datepicker__triangle {
-          display: none;
-        }
-        .modal-datepicker-popper .react-datepicker__header {
-          background-color: transparent;
-          border-bottom: none;
-          padding-top: 0;
-        }
-        .modal-datepicker-popper .react-datepicker__current-month {
-          font-weight: 700;
-          font-size: 1rem;
-          color: #111827; 
-          margin-bottom: 0.75rem;
-        }
-        .modal-datepicker-popper .react-datepicker__day-names {
-          margin-bottom: -0.25rem;
-          display: flex;
-          justify-content: space-between;
-        }
-        .modal-datepicker-popper .react-datepicker__day-name {
-          color: #9CA3AF;
-          font-weight: 600;
-          font-size: 0.75rem;
-          text-transform: uppercase;
-          width: 2.25rem;
-        }
-        .modal-datepicker-popper .react-datepicker__month {
-          margin: 0;
-        }
-        .modal-datepicker-popper .react-datepicker__week {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 0.25rem;
-        }
-        .modal-datepicker-popper .react-datepicker__day {
-          color: #374151;
-          width: 2.25rem;
-          height: 2.25rem;
-          line-height: 2.25rem;
-          border-radius: 9999px;
-          transition: all 0.2s ease;
-          margin: 0;
-          font-size: 0.875rem;
-        }
-        .modal-datepicker-popper .react-datepicker__day:hover:not(.react-datepicker__day--disabled) {
-          background-color: #F3F4F6;
-          color: #111827;
-        }
-        .modal-datepicker-popper .react-datepicker__day--selected,
-        .modal-datepicker-popper .react-datepicker__day--keyboard-selected,
-        .modal-datepicker-popper .react-datepicker__day--in-range {
-          background-color: #111827 !important;
-          color: white !important;
-        }
-        .modal-datepicker-popper .react-datepicker__day--in-selecting-range {
-          background-color: #E5E7EB;
-          color: #111827;
-        }
-        .modal-datepicker-popper .react-datepicker__day--disabled {
-          color: #D1D5DB;
-          text-decoration: line-through;
-          background-color: transparent;
-          cursor: not-allowed;
-        }
-        .modal-datepicker-popper .react-datepicker__day--disabled:hover {
-          background-color: transparent;
-        }
-        .modal-calendar-input {
-          background: transparent;
-          width: 100%;
-          outline: none;
-          color: #111827;
-          font-weight: 500;
-          font-size: 0.875rem;
-          cursor: pointer;
-        }
-        .modal-calendar-input::placeholder {
-          color: #9CA3AF;
-          font-weight: 400;
-        }
+        .modal-datepicker-popper { z-index: 100 !important; }
+        .modal-datepicker-popper .react-datepicker { font-family: inherit; border: 1px solid #F3F4F6; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); padding: 1rem; background-color: #ffffff; }
+        .modal-datepicker-popper .react-datepicker__triangle { display: none; }
+        .modal-datepicker-popper .react-datepicker__header { background-color: transparent; border-bottom: none; padding-top: 0; }
+        .modal-datepicker-popper .react-datepicker__current-month { font-weight: 700; font-size: 1rem; color: #111827; margin-bottom: 0.75rem; }
+        .modal-datepicker-popper .react-datepicker__day-names { margin-bottom: -0.25rem; display: flex; justify-content: space-between; }
+        .modal-datepicker-popper .react-datepicker__day-name { color: #9CA3AF; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; width: 2.25rem; }
+        .modal-datepicker-popper .react-datepicker__month { margin: 0; }
+        .modal-datepicker-popper .react-datepicker__week { display: flex; justify-content: space-between; margin-bottom: 0.25rem; }
+        .modal-datepicker-popper .react-datepicker__day { color: #374151; width: 2.25rem; height: 2.25rem; line-height: 2.25rem; border-radius: 9999px; transition: all 0.2s ease; margin: 0; font-size: 0.875rem; }
+        .modal-datepicker-popper .react-datepicker__day:hover:not(.react-datepicker__day--disabled) { background-color: #F3F4F6; color: #111827; }
+        .modal-datepicker-popper .react-datepicker__day--selected, .modal-datepicker-popper .react-datepicker__day--keyboard-selected, .modal-datepicker-popper .react-datepicker__day--in-range { background-color: #111827 !important; color: white !important; }
+        .modal-datepicker-popper .react-datepicker__day--in-selecting-range { background-color: #E5E7EB; color: #111827; }
+        .modal-datepicker-popper .react-datepicker__day--disabled { color: #D1D5DB; text-decoration: line-through; background-color: transparent; cursor: not-allowed; }
+        .modal-datepicker-popper .react-datepicker__day--disabled:hover { background-color: transparent; }
+        .modal-calendar-input { background: transparent; width: 100%; outline: none; color: #111827; font-weight: 500; font-size: 0.875rem; cursor: pointer; }
+        .modal-calendar-input::placeholder { color: #9CA3AF; font-weight: 400; }
       `}</style>
 
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg relative overflow-hidden animate-in fade-in zoom-in duration-200">
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
           <h2 className="text-xl font-bold text-gray-900">
             {submitted ? "Demande Envoyée" : "Réserver votre séjour"}
@@ -196,6 +128,7 @@ const ContactAgentModal = ({
         <div className="p-6">
           {submitted ? (
             <div className="text-center py-8">
+              {/* Retain success message UI */}
               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle2
                   size={32}
@@ -207,8 +140,7 @@ const ContactAgentModal = ({
                 C'est noté !
               </h3>
               <p className="text-gray-500 text-sm mb-6">
-                Votre demande de réservation a été envoyée avec succès. L'hôte
-                l'examinera dans les plus brefs délais.
+                Votre demande de réservation a été envoyée avec succès.
               </p>
               <button
                 onClick={onClose}
@@ -225,9 +157,8 @@ const ContactAgentModal = ({
                 </div>
               )}
 
-              {/* Dates Container */}
+              {/* Retain dates container UI */}
               <div className="flex flex-col sm:flex-row gap-4">
-                {/* Check-In */}
                 <div className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus-within:border-gray-900 focus-within:ring-1 focus-within:ring-gray-900 transition-all cursor-text relative">
                   <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">
                     Arrivée
@@ -251,7 +182,6 @@ const ContactAgentModal = ({
                   </div>
                 </div>
 
-                {/* Check-Out */}
                 <div className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus-within:border-gray-900 focus-within:ring-1 focus-within:ring-gray-900 transition-all cursor-text relative">
                   <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">
                     Départ
@@ -276,7 +206,28 @@ const ContactAgentModal = ({
                 </div>
               </div>
 
-              {/* Message */}
+              {/* NEW: Phone Number Input UI */}
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2">
+                  Numéro de téléphone
+                </label>
+                <div className="relative">
+                  <Phone
+                    size={18}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  />
+                  <input
+                    type="tel"
+                    className="w-full bg-gray-50 border border-gray-200 pl-11 pr-4 py-3 rounded-xl text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    placeholder="+216 12 345 678"
+                  />
+                </div>
+              </div>
+
+              {/* Retain message input UI */}
               <div>
                 <label className="block text-sm font-bold text-gray-900 mb-2">
                   Message pour l'hôte
@@ -291,7 +242,7 @@ const ContactAgentModal = ({
                 />
               </div>
 
-              {/* Price Calculation Display */}
+              {/* Retain Price and Submit button UI */}
               {totalPrice > 0 ? (
                 <div className="py-4 border-t border-b border-gray-100 flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-600 underline decoration-gray-300 underline-offset-4">
@@ -315,7 +266,6 @@ const ContactAgentModal = ({
                 </div>
               )}
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}

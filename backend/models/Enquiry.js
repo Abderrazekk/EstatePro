@@ -16,6 +16,11 @@ const enquirySchema = new mongoose.Schema(
       type: String,
       required: [true, "Please add a message"],
     },
+    // NEW: Add the contactPhone field
+    contactPhone: {
+      type: String,
+      required: [true, "Please add a phone number"],
+    },
     // Reservation specific fields
     checkIn: {
       type: Date,

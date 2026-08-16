@@ -25,16 +25,20 @@ const PromoBanner = () => {
   if (loading || !banner) return null;
 
   return (
-    <section className="w-full bg-stone-950">
+    <section className="w-full bg-stone-950 flex justify-center">
       <Link
         to="/properties"
-        className="block relative w-full h-[450px] md:h-[500px] lg:h-[600px] overflow-hidden group cursor-pointer"
+        className="block relative w-full overflow-hidden group cursor-pointer"
       >
-        {/* The Uploaded Background Image */}
+        {/* 
+          - `h-auto` (default for mobile): Scales the image perfectly so 100% of it is visible, no cut text!
+          - `md:h-[450px] lg:h-[600px]`: Gives it a nice, tall presence on larger desktop screens.
+          - `w-full` & `object-cover`: Ensures there are NEVER any black bars on the sides.
+        */}
         <img
           src={banner.imageUrl}
           alt="Promotional Banner"
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+          className="w-full h-auto md:h-[450px] lg:h-[550px] xl:h-[600px] object-cover object-center transition-transform duration-1000 group-hover:scale-105"
         />
       </Link>
     </section>

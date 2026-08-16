@@ -12,7 +12,8 @@ import {
   X,
   ShieldCheck,
   AlertTriangle,
-  Image, // Added for Sponsors link
+  Image,
+  Megaphone, // Added Megaphone icon for Promotional Banner
 } from "lucide-react";
 
 const AdminLayout = () => {
@@ -54,6 +55,11 @@ const AdminLayout = () => {
       label: "Manage Sponsors",
       path: "/admin/sponsors",
       icon: Image,
+    },
+    {
+      label: "Promo Banner", // Added new nav item
+      path: "/admin/banner",
+      icon: Megaphone,
     },
   ];
 

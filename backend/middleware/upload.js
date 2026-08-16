@@ -3,11 +3,12 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
-  if (file.fieldname === "images") {
+  // ✅ Updated to accept both "images" (plural) and "image" (singular)
+  if (file.fieldname === "images" || file.fieldname === "image") {
     if (file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {
-      cb(new Error('Only images are allowed for the "images" field'), false);
+      cb(new Error("Only images are allowed"), false);
     }
   } else if (file.fieldname === "video") {
     if (file.mimetype.startsWith("video/")) {
@@ -16,7 +17,8 @@ const fileFilter = (req, file, cb) => {
       cb(new Error('Only videos are allowed for the "video" field'), false);
     }
   } else {
-    cb(new Error("Unexpected field"), false);
+    // Helpful debug message if a wrong field name is used
+    cb(new Error(`Unexpected field: ${file.fieldname}`), false);
   }
 };
 

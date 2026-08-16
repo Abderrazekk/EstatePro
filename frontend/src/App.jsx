@@ -22,6 +22,7 @@ import Wishlist from "./pages/Wishlist";
 import AdminEnquiries from "./pages/admin/AdminEnquiries";
 import MyEnquiries from "./pages/client/MyEnquiries";
 import ManageSponsors from "./pages/admin/ManageSponsors";
+import ManageBanner from "./pages/admin/ManageBanner";
 
 // --- New Pages Imports ---
 import ContactConcierge from "./pages/ContactConcierge";
@@ -90,6 +91,7 @@ function App() {
           <Route path="clients" element={<ManageClients />} />
           <Route path="enquiries" element={<AdminEnquiries />} />
           <Route path="sponsors" element={<ManageSponsors />} />
+          <Route path="banner" element={<ManageBanner />} />
         </Route>
 
         {/* Catch-all */}

@@ -1,7 +1,8 @@
 // frontend/src/pages/Home.jsx
 import Hero from "../components/Hero";
 import FeaturedProperties from "../components/FeaturedProperties";
-import Sponsors from "../components/Sponsors"; // Imported Sponsors component
+import PromoBanner from "../components/PromoBanner"; // Imported new Banner Component
+import Sponsors from "../components/Sponsors";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -39,6 +40,9 @@ const Home = () => {
 
         {/* Featured Properties */}
         <FeaturedProperties />
+
+        {/* Dynamically Loaded Admin Promotional Banner */}
+        <PromoBanner />
 
         {/* Dynamic Infinite Moving Sponsors Marquee */}
         <Sponsors />

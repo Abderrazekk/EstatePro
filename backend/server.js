@@ -10,6 +10,7 @@ const userRoutes = require("./routes/userRoutes");
 const adminClientRoutes = require("./routes/adminClientRoutes");
 const enquiryRoutes = require("./routes/enquiryRoutes");
 const sponsorRoutes = require("./routes/sponsorRoutes");
+const bannerRoutes = require("./routes/bannerRoutes");
 
 // Load other env vars (PORT, MONGO_URI, JWT_SECRET) from .env
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
@@ -30,6 +31,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/admin/clients", adminClientRoutes);
 app.use("/api/enquiries", enquiryRoutes);
 app.use("/api/sponsors", sponsorRoutes);
+app.use("/api/banners", bannerRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");

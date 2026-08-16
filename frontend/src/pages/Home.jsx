@@ -1,7 +1,7 @@
-// frontend/src/pages/Home.jsx
+import { useEffect, useState } from "react";
 import Hero from "../components/Hero";
 import FeaturedProperties from "../components/FeaturedProperties";
-import PromoBanner from "../components/PromoBanner"; // Imported new Banner Component
+import PromoBanner from "../components/PromoBanner";
 import Sponsors from "../components/Sponsors";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -14,42 +14,59 @@ import {
   MessageCircle,
 } from "lucide-react";
 
+// Upgraded Hook
+const useScrollReveal = (threshold = 0.15) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [element, setElement] = useState(null);
+
+  useEffect(() => {
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [element, threshold]);
+
+  return [setElement, isVisible];
+};
+
 const Home = () => {
+  const [promiseRef, promiseVisible] = useScrollReveal();
+  const [ctaRef, ctaVisible] = useScrollReveal();
+
   return (
     <div className="min-h-screen flex flex-col bg-white selection:bg-stone-200 selection:text-stone-900">
-      {/* Custom Keyframe Animations */}
       <style>{`
         @keyframes fade-in-up {
-          0% { opacity: 0; transform: translateY(30px); }
+          0% { opacity: 0; transform: translateY(40px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          opacity: 0;
-        }
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
+        .animate-fade-in-up { animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .delay-100 { animation-delay: 150ms; }
+        .delay-200 { animation-delay: 300ms; }
+        .delay-300 { animation-delay: 450ms; }
       `}</style>
 
       <Navbar />
 
       <main className="flex-1">
-        {/* Hero */}
         <Hero />
-
-        {/* Featured Properties */}
         <FeaturedProperties />
-
-        {/* Dynamically Loaded Admin Promotional Banner */}
         <PromoBanner />
-
-        {/* Dynamic Infinite Moving Sponsors Marquee */}
         <Sponsors />
 
-        {/* Why choose us – Refined DarHôte Elegance */}
-        <section className="py-24 bg-stone-50 overflow-hidden relative">
-          {/* Decorative subtle background pattern */}
+        {/* Why choose us – DarHôte Promise */}
+        <section
+          ref={promiseRef}
+          className="py-24 bg-stone-50 overflow-hidden relative"
+        >
           <div
             className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
@@ -59,8 +76,9 @@ const Home = () => {
           ></div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            {/* Section Header */}
-            <div className="text-center mb-20 animate-fade-in-up">
+            <div
+              className={`text-center mb-20 ${promiseVisible ? "animate-fade-in-up" : "opacity-0"}`}
+            >
               <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-stone-500 bg-white border border-stone-200 px-4 py-2 rounded-full shadow-sm mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-stone-800"></span>
                 The DarHôte Promise
@@ -77,10 +95,10 @@ const Home = () => {
               </p>
             </div>
 
-            {/* Feature Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-              {/* Card 1 */}
-              <div className="group animate-fade-in-up delay-100 p-10 rounded-[2rem] border border-stone-200/60 bg-white hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500 hover:-translate-y-2">
+              <div
+                className={`group p-10 rounded-[2rem] border border-stone-200/60 bg-white hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500 hover:-translate-y-2 ${promiseVisible ? "animate-fade-in-up delay-100" : "opacity-0"}`}
+              >
                 <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gray-900 transition-colors duration-500">
                   <ShieldCheck className="w-8 h-8 text-stone-700 group-hover:text-white transition-colors duration-500 stroke-[1.5]" />
                 </div>
@@ -94,8 +112,9 @@ const Home = () => {
                 </p>
               </div>
 
-              {/* Card 2 */}
-              <div className="group animate-fade-in-up delay-200 p-10 rounded-[2rem] border border-stone-200/60 bg-white hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500 hover:-translate-y-2">
+              <div
+                className={`group p-10 rounded-[2rem] border border-stone-200/60 bg-white hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500 hover:-translate-y-2 ${promiseVisible ? "animate-fade-in-up delay-200" : "opacity-0"}`}
+              >
                 <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gray-900 transition-colors duration-500">
                   <Clock className="w-8 h-8 text-stone-700 group-hover:text-white transition-colors duration-500 stroke-[1.5]" />
                 </div>
@@ -108,8 +127,9 @@ const Home = () => {
                 </p>
               </div>
 
-              {/* Card 3 */}
-              <div className="group animate-fade-in-up delay-300 p-10 rounded-[2rem] border border-stone-200/60 bg-white hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500 hover:-translate-y-2">
+              <div
+                className={`group p-10 rounded-[2rem] border border-stone-200/60 bg-white hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500 hover:-translate-y-2 ${promiseVisible ? "animate-fade-in-up delay-300" : "opacity-0"}`}
+              >
                 <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gray-900 transition-colors duration-500">
                   <HeartHandshake className="w-8 h-8 text-stone-700 group-hover:text-white transition-colors duration-500 stroke-[1.5]" />
                 </div>
@@ -125,9 +145,11 @@ const Home = () => {
           </div>
         </section>
 
-        {/* CTA Banner – Monochromatic & Premium */}
-        <section className="bg-gray-900 py-24 relative overflow-hidden">
-          {/* Abstract soft lighting blobs */}
+        {/* CTA Banner */}
+        <section
+          ref={ctaRef}
+          className="bg-gray-900 py-24 relative overflow-hidden"
+        >
           <div className="absolute inset-0 opacity-20 pointer-events-none">
             <div
               className="absolute -top-24 -left-24 w-96 h-96 bg-stone-500 rounded-full mix-blend-screen filter blur-[100px] animate-pulse"
@@ -139,7 +161,9 @@ const Home = () => {
             />
           </div>
 
-          <div className="relative z-10 max-w-4xl mx-auto px-4 text-center animate-fade-in-up">
+          <div
+            className={`relative z-10 max-w-4xl mx-auto px-4 text-center ${ctaVisible ? "animate-fade-in-up" : "opacity-0"}`}
+          >
             <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight leading-tight">
               Ready to find your{" "}
               <span className="italic font-serif text-stone-400 font-light">
@@ -152,7 +176,6 @@ const Home = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-6 items-center">
-              {/* Phone call button */}
               <a
                 href="tel:+21671234567"
                 className="w-full sm:w-auto group bg-white text-gray-900 px-10 py-5 rounded-full font-bold hover:bg-stone-100 transition-all duration-300 shadow-xl shadow-black/20 hover:-translate-y-1 flex items-center justify-center gap-3 text-lg"
@@ -160,8 +183,6 @@ const Home = () => {
                 <Phone className="w-5 h-5 text-stone-600 group-hover:text-gray-900 transition-colors" />
                 +216 71 234 567
               </a>
-
-              {/* WhatsApp button */}
               <a
                 href="https://wa.me/21612345678"
                 target="_blank"

@@ -2,17 +2,39 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+// Upgraded Hook
+const useScrollReveal = (threshold = 0.2) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [element, setElement] = useState(null);
+
+  useEffect(() => {
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [element, threshold]);
+
+  return [setElement, isVisible];
+};
+
 const PromoBanner = () => {
   const [banner, setBanner] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [ref, isVisible] = useScrollReveal(0.2);
 
   useEffect(() => {
     const fetchBanner = async () => {
       try {
         const res = await axios.get("/api/banners");
-        if (res.data) {
-          setBanner(res.data);
-        }
+        if (res.data) setBanner(res.data);
       } catch (error) {
         console.error("Failed to fetch promotional banner:", error);
       } finally {
@@ -25,16 +47,14 @@ const PromoBanner = () => {
   if (loading || !banner) return null;
 
   return (
-    <section className="w-full bg-stone-950 flex justify-center">
+    <section
+      ref={ref}
+      className="w-full bg-stone-950 flex justify-center overflow-hidden"
+    >
       <Link
         to="/properties"
-        className="block relative w-full overflow-hidden group cursor-pointer"
+        className={`block relative w-full overflow-hidden group cursor-pointer transition-all duration-1000 transform ${isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-95"}`}
       >
-        {/* 
-          - `h-auto` (default for mobile): Scales the image perfectly so 100% of it is visible, no cut text!
-          - `md:h-[450px] lg:h-[600px]`: Gives it a nice, tall presence on larger desktop screens.
-          - `w-full` & `object-cover`: Ensures there are NEVER any black bars on the sides.
-        */}
         <img
           src={banner.imageUrl}
           alt="Promotional Banner"

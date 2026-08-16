@@ -49,7 +49,7 @@ const PromoBanner = () => {
   return (
     <section
       ref={ref}
-      className="w-full bg-stone-950 flex justify-center overflow-hidden"
+      className="w-full bg-white flex justify-center overflow-hidden"
     >
       <Link
         to="/properties"

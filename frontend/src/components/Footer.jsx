@@ -15,8 +15,8 @@ const Footer = () => {
               to="/"
               className="flex items-center gap-1 text-3xl font-extrabold tracking-tight"
             >
-              <span className="text-white">Dar</span>
-              <span className="text-stone-500">Hôte.</span>
+              <span className="text-white">Bor</span>
+              <span className="text-stone-500">gogo.</span>
             </Link>
             <p className="text-sm leading-relaxed text-stone-500 max-w-xs font-light">
               Your gateway to authentic Tunisian escapes. We connect discerning
@@ -44,7 +44,7 @@ const Footer = () => {
                   to="/register"
                   className="text-stone-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-sm"
                 >
-                  Join DarHôte
+                  Join Borgogo
                 </Link>
               </li>
               <li>
@@ -140,7 +140,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-sm text-stone-600 font-light">
-            &copy; {currentYear} DarHôte. All rights reserved.
+            &copy; {currentYear} Borgogo. All rights reserved.
           </p>
 
           {/* Social Icons */}

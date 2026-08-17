@@ -1,6 +1,141 @@
 import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import MapPicker from "./MapPicker";
+import {
+  AMENITIES_CATEGORIES,
+  FEATURES_CATEGORIES,
+} from "../constants/propertyOptions";
+import {
+  Check,
+  Plus,
+  X,
+  Sparkles,
+  ShieldCheck,
+  Wifi,
+  Waves,
+  Wind,
+  Car,
+  Utensils,
+  Tv,
+  Trees,
+  Coffee,
+  Shirt,
+  Flame,
+  Dog,
+  Laptop,
+  Sun,
+  Palmtree,
+  Mountain,
+  Award,
+  Compass,
+  CheckCircle2,
+} from "lucide-react";
+
+// Helper function to dynamically map property option keywords to Lucide icons
+const getOptionIcon = (label = "") => {
+  const normalized = label.toLowerCase().trim();
+
+  if (normalized.includes("wifi") || normalized.includes("internet"))
+    return Wifi;
+  if (normalized.includes("piscine") || normalized.includes("pool"))
+    return Waves;
+  if (
+    normalized.includes("clim") ||
+    normalized.includes("air") ||
+    normalized.includes("ventilation")
+  )
+    return Wind;
+  if (
+    normalized.includes("park") ||
+    normalized.includes("garage") ||
+    normalized.includes("voiture")
+  )
+    return Car;
+  if (
+    normalized.includes("cuisin") ||
+    normalized.includes("kitchen") ||
+    normalized.includes("repas")
+  )
+    return Utensils;
+  if (
+    normalized.includes("tv") ||
+    normalized.includes("télé") ||
+    normalized.includes("television")
+  )
+    return Tv;
+  if (
+    normalized.includes("jardin") ||
+    normalized.includes("parc") ||
+    normalized.includes("espace vert")
+  )
+    return Trees;
+  if (
+    normalized.includes("déjeuner") ||
+    normalized.includes("café") ||
+    normalized.includes("breakfast")
+  )
+    return Coffee;
+  if (
+    normalized.includes("linge") ||
+    normalized.includes("laver") ||
+    normalized.includes("machine") ||
+    normalized.includes("lave")
+  )
+    return Shirt;
+  if (
+    normalized.includes("chauffage") ||
+    normalized.includes("cheminée") ||
+    normalized.includes("feu") ||
+    normalized.includes("bbq") ||
+    normalized.includes("barbecue")
+  )
+    return Flame;
+  if (
+    normalized.includes("sécurit") ||
+    normalized.includes("garde") ||
+    normalized.includes("alarme")
+  )
+    return ShieldCheck;
+  if (
+    normalized.includes("animaux") ||
+    normalized.includes("pet") ||
+    normalized.includes("chien") ||
+    normalized.includes("chat")
+  )
+    return Dog;
+  if (
+    normalized.includes("travail") ||
+    normalized.includes("bureau") ||
+    normalized.includes("workspace")
+  )
+    return Laptop;
+  if (
+    normalized.includes("terrasse") ||
+    normalized.includes("balcon") ||
+    normalized.includes("sun")
+  )
+    return Sun;
+  if (
+    normalized.includes("plage") ||
+    normalized.includes("mer") ||
+    normalized.includes("beach")
+  )
+    return Palmtree;
+  if (normalized.includes("montagne") || normalized.includes("vue"))
+    return Mountain;
+  if (
+    normalized.includes("jacuzzi") ||
+    normalized.includes("spa") ||
+    normalized.includes("luxe")
+  )
+    return Sparkles;
+  if (normalized.includes("authent") || normalized.includes("tradition"))
+    return Award;
+  if (normalized.includes("calme") || normalized.includes("tranquille"))
+    return Compass;
+
+  return CheckCircle2;
+};
 
 const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
   const [formData, setFormData] = useState({
@@ -31,8 +166,8 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
   const [video, setVideo] = useState(null);
   const [position, setPosition] = useState({ lat: 36.8065, lng: 10.1815 });
   const [previewImages, setPreviewImages] = useState([]);
-  const [featureInput, setFeatureInput] = useState("");
-  const [amenityInput, setAmenityInput] = useState("");
+  const [customFeatureInput, setCustomFeatureInput] = useState("");
+  const [customAmenityInput, setCustomAmenityInput] = useState("");
 
   useEffect(() => {
     if (initialData) {
@@ -101,36 +236,24 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
     }));
   };
 
-  const addFeature = () => {
-    if (featureInput.trim()) {
-      setFormData((prev) => ({
+  const toggleItem = (item, key) => {
+    setFormData((prev) => {
+      const exists = prev[key].includes(item);
+      return {
         ...prev,
-        features: [...prev.features, featureInput.trim()],
-      }));
-      setFeatureInput("");
-    }
-  };
-  const removeFeature = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      features: prev.features.filter((_, i) => i !== index),
-    }));
+        [key]: exists
+          ? prev[key].filter((i) => i !== item)
+          : [...prev[key], item],
+      };
+    });
   };
 
-  const addAmenity = () => {
-    if (amenityInput.trim()) {
-      setFormData((prev) => ({
-        ...prev,
-        amenities: [...prev.amenities, amenityInput.trim()],
-      }));
-      setAmenityInput("");
+  const addCustomItem = (value, key, setInput) => {
+    const trimmed = value.trim();
+    if (trimmed && !formData[key].includes(trimmed)) {
+      setFormData((prev) => ({ ...prev, [key]: [...prev[key], trimmed] }));
+      setInput("");
     }
-  };
-  const removeAmenity = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      amenities: prev.amenities.filter((_, i) => i !== index),
-    }));
   };
 
   const handleSubmit = (e) => {
@@ -155,17 +278,26 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 bg-white p-6 rounded-xl shadow-sm border border-gray-100"
+      className="space-y-8 bg-white p-6 sm:p-8 rounded-3xl shadow-xl shadow-stone-200/50 border border-stone-200/80"
     >
-      <h2 className="text-2xl font-bold text-gray-900">
-        {isEdit ? "Modifier la Maison d'Hôte" : "Ajouter une Maison d'Hôte"}
-      </h2>
+      <div className="border-b border-stone-100 pb-5 flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-black text-stone-900 tracking-tight">
+            {isEdit ? "Modifier la Maison d'Hôte" : "Nouvelle Maison d'Hôte"}
+          </h2>
+          <p className="text-xs text-stone-500 mt-1">
+            Complétez les informations pour publier ou mettre à jour la
+            résidence.
+          </p>
+        </div>
+        <Sparkles className="w-6 h-6 text-stone-400" />
+      </div>
 
       {/* Main Details */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
-          <label className="block mb-1 font-medium text-sm text-gray-700">
-            Titre
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
+            Titre de la Propriété *
           </label>
           <input
             name="title"
@@ -173,12 +305,13 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             value={formData.title}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border border-stone-200 px-4 py-3 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none transition"
           />
         </div>
+
         <div>
-          <label className="block mb-1 font-medium text-sm text-gray-700">
-            Prix par Nuitée (TND)
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
+            Prix par Nuitée (TND) *
           </label>
           <input
             type="number"
@@ -187,12 +320,13 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             value={formData.pricePerNight}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border border-stone-200 px-4 py-3 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none transition"
           />
         </div>
-        <div className="col-span-2">
-          <label className="block mb-1 font-medium text-sm text-gray-700">
-            Description
+
+        <div className="col-span-1 md:col-span-2">
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
+            Description *
           </label>
           <textarea
             name="description"
@@ -200,12 +334,14 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             onChange={handleChange}
             required
             rows="4"
-            className="w-full border px-3 py-2 rounded-lg"
+            placeholder="Décrivez l'histoire, le charme et le cadre unique de cette maison..."
+            className="w-full border border-stone-200 p-4 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none transition"
           />
         </div>
+
         <div>
-          <label className="block mb-1 font-medium text-sm text-gray-700">
-            Gouvernorat / Région
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
+            Gouvernorat / Région *
           </label>
           <input
             name="location"
@@ -213,44 +349,47 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             value={formData.location}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border border-stone-200 px-4 py-3 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none transition"
           />
         </div>
+
         <div>
-          <label className="block mb-1 font-medium text-sm text-gray-700">
-            Type de Logement
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
+            Type de Logement *
           </label>
           <select
             name="type"
             value={formData.type}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border border-stone-200 px-4 py-3 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none cursor-pointer"
           >
-            <option>Maison d'Hôte</option>
-            <option>Dar Traditionnelle</option>
-            <option>Villa de Charme</option>
-            <option>Gîte Rural</option>
-            <option>Chambre d'Hôte</option>
+            <option value="Maison d'Hôte">Maison d'Hôte</option>
+            <option value="Dar Traditionnelle">Dar Traditionnelle</option>
+            <option value="Villa de Charme">Villa de Charme</option>
+            <option value="Gîte Rural">Gîte Rural</option>
+            <option value="Chambre d'Hôte">Chambre d'Hôte</option>
           </select>
         </div>
+
         <div>
-          <label className="block mb-1 font-medium text-sm text-gray-700">
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
             Statut
           </label>
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border border-stone-200 px-4 py-3 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none cursor-pointer"
           >
             <option value="Available">Disponible</option>
             <option value="Maintenance">Maintenance</option>
             <option value="Unavailable">Indisponible</option>
           </select>
         </div>
+
         <div>
-          <label className="block mb-1 font-medium text-sm text-gray-700">
-            Capacité (Nombre Max de Personnes)
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
+            Capacité (Voyageurs max)
           </label>
           <input
             type="number"
@@ -258,11 +397,12 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             value={formData.maxGuests}
             onChange={handleChange}
             min="1"
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border border-stone-200 px-4 py-3 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none transition"
           />
         </div>
+
         <div>
-          <label className="block mb-1 font-medium text-sm text-gray-700">
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
             Nombre de Chambres
           </label>
           <input
@@ -271,11 +411,12 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             value={formData.bedrooms}
             onChange={handleChange}
             min="1"
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border border-stone-200 px-4 py-3 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none transition"
           />
         </div>
+
         <div>
-          <label className="block mb-1 font-medium text-sm text-gray-700">
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
             Salles de Bain
           </label>
           <input
@@ -284,11 +425,12 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             value={formData.bathrooms}
             onChange={handleChange}
             min="1"
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border border-stone-200 px-4 py-3 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none transition"
           />
         </div>
+
         <div>
-          <label className="block mb-1 font-medium text-sm text-gray-700">
+          <label className="block mb-1.5 font-bold text-xs uppercase tracking-wider text-stone-700">
             Nuitées Minimum
           </label>
           <input
@@ -297,47 +439,52 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             value={formData.minNights}
             onChange={handleChange}
             min="1"
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border border-stone-200 px-4 py-3 rounded-2xl text-sm focus:ring-2 focus:ring-stone-900 outline-none transition"
           />
         </div>
       </div>
 
       {/* Address */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input
-          placeholder="Rue / Adresse"
-          name="address.street"
-          value={formData["address.street"]}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded-lg"
-        />
-        <input
-          placeholder="Ville"
-          name="address.city"
-          value={formData["address.city"]}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded-lg"
-        />
-        <input
-          placeholder="Gouvernorat"
-          name="address.state"
-          value={formData["address.state"]}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded-lg"
-        />
-        <input
-          placeholder="Code Postal"
-          name="address.zipCode"
-          value={formData["address.zipCode"]}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded-lg"
-        />
+      <div className="pt-4 border-t border-stone-100">
+        <label className="block mb-3 font-bold text-xs uppercase tracking-wider text-stone-700">
+          Adresse physique
+        </label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            placeholder="Rue / Adresse"
+            name="address.street"
+            value={formData["address.street"]}
+            onChange={handleChange}
+            className="border border-stone-200 px-4 py-2.5 rounded-xl text-sm focus:ring-2 focus:ring-stone-900 outline-none"
+          />
+          <input
+            placeholder="Ville"
+            name="address.city"
+            value={formData["address.city"]}
+            onChange={handleChange}
+            className="border border-stone-200 px-4 py-2.5 rounded-xl text-sm focus:ring-2 focus:ring-stone-900 outline-none"
+          />
+          <input
+            placeholder="Gouvernorat"
+            name="address.state"
+            value={formData["address.state"]}
+            onChange={handleChange}
+            className="border border-stone-200 px-4 py-2.5 rounded-xl text-sm focus:ring-2 focus:ring-stone-900 outline-none"
+          />
+          <input
+            placeholder="Code Postal"
+            name="address.zipCode"
+            value={formData["address.zipCode"]}
+            onChange={handleChange}
+            className="border border-stone-200 px-4 py-2.5 rounded-xl text-sm focus:ring-2 focus:ring-stone-900 outline-none"
+          />
+        </div>
       </div>
 
       {/* Map picker */}
       <div>
-        <label className="block mb-1 font-medium text-sm text-gray-700">
-          Localisation Carte
+        <label className="block mb-2 font-bold text-xs uppercase tracking-wider text-stone-700">
+          Emplacement sur la carte
         </label>
         <MapPicker
           position={position}
@@ -346,18 +493,230 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
         />
       </div>
 
+      {/* CATEGORIZED AMENITIES SELECTOR */}
+      <div className="pt-6 border-t border-stone-100 space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-black text-stone-900">
+              Équipements Inclus & Services
+            </h3>
+            <p className="text-xs text-stone-500">
+              Sélectionnez les équipements disponibles dans la résidence.
+            </p>
+          </div>
+          <span className="text-xs font-bold bg-stone-100 text-stone-800 px-3 py-1 rounded-full">
+            {formData.amenities.length} sélectionné(s)
+          </span>
+        </div>
+
+        <div className="space-y-6 bg-stone-50/50 p-5 rounded-2xl border border-stone-200/60">
+          {AMENITIES_CATEGORIES.map((cat, idx) => (
+            <div key={idx} className="space-y-2.5">
+              <h4 className="text-xs font-extrabold uppercase tracking-widest text-stone-500">
+                {cat.category}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {cat.items.map((item) => {
+                  const isSelected = formData.amenities.includes(item);
+                  const OptionIcon = getOptionIcon(item);
+                  return (
+                    <button
+                      type="button"
+                      key={item}
+                      onClick={() => toggleItem(item, "amenities")}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 border ${
+                        isSelected
+                          ? "bg-stone-900 text-white border-stone-900 shadow-sm"
+                          : "bg-white text-stone-600 border-stone-200 hover:border-stone-400"
+                      }`}
+                    >
+                      <OptionIcon
+                        className={`w-4 h-4 ${isSelected ? "text-white" : "text-stone-500"}`}
+                      />
+                      <span>{item}</span>
+                      {isSelected ? (
+                        <Check className="w-3.5 h-3.5 ml-0.5 text-emerald-400" />
+                      ) : (
+                        <Plus className="w-3.5 h-3.5 text-stone-400" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+
+          {/* Custom Amenity Adder */}
+          <div className="pt-2 border-t border-stone-200/60">
+            <label className="block mb-1.5 text-xs font-bold text-stone-700">
+              Ajouter un équipement personnalisé
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customAmenityInput}
+                onChange={(e) => setCustomAmenityInput(e.target.value)}
+                placeholder="Ex: Borne de recharge solaire..."
+                className="flex-1 bg-white border border-stone-200 rounded-xl px-3.5 py-2 text-xs text-stone-900 outline-none focus:ring-2 focus:ring-stone-900"
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  addCustomItem(
+                    customAmenityInput,
+                    "amenities",
+                    setCustomAmenityInput,
+                  )
+                }
+                className="bg-stone-900 text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-stone-800 transition"
+              >
+                Ajouter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CATEGORIZED FEATURES SELECTOR */}
+      <div className="pt-6 border-t border-stone-100 space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-black text-stone-900">
+              Caractéristiques & Style
+            </h3>
+            <p className="text-xs text-stone-500">
+              Sélectionnez l'architecture, le cadre et le concept de
+              l'établissement.
+            </p>
+          </div>
+          <span className="text-xs font-bold bg-stone-100 text-stone-800 px-3 py-1 rounded-full">
+            {formData.features.length} sélectionnée(s)
+          </span>
+        </div>
+
+        <div className="space-y-6 bg-stone-50/50 p-5 rounded-2xl border border-stone-200/60">
+          {FEATURES_CATEGORIES.map((cat, idx) => (
+            <div key={idx} className="space-y-2.5">
+              <h4 className="text-xs font-extrabold uppercase tracking-widest text-stone-500">
+                {cat.category}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {cat.items.map((item) => {
+                  const isSelected = formData.features.includes(item);
+                  const OptionIcon = getOptionIcon(item);
+                  return (
+                    <button
+                      type="button"
+                      key={item}
+                      onClick={() => toggleItem(item, "features")}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 border ${
+                        isSelected
+                          ? "bg-stone-900 text-white border-stone-900 shadow-sm"
+                          : "bg-white text-stone-600 border-stone-200 hover:border-stone-400"
+                      }`}
+                    >
+                      <OptionIcon
+                        className={`w-4 h-4 ${isSelected ? "text-white" : "text-stone-500"}`}
+                      />
+                      <span>{item}</span>
+                      {isSelected ? (
+                        <Check className="w-3.5 h-3.5 ml-0.5 text-emerald-400" />
+                      ) : (
+                        <Plus className="w-3.5 h-3.5 text-stone-400" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+
+          {/* Custom Feature Adder */}
+          <div className="pt-2 border-t border-stone-200/60">
+            <label className="block mb-1.5 text-xs font-bold text-stone-700">
+              Ajouter une caractéristique personnalisée
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customFeatureInput}
+                onChange={(e) => setCustomFeatureInput(e.target.value)}
+                placeholder="Ex: Fontaine en marbre antique..."
+                className="flex-1 bg-white border border-stone-200 rounded-xl px-3.5 py-2 text-xs text-stone-900 outline-none focus:ring-2 focus:ring-stone-900"
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  addCustomItem(
+                    customFeatureInput,
+                    "features",
+                    setCustomFeatureInput,
+                  )
+                }
+                className="bg-stone-900 text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-stone-800 transition"
+              >
+                Ajouter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Selected Items Tags Preview with Icons */}
+      {(formData.amenities.length > 0 || formData.features.length > 0) && (
+        <div className="p-4 bg-stone-100/70 rounded-2xl border border-stone-200/50 space-y-3">
+          <p className="text-xs font-bold text-stone-700 uppercase tracking-wider">
+            Récapitulatif des choix
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {formData.amenities.map((item) => {
+              const OptionIcon = getOptionIcon(item);
+              return (
+                <span
+                  key={item}
+                  className="bg-white border border-stone-300 text-stone-800 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 shadow-xs"
+                >
+                  <OptionIcon className="w-3.5 h-3.5 text-stone-600" />
+                  <span>{item}</span>
+                  <X
+                    className="w-3.5 h-3.5 text-red-500 cursor-pointer hover:scale-110 ml-0.5 transition-transform"
+                    onClick={() => toggleItem(item, "amenities")}
+                  />
+                </span>
+              );
+            })}
+            {formData.features.map((item) => {
+              const OptionIcon = getOptionIcon(item);
+              return (
+                <span
+                  key={item}
+                  className="bg-stone-900 text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 shadow-xs"
+                >
+                  <OptionIcon className="w-3.5 h-3.5 text-stone-300" />
+                  <span>{item}</span>
+                  <X
+                    className="w-3.5 h-3.5 text-red-400 cursor-pointer hover:scale-110 ml-0.5 transition-transform"
+                    onClick={() => toggleItem(item, "features")}
+                  />
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Images Upload */}
-      <div>
-        <label className="block mb-1 font-medium text-sm text-gray-700">
-          Photos (max 10) {isEdit && "(Ajouter de nouvelles photos)"}
+      <div className="pt-4 border-t border-stone-100">
+        <label className="block mb-2 font-bold text-xs uppercase tracking-wider text-stone-700">
+          Photos principales {isEdit && "(Ajouter de nouvelles photos)"}
         </label>
         <div
           {...getImageRootProps()}
-          className="border-dashed border-2 border-gray-300 p-6 rounded-lg text-center cursor-pointer hover:border-blue-500 transition-colors"
+          className="border-dashed border-2 border-stone-300 p-6 rounded-2xl text-center cursor-pointer hover:border-stone-900 transition-colors bg-stone-50/50"
         >
           <input {...getImageInputProps()} />
-          <p className="text-gray-500">
-            Glissez-déposez vos images ici, ou cliquez pour sélectionner
+          <p className="text-xs font-medium text-stone-600">
+            Glissez-déposez vos images ici, ou cliquez pour parcourir
           </p>
         </div>
         <div className="flex gap-2 mt-3 overflow-x-auto">
@@ -366,7 +725,7 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
               key={idx}
               src={src}
               alt="Aperçu"
-              className="h-20 w-20 object-cover rounded-lg border"
+              className="h-20 w-20 object-cover rounded-xl border border-stone-200"
             />
           ))}
         </div>
@@ -374,103 +733,27 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
 
       {/* Video Upload */}
       <div>
-        <label className="block mb-1 font-medium text-sm text-gray-700">
-          Vidéo (Optionnel)
+        <label className="block mb-2 font-bold text-xs uppercase tracking-wider text-stone-700">
+          Vidéo de Présentation (Optionnel)
         </label>
         <div
           {...getVideoRootProps()}
-          className="border-dashed border-2 border-gray-300 p-4 rounded-lg text-center cursor-pointer"
+          className="border-dashed border-2 border-stone-300 p-4 rounded-2xl text-center cursor-pointer bg-stone-50/50"
         >
           <input {...getVideoInputProps()} />
-          <p className="text-sm text-gray-500">
-            Déposer une vidéo de présentation
+          <p className="text-xs font-medium text-stone-600">
+            Glissez une vidéo de présentation
           </p>
         </div>
-        {video && <p className="text-xs text-blue-600 mt-1">{video.name}</p>}
-      </div>
-
-      {/* Features */}
-      <div>
-        <label className="block mb-1 font-medium text-sm text-gray-700">
-          Caractéristiques Spéciales
-        </label>
-        <div className="flex gap-2 mb-2">
-          <input
-            value={featureInput}
-            onChange={(e) => setFeatureInput(e.target.value)}
-            className="border px-3 py-2 rounded-lg flex-1 text-sm"
-            placeholder="ex: Vue sur mer, Architecture arabo-andalouse..."
-          />
-          <button
-            type="button"
-            onClick={addFeature}
-            className="bg-blue-600 text-white px-4 rounded-lg text-sm font-medium hover:bg-blue-700"
-          >
-            Ajouter
-          </button>
-        </div>
-        <ul className="flex flex-wrap gap-2">
-          {formData.features.map((feat, idx) => (
-            <li
-              key={idx}
-              className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
-            >
-              {feat}
-              <button
-                type="button"
-                onClick={() => removeFeature(idx)}
-                className="text-red-500 font-bold"
-              >
-                &times;
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Amenities */}
-      <div>
-        <label className="block mb-1 font-medium text-sm text-gray-700">
-          Équipements & Services
-        </label>
-        <div className="flex gap-2 mb-2">
-          <input
-            value={amenityInput}
-            onChange={(e) => setAmenityInput(e.target.value)}
-            className="border px-3 py-2 rounded-lg flex-1 text-sm"
-            placeholder="ex: Piscine, Petit-déjeuner inclus, Wi-Fi, Climatisation..."
-          />
-          <button
-            type="button"
-            onClick={addAmenity}
-            className="bg-blue-600 text-white px-4 rounded-lg text-sm font-medium hover:bg-blue-700"
-          >
-            Ajouter
-          </button>
-        </div>
-        <ul className="flex flex-wrap gap-2">
-          {formData.amenities.map((am, idx) => (
-            <li
-              key={idx}
-              className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
-            >
-              {am}
-              <button
-                type="button"
-                onClick={() => removeAmenity(idx)}
-                className="text-red-500 font-bold"
-              >
-                &times;
-              </button>
-            </li>
-          ))}
-        </ul>
+        {video && (
+          <p className="text-xs text-stone-900 font-bold mt-1">{video.name}</p>
+        )}
       </div>
 
       {/* Host Information */}
-      <div className="border-t pt-4">
-        <h3 className="text-base font-semibold mb-3">
-          Informations de l'Hôte / Propriétaire
+      <div className="border-t border-stone-100 pt-5">
+        <h3 className="text-sm font-extrabold text-stone-900 uppercase tracking-wider mb-3">
+          Informations Hôte / Contact
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <input
@@ -478,54 +761,54 @@ const PropertyForm = ({ initialData, onSubmit, isEdit }) => {
             name="hostName"
             value={formData.hostName}
             onChange={handleChange}
-            className="border px-3 py-2 rounded-lg"
+            className="border border-stone-200 px-4 py-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-stone-900"
           />
           <input
             placeholder="Email de l'Hôte"
             name="hostEmail"
             value={formData.hostEmail}
             onChange={handleChange}
-            className="border px-3 py-2 rounded-lg"
+            className="border border-stone-200 px-4 py-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-stone-900"
           />
           <input
             placeholder="Téléphone (+216)"
             name="hostPhone"
             value={formData.hostPhone}
             onChange={handleChange}
-            className="border px-3 py-2 rounded-lg"
+            className="border border-stone-200 px-4 py-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-stone-900"
           />
         </div>
       </div>
 
       {/* Toggles */}
-      <div className="flex gap-6 pt-2">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+      <div className="flex gap-6 pt-2 border-t border-stone-100">
+        <label className="flex items-center gap-2 text-xs font-bold text-stone-800 cursor-pointer">
           <input
             type="checkbox"
             name="isFeatured"
             checked={formData.isFeatured}
             onChange={handleChange}
-            className="rounded text-blue-600 focus:ring-blue-500"
+            className="w-4 h-4 rounded text-stone-900 focus:ring-stone-900"
           />
           Mettre en avant (Featured)
         </label>
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+        <label className="flex items-center gap-2 text-xs font-bold text-stone-800 cursor-pointer">
           <input
             type="checkbox"
             name="isPublished"
             checked={formData.isPublished}
             onChange={handleChange}
-            className="rounded text-blue-600 focus:ring-blue-500"
+            className="w-4 h-4 rounded text-stone-900 focus:ring-stone-900"
           />
-          Publié sur le site
+          Publier sur le site
         </label>
       </div>
 
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white font-medium px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+        className="w-full bg-stone-900 text-white font-bold px-6 py-4 rounded-2xl hover:bg-stone-800 active:scale-[0.99] transition shadow-lg shadow-stone-900/10"
       >
-        {isEdit ? "Mettre à jour la Maison d'Hôte" : "Publier la Maison d'Hôte"}
+        {isEdit ? "Enregistrer les modifications" : "Publier la Maison d'Hôte"}
       </button>
     </form>
   );

@@ -41,8 +41,8 @@ const Navbar = () => {
               className="flex items-center gap-1 text-2xl font-extrabold tracking-tight shrink-0"
               onClick={closeMobile}
             >
-              <span className="text-gray-900">Dar</span>
-              <span className="text-stone-400">Hôte.</span>
+              <span className="text-gray-900">Bor</span>
+              <span className="text-stone-400">gogo.</span>
             </Link>
 
             {/* Centered desktop navigation links */}
@@ -153,8 +153,8 @@ const Navbar = () => {
               onClick={closeMobile}
               className="flex items-center gap-1 text-2xl font-extrabold tracking-tight"
             >
-              <span className="text-gray-900">Dar</span>
-              <span className="text-stone-400">Hôte.</span>
+              <span className="text-gray-900">Bor</span>
+              <span className="text-stone-400">gogo.</span>
             </Link>
             <button
               onClick={closeMobile}

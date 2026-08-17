@@ -19,10 +19,142 @@ import {
   Check,
   MapPin,
   ArrowRight,
+  Wifi,
+  Waves,
+  Wind,
+  Car,
+  Utensils,
+  Tv,
+  Trees,
+  Coffee,
+  Shirt,
+  Flame,
+  ShieldCheck,
+  Dog,
+  Laptop,
+  Sun,
+  Mountain,
+  Palmtree,
+  Sparkles,
+  Award,
+  Building,
+  Flower2,
+  Lock,
+  Compass,
+  CheckCircle2,
+  Sliders,
+  Tv2,
+  Volume2,
 } from "lucide-react";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
+// Helper function to dynamically associate keywords with Lucide icons
+const getOptionIcon = (label = "") => {
+  const normalized = label.toLowerCase().trim();
+
+  if (normalized.includes("wifi") || normalized.includes("internet"))
+    return Wifi;
+  if (normalized.includes("piscine") || normalized.includes("pool"))
+    return Waves;
+  if (
+    normalized.includes("clim") ||
+    normalized.includes("air") ||
+    normalized.includes("ventilation")
+  )
+    return Wind;
+  if (
+    normalized.includes("park") ||
+    normalized.includes("garage") ||
+    normalized.includes("voiture")
+  )
+    return Car;
+  if (
+    normalized.includes("cuisin") ||
+    normalized.includes("kitchen") ||
+    normalized.includes("repas")
+  )
+    return Utensils;
+  if (
+    normalized.includes("tv") ||
+    normalized.includes("télé") ||
+    normalized.includes("television")
+  )
+    return Tv;
+  if (
+    normalized.includes("jardin") ||
+    normalized.includes("parc") ||
+    normalized.includes("espace vert")
+  )
+    return Trees;
+  if (
+    normalized.includes("déjeuner") ||
+    normalized.includes("café") ||
+    normalized.includes("breakfast")
+  )
+    return Coffee;
+  if (
+    normalized.includes("linge") ||
+    normalized.includes("laver") ||
+    normalized.includes("machine") ||
+    normalized.includes("lave")
+  )
+    return Shirt;
+  if (
+    normalized.includes("chauffage") ||
+    normalized.includes("cheminée") ||
+    normalized.includes("feu") ||
+    normalized.includes("bbq") ||
+    normalized.includes("barbecue")
+  )
+    return Flame;
+  if (
+    normalized.includes("sécurit") ||
+    normalized.includes("garde") ||
+    normalized.includes("alarme")
+  )
+    return ShieldCheck;
+  if (
+    normalized.includes("animaux") ||
+    normalized.includes("pet") ||
+    normalized.includes("chien") ||
+    normalized.includes("chat")
+  )
+    return Dog;
+  if (
+    normalized.includes("travail") ||
+    normalized.includes("bureau") ||
+    normalized.includes("workspace")
+  )
+    return Laptop;
+  if (
+    normalized.includes("terrasse") ||
+    normalized.includes("balcon") ||
+    normalized.includes("sun")
+  )
+    return Sun;
+  if (
+    normalized.includes("plage") ||
+    normalized.includes("mer") ||
+    normalized.includes("beach")
+  )
+    return Palmtree;
+  if (normalized.includes("montagne") || normalized.includes("vue"))
+    return Mountain;
+  if (
+    normalized.includes("jacuzzi") ||
+    normalized.includes("spa") ||
+    normalized.includes("luxe")
+  )
+    return Sparkles;
+  if (normalized.includes("authent") || normalized.includes("tradition"))
+    return Award;
+  if (normalized.includes("calme") || normalized.includes("tranquille"))
+    return Compass;
+
+  return CheckCircle2; // Fallback icon
+};
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -39,7 +171,6 @@ const PropertyDetail = () => {
 
   const { user, toggleWishlist } = useAuth();
 
-  // Refs for scrolling the thumbnails
   const thumbScrollRef = useRef(null);
   const thumbRefs = useRef([]);
 
@@ -52,12 +183,10 @@ const PropertyDetail = () => {
         setProperty(propData);
         if (propData.images?.length > 0) setActiveImage(propData.images[0].url);
 
-        // Fetch similar properties based on location or type
         try {
           const similarRes = await axios.get(`/api/properties`);
           const allProps = similarRes.data.properties || similarRes.data;
 
-          // Filter out current property and match by location or type, limit to 4
           const filtered = allProps
             .filter(
               (p) =>
@@ -66,7 +195,6 @@ const PropertyDetail = () => {
             )
             .slice(0, 4);
 
-          // If we don't have enough matches from location/type, just fill with any other properties up to 4
           if (filtered.length < 4) {
             const remaining = allProps.filter(
               (p) => p._id !== id && !filtered.some((f) => f._id === p._id),
@@ -111,7 +239,6 @@ const PropertyDetail = () => {
     fetchBookedDates();
   }, [id]);
 
-  // Handle Keyboard Navigation for Lightbox
   useEffect(() => {
     if (!lightboxOpen || !property) return;
     const handleKey = (e) => {
@@ -125,7 +252,6 @@ const PropertyDetail = () => {
 
   const images = property?.images ?? [];
 
-  // Automatically scroll the thumbnail list to keep the active image centered
   useEffect(() => {
     const index = images.findIndex((img) => img.url === activeImage);
     if (index !== -1 && thumbRefs.current[index]) {
@@ -137,7 +263,6 @@ const PropertyDetail = () => {
     }
   }, [activeImage, images]);
 
-  // --- Main Image & Lightbox Navigation Logic ---
   const openLightboxAt = (url) => {
     const idx = images.findIndex((img) => img.url === url);
     setLightboxIndex(idx === -1 ? 0 : idx);
@@ -167,7 +292,6 @@ const PropertyDetail = () => {
     setActiveImage(images[nextIndex].url);
   };
 
-  // --- Thumbnail Scroll Logic ---
   const scrollThumbnails = (direction) => {
     if (thumbScrollRef.current) {
       const scrollAmount = thumbScrollRef.current.clientWidth / 2;
@@ -178,12 +302,11 @@ const PropertyDetail = () => {
     }
   };
 
-  // --- Share Logic ---
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error("Erreur lors de la copie du lien", err);
     }
@@ -227,7 +350,6 @@ const PropertyDetail = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* Custom Styles for Modern Classy Calendar & Scrollbar */}
       <style>{`
         .custom-calendar-wrapper .react-datepicker {
           font-family: inherit;
@@ -314,9 +436,8 @@ const PropertyDetail = () => {
       <Navbar />
 
       <main className="flex-1 max-w-6xl mx-auto px-4 py-8 w-full">
-        {/* Modern Gallery Section */}
+        {/* Gallery Section */}
         <div className="mb-8 flex flex-col gap-3">
-          {/* Main Large Image */}
           <div className="w-full h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-2xl bg-gray-100 border border-gray-100">
             <img
               src={
@@ -329,7 +450,6 @@ const PropertyDetail = () => {
               className="w-full h-full object-cover cursor-zoom-in transition-transform duration-700 group-hover:scale-105"
             />
 
-            {/* Main Image Navigation Arrows */}
             {images.length > 1 && (
               <>
                 <button
@@ -364,7 +484,6 @@ const PropertyDetail = () => {
             </button>
           </div>
 
-          {/* Scrollable Thumbnails Strip with Left/Right Arrows */}
           {images.length > 1 && (
             <div className="relative group/thumbs flex items-center mt-1">
               <button
@@ -419,7 +538,6 @@ const PropertyDetail = () => {
                 {property.type}
               </span>
 
-              {/* Actions: Share & Wishlist */}
               <div className="flex items-center gap-1">
                 <button
                   onClick={handleShare}
@@ -472,7 +590,7 @@ const PropertyDetail = () => {
           </div>
         </div>
 
-        {/* Details Icons */}
+        {/* Details Overview */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-8 border-b border-gray-100">
           <Stat
             icon={Users}
@@ -504,38 +622,51 @@ const PropertyDetail = () => {
               </p>
             </Section>
 
-            {/* Features & Amenities Section */}
-            {(property.features?.length > 0 ||
-              property.amenities?.length > 0) && (
+            {/* PROFESSIONAL DYNAMIC AMENITIES & FEATURES SECTION WITH ICONS */}
+            {(property.amenities?.length > 0 ||
+              property.features?.length > 0) && (
               <Section title="Équipements et Caractéristiques">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 mt-4">
-                  {property.features?.map((feature, index) => (
-                    <div
-                      key={`feat-${index}`}
-                      className="flex items-center gap-4 text-gray-700"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                        <span className="text-sm font-bold">✦</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                  {/* Amenities List with Specific Icons */}
+                  {property.amenities?.map((amenity, index) => {
+                    const IconComponent = getOptionIcon(amenity);
+                    return (
+                      <div
+                        key={`amenity-${index}`}
+                        className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-stone-50/80 border border-stone-200/60 hover:border-gray-300 transition-colors"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-white text-gray-900 shadow-sm border border-stone-200/80 flex items-center justify-center shrink-0">
+                          <IconComponent size={20} strokeWidth={1.8} />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-800">
+                          {amenity}
+                        </span>
                       </div>
-                      <span className="text-base font-medium">{feature}</span>
-                    </div>
-                  ))}
-                  {property.amenities?.map((amenity, index) => (
-                    <div
-                      key={`amen-${index}`}
-                      className="flex items-center gap-4 text-gray-700"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
-                        <span className="text-sm font-bold">✓</span>
+                    );
+                  })}
+
+                  {/* Features List with Specific Icons */}
+                  {property.features?.map((feature, index) => {
+                    const IconComponent = getOptionIcon(feature);
+                    return (
+                      <div
+                        key={`feature-${index}`}
+                        className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-blue-50/40 border border-blue-100/60 hover:border-blue-200 transition-colors"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-blue-600 text-white shadow-sm flex items-center justify-center shrink-0">
+                          <IconComponent size={20} strokeWidth={1.8} />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-900">
+                          {feature}
+                        </span>
                       </div>
-                      <span className="text-base font-medium">{amenity}</span>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </Section>
             )}
 
-            {/* Video Player Section */}
+            {/* Video Section */}
             {property.video?.url && (
               <Section title="Visite Vidéo">
                 <div className="relative w-full rounded-2xl overflow-hidden bg-black shadow-md aspect-video border border-gray-100">
@@ -569,7 +700,6 @@ const PropertyDetail = () => {
           {/* Sidebar */}
           <div className="md:w-1/3">
             <div className="sticky top-8 space-y-6">
-              {/* Premium Calendar Container */}
               <div className="border border-gray-100 rounded-3xl p-6 bg-white shadow-sm ring-1 ring-gray-900/5">
                 <h3 className="text-lg font-bold text-gray-900 mb-5">
                   Disponibilité
@@ -594,7 +724,7 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* Host Info */}
+              {/* Host Section */}
               <div className="border border-gray-100 rounded-3xl p-6 bg-gray-50/50">
                 <h3 className="text-lg font-bold text-gray-900 mb-4">
                   Hôte de la maison
@@ -631,7 +761,7 @@ const PropertyDetail = () => {
           </div>
         </div>
 
-        {/* --- SIMILAR HOMES SECTION --- */}
+        {/* Similar Properties */}
         {similarProperties.length > 0 && (
           <div className="mt-20 pt-12 border-t border-gray-100">
             <div className="flex items-center justify-between mb-8">
@@ -658,7 +788,6 @@ const PropertyDetail = () => {
                     key={item._id}
                     className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
                   >
-                    {/* Card Image Container */}
                     <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100">
                       <Link to={`/properties/${item._id}`}>
                         <img
@@ -668,12 +797,10 @@ const PropertyDetail = () => {
                         />
                       </Link>
 
-                      {/* Type Badge */}
                       <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
                         {item.type}
                       </span>
 
-                      {/* Wishlist Heart Icon */}
                       {user && (
                         <div className="absolute top-3 right-3 z-10">
                           <HeartIcon
@@ -684,7 +811,6 @@ const PropertyDetail = () => {
                       )}
                     </div>
 
-                    {/* Card Content */}
                     <div className="p-4 flex flex-col flex-1 justify-between">
                       <div>
                         <div className="flex items-center gap-1.5 text-xs text-gray-500 font-medium mb-1">
@@ -729,7 +855,6 @@ const PropertyDetail = () => {
         )}
       </main>
 
-      {/* MODAL IS HERE: Passing bookedDates prop down */}
       {showModal && (
         <ContactAgentModal
           propertyId={property._id}
@@ -739,13 +864,12 @@ const PropertyDetail = () => {
         />
       )}
 
-      {/* Classy Lightbox Modal */}
+      {/* Lightbox Modal */}
       {lightboxOpen && images.length > 0 && (
         <div
           className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center"
           onClick={() => setLightboxOpen(false)}
         >
-          {/* Close Button */}
           <button
             onClick={() => setLightboxOpen(false)}
             className="absolute top-6 right-6 text-white/70 hover:text-white p-2 transition-colors z-50 bg-black/20 hover:bg-black/40 rounded-full"
@@ -753,7 +877,6 @@ const PropertyDetail = () => {
             <X size={32} />
           </button>
 
-          {/* Navigation Arrows */}
           {images.length > 1 && (
             <>
               <button
@@ -777,7 +900,6 @@ const PropertyDetail = () => {
             </>
           )}
 
-          {/* Main Image Container */}
           <div
             className="relative w-full max-w-6xl px-16 md:px-24 flex items-center justify-center h-full"
             onClick={(e) => e.stopPropagation()}
@@ -789,7 +911,6 @@ const PropertyDetail = () => {
             />
           </div>
 
-          {/* Image Counter */}
           {images.length > 1 && (
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white font-medium text-sm tracking-widest bg-black/50 px-6 py-2.5 rounded-full backdrop-blur-md">
               {lightboxIndex + 1} / {images.length}

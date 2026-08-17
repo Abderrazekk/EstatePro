@@ -42,10 +42,7 @@ exports.createProperty = async (req, res) => {
         resource_type: "video",
         folder: "maison_hote/properties/videos",
       });
-      video = {
-        url: result.secure_url,
-        publicId: result.public_id,
-      };
+      video = { url: result.secure_url, publicId: result.public_id };
     }
 
     const address = {
@@ -155,10 +152,7 @@ exports.updateProperty = async (req, res) => {
         resource_type: "video",
         folder: "maison_hote/properties/videos",
       });
-      property.video = {
-        url: result.secure_url,
-        publicId: result.public_id,
-      };
+      property.video = { url: result.secure_url, publicId: result.public_id };
     }
 
     if (req.body.title) property.title = req.body.title;
@@ -272,7 +266,7 @@ exports.deleteImage = async (req, res) => {
   }
 };
 
-// @desc    Get all guest houses with reservation filters
+// @desc    Get all guest houses with ADVANCED filters
 // @route   GET /api/properties
 exports.getProperties = async (req, res) => {
   try {
@@ -281,33 +275,78 @@ exports.getProperties = async (req, res) => {
     const skip = (page - 1) * limit;
 
     let query = { isPublished: true };
+
+    // Exact Matches
     if (req.query.status) query.status = req.query.status;
+    if (req.query.type) query.type = req.query.type;
+
+    // Text/Regex Matches
+    if (req.query.location)
+      query.location = { $regex: req.query.location, $options: "i" };
     if (req.query.search) {
       query.$or = [
         { title: { $regex: req.query.search, $options: "i" } },
         { description: { $regex: req.query.search, $options: "i" } },
         { location: { $regex: req.query.search, $options: "i" } },
+        { "address.city": { $regex: req.query.search, $options: "i" } },
       ];
     }
-    if (req.query.minPrice)
-      query.pricePerNight = { $gte: parseFloat(req.query.minPrice) };
-    if (req.query.maxPrice)
-      query.pricePerNight = {
-        ...query.pricePerNight,
-        $lte: parseFloat(req.query.maxPrice),
-      };
+
+    // Number Ranges (Pricing & Layout)
+    if (req.query.minPrice || req.query.maxPrice) {
+      query.pricePerNight = {};
+      if (req.query.minPrice)
+        query.pricePerNight.$gte = parseFloat(req.query.minPrice);
+      if (req.query.maxPrice)
+        query.pricePerNight.$lte = parseFloat(req.query.maxPrice);
+    }
     if (req.query.guests)
       query.maxGuests = { $gte: parseInt(req.query.guests) };
-    if (req.query.type) query.type = req.query.type;
-    if (req.query.location)
-      query.location = { $regex: req.query.location, $options: "i" };
-    if (req.query.isFeatured === "true") {
-      query.isFeatured = true;
+    if (req.query.bedrooms)
+      query.bedrooms = { $gte: parseInt(req.query.bedrooms) };
+    if (req.query.bathrooms)
+      query.bathrooms = { $gte: parseInt(req.query.bathrooms) };
+    if (req.query.minNights)
+      query.minNights = { $lte: parseInt(req.query.minNights) };
+
+    // Arrays Matches ($all ensures property has ALL selected amenities)
+    if (req.query.amenities) {
+      const amenitiesArray = req.query.amenities
+        .split(",")
+        .map((a) => a.trim());
+      query.amenities = { $all: amenitiesArray };
+    }
+    if (req.query.features) {
+      const featuresArray = req.query.features.split(",").map((f) => f.trim());
+      query.features = { $all: featuresArray };
+    }
+
+    if (req.query.isFeatured === "true") query.isFeatured = true;
+
+    // Sorting Logic
+    let sortOption = { createdAt: -1 };
+    if (req.query.sort) {
+      switch (req.query.sort) {
+        case "price_asc":
+          sortOption = { pricePerNight: 1 };
+          break;
+        case "price_desc":
+          sortOption = { pricePerNight: -1 };
+          break;
+        case "popular":
+          sortOption = { views: -1 };
+          break;
+        case "newest":
+          sortOption = { createdAt: -1 };
+          break;
+        default:
+          sortOption = { createdAt: -1 };
+      }
     }
 
     const properties = await Property.find(query)
       .populate("createdBy", "name email")
-      .sort({ createdAt: -1 })
+      .sort(sortOption)
       .skip(skip)
       .limit(limit);
 
@@ -328,6 +367,7 @@ exports.getProperty = async (req, res) => {
     );
     if (!property)
       return res.status(404).json({ message: "Maison d'Hôte not found" });
+
     property.views += 1;
     await property.save();
     res.json(property);

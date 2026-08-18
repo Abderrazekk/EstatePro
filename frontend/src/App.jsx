@@ -23,6 +23,7 @@ import AdminEnquiries from "./pages/admin/AdminEnquiries";
 import MyEnquiries from "./pages/client/MyEnquiries";
 import ManageSponsors from "./pages/admin/ManageSponsors";
 import ManageBanner from "./pages/admin/ManageBanner";
+import ChatbotWidget from "./components/ChatbotWidget";
 
 // --- New Pages Imports ---
 import ContactConcierge from "./pages/ContactConcierge";
@@ -97,6 +98,9 @@ function App() {
         {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+
+      {/* Floating Chatbot available on every page */}
+      <ChatbotWidget />
     </Router>
   );
 }

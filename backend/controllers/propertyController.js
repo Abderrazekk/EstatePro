@@ -2,6 +2,7 @@ const Property = require("../models/Property");
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
 const geocodeAddress = require("../utils/geocoder");
+const { parseChatMessage } = require("../utils/chatbotParser");
 
 const uploadToCloudinary = (buffer, options = {}) => {
   return new Promise((resolve, reject) => {
@@ -373,5 +374,98 @@ exports.getProperty = async (req, res) => {
     res.json(property);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.searchChatbot = async (req, res) => {
+  try {
+    const { message, quickFilter } = req.body;
+    let filters = {};
+
+    // 1. Parse text message or use structured quickFilter
+    if (quickFilter) {
+      filters = { ...quickFilter };
+    } else if (message) {
+      filters = parseChatMessage(message);
+    }
+
+    // 2. Build MongoDB Query
+    let query = { isPublished: true, status: "Available" };
+    let extractedDetails = [];
+
+    if (filters.location) {
+      query.$or = [
+        { location: { $regex: filters.location, $options: "i" } },
+        { "address.city": { $regex: filters.location, $options: "i" } },
+      ];
+      extractedDetails.push(`📍 Ville: **${filters.location}**`);
+    }
+
+    if (filters.maxPrice) {
+      query.pricePerNight = { $lte: Number(filters.maxPrice) };
+      extractedDetails.push(`💰 Budget Max: **${filters.maxPrice} DT / nuit**`);
+    }
+
+    if (filters.guests) {
+      query.maxGuests = { $gte: Number(filters.guests) };
+      extractedDetails.push(`👥 Capacité: **${filters.guests}+ personnes**`);
+    }
+
+    if (filters.type) {
+      query.type = filters.type;
+      extractedDetails.push(`🏡 Type: **${filters.type}**`);
+    }
+
+    if (filters.amenities && filters.amenities.length > 0) {
+      // Flexible regex match for amenities
+      const amenityRegexes = filters.amenities.map((a) => new RegExp(a, "i"));
+      query.amenities = { $in: amenityRegexes };
+      extractedDetails.push(`✨ Équipement: **${filters.amenities[0]}**`);
+    }
+
+    // 3. Fetch up to 6 matching guest houses
+    let properties = await Property.find(query)
+      .select(
+        "title pricePerNight location type images maxGuests bedrooms features amenities",
+      )
+      .sort({ pricePerNight: 1 })
+      .limit(6);
+
+    // Fallback: If no strict matches found, relax price and amenity constraints
+    if (properties.length === 0 && (filters.maxPrice || filters.amenities)) {
+      delete query.pricePerNight;
+      delete query.amenities;
+      properties = await Property.find(query)
+        .select(
+          "title pricePerNight location type images maxGuests bedrooms features amenities",
+        )
+        .sort({ pricePerNight: 1 })
+        .limit(4);
+    }
+
+    // Construct response text
+    let replyMessage = "";
+    if (properties.length > 0) {
+      replyMessage =
+        extractedDetails.length > 0
+          ? `Voici les meilleures maisons d'hôte correspondant à vos critères :\n${extractedDetails.join("\n")}`
+          : "Voici une sélection de nos plus belles maisons d'hôte disponibles en Tunisie :";
+    } else {
+      replyMessage = `Désolé, aucune maison d'hôte ne correspond exactement à tous ces critères.\n\n💡 Essayez de réinitialiser les filtres ou d'élargir votre recherche.`;
+    }
+
+    return res.status(200).json({
+      success: true,
+      replyMessage,
+      extractedDetails,
+      propertiesCount: properties.length,
+      properties,
+    });
+  } catch (error) {
+    console.error("Chatbot Search Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors de la recherche des logements.",
+    });
   }
 };

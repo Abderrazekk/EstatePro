@@ -2,7 +2,6 @@ const Property = require("../models/Property");
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
 const geocodeAddress = require("../utils/geocoder");
-const { parseChatMessage } = require("../utils/chatbotParser");
 
 const uploadToCloudinary = (buffer, options = {}) => {
   return new Promise((resolve, reject) => {
@@ -377,95 +376,309 @@ exports.getProperty = async (req, res) => {
   }
 };
 
-exports.searchChatbot = async (req, res) => {
+// @desc    Get all unique available locations from DB dynamically
+// @route   GET /api/properties/locations
+// @access  Public
+exports.getLocations = async (req, res) => {
   try {
-    const { message, quickFilter } = req.body;
-    let filters = {};
+    const locations = await Property.distinct("location", {
+      isPublished: true,
+    });
+    const cities = await Property.distinct("address.city", {
+      isPublished: true,
+    });
 
-    // 1. Parse text message or use structured quickFilter
-    if (quickFilter) {
-      filters = { ...quickFilter };
-    } else if (message) {
-      filters = parseChatMessage(message);
+    const combined = [...new Set([...locations, ...cities])].filter(Boolean);
+    res.json(
+      combined.length > 0 ? combined : ["Djerba", "Sidi Bou Said", "Hammamet"],
+    );
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// --- HELPER DE NORMALISATION TEXTUELLE ---
+const normalizeText = (str) => {
+  if (!str) return "";
+  return str
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Enlève les accents
+    .replace(/[^a-z0-9\s]/g, " ") // Enlève les caractères spéciaux
+    .replace(/\s+/g, " ") // Réduit les espaces multiples
+    .trim();
+};
+
+// Dictionnaire de correspondance intelligente pour les Équipements et Caractéristiques
+const KEYWORD_MAP = {
+  // --- ÉQUIPEMENTS & SERVICES (amenities) ---
+  wifi: { field: "amenities", regex: /wi-fi|wifi|internet/i },
+  piscine: { field: "amenities", regex: /piscine/i },
+  "piscine privee": { field: "amenities", regex: /piscine privée/i },
+  "piscine chauffee": { field: "amenities", regex: /piscine chauffée/i },
+  hammam: { field: "amenities", regex: /hammam/i },
+  jacuzzi: { field: "amenities", regex: /jacuzzi|spa/i },
+  clim: { field: "amenities", regex: /climatisation/i },
+  climatisation: { field: "amenities", regex: /climatisation/i },
+  chauffage: { field: "amenities", regex: /chauffage/i },
+  cheminee: { field: "amenities", regex: /cheminée/i },
+  "petit dejeuner": { field: "amenities", regex: /petit-déjeuner/i },
+  "table d'hote": { field: "amenities", regex: /table d'hôte/i },
+  "chef prive": { field: "amenities", regex: /chef privé/i },
+  barbecue: { field: "amenities", regex: /barbecue/i },
+  "lave linge": { field: "amenities", regex: /lave-linge/i },
+
+  // --- CARACTÉRISTIQUES & STYLE (features) ---
+  patio: { field: "features", regex: /patio/i },
+  fontaine: { field: "features", regex: /fontaine/i },
+  troglodyte: { field: "features", regex: /troglodyte/i },
+  menzel: { field: "features", regex: /menzel|houch/i },
+  houch: { field: "features", regex: /houch|menzel/i },
+  rooftop: { field: "features", regex: /roof-top|terrasse/i },
+  "roof top": { field: "features", regex: /roof-top|terrasse/i },
+  terrasse: { field: "features", regex: /terrasse/i },
+  "vue mer": { field: "features", regex: /vue.*mer|plage/i },
+  medina: { field: "features", regex: /médina/i },
+  palmeraie: { field: "features", regex: /palmeraie|oasis/i },
+  oasis: { field: "features", regex: /oasis|palmeraie/i },
+  montagne: { field: "features", regex: /montagne/i },
+  jardin: { field: "features", regex: /jardin/i },
+  romantique: { field: "features", regex: /romantique/i },
+  calme: { field: "features", regex: /calme/i },
+};
+
+// @desc    Recherche Avancée pour Chatbot (Gouvernorat, Adresse, Équipements, Style)
+// @route   POST /api/properties/bot-search
+// @access  Public
+exports.botSearch = async (req, res) => {
+  try {
+    const {
+      text,
+      location,
+      type,
+      maxPrice,
+      minPrice,
+      guests,
+      amenities,
+      features,
+    } = req.body;
+
+    let query = { isPublished: true };
+    const andConditions = [];
+
+    // 1. Filtres structurés directs (Boutons / Quick replies)
+    if (location) {
+      andConditions.push({
+        $or: [
+          { location: { $regex: location, $options: "i" } },
+          { "address.state": { $regex: location, $options: "i" } },
+          { "address.city": { $regex: location, $options: "i" } },
+          { "address.street": { $regex: location, $options: "i" } },
+        ],
+      });
     }
 
-    // 2. Build MongoDB Query
-    let query = { isPublished: true, status: "Available" };
-    let extractedDetails = [];
+    if (type) query.type = type;
+    if (guests) query.maxGuests = { $gte: parseInt(guests) };
 
-    if (filters.location) {
-      query.$or = [
-        { location: { $regex: filters.location, $options: "i" } },
-        { "address.city": { $regex: filters.location, $options: "i" } },
+    if (minPrice || maxPrice) {
+      query.pricePerNight = {};
+      if (minPrice) query.pricePerNight.$gte = parseFloat(minPrice);
+      if (maxPrice) query.pricePerNight.$lte = parseFloat(maxPrice);
+    }
+
+    if (amenities && Array.isArray(amenities) && amenities.length > 0) {
+      query.amenities = { $all: amenities };
+    }
+
+    if (features && Array.isArray(features) && features.length > 0) {
+      query.features = { $all: features };
+    }
+
+    // 2. Traitement du Texte Libre en Langage Naturel
+    if (text && text.trim().length > 0) {
+      const lowerText = text.toLowerCase().trim();
+      const normInput = normalizeText(lowerText);
+
+      // A. Extraire le nombre de personnes (ex: "pour 4 personnes", "6 voyageurs")
+      const guestsMatch = lowerText.match(
+        /(\d+)\s*(?:personnes|personne|invités|invite|voyageurs|pax)/i,
+      );
+      if (guestsMatch && guestsMatch[1] && !guests) {
+        query.maxGuests = { $gte: parseInt(guestsMatch[1]) };
+      }
+
+      // B. Extraire le Prix Max (ex: "moins de 400 tnd", "budget 300 dt")
+      const priceMatch = lowerText.match(
+        /(?:moins de|under|<|budget|max)?\s*(\d+)\s*(?:tnd|dinars|dinar|dt)?/i,
+      );
+      if (priceMatch && priceMatch[1] && !maxPrice) {
+        const extractedPrice = parseFloat(priceMatch[1]);
+        if (extractedPrice > 30) {
+          // évite de confondre le nombre de personnes avec le prix
+          query.pricePerNight = {
+            ...(query.pricePerNight || {}),
+            $lte: extractedPrice,
+          };
+        }
+      }
+
+      // C. Détection Dynamique de la Localisation (Gouvernorat / Ville / Rue)
+      const dbLocations = await Property.distinct("location", {
+        isPublished: true,
+      });
+      const dbStates = await Property.distinct("address.state", {
+        isPublished: true,
+      });
+      const dbCities = await Property.distinct("address.city", {
+        isPublished: true,
+      });
+
+      const allLocations = [
+        ...new Set([...dbLocations, ...dbStates, ...dbCities]),
+      ].filter(Boolean);
+
+      let matchedLocation = null;
+      for (const dbLoc of allLocations) {
+        const normDbLoc = normalizeText(dbLoc);
+        if (
+          normDbLoc &&
+          normDbLoc.length > 2 &&
+          normInput.includes(normDbLoc)
+        ) {
+          matchedLocation = dbLoc;
+          break;
+        }
+      }
+
+      if (matchedLocation) {
+        andConditions.push({
+          $or: [
+            { location: { $regex: matchedLocation, $options: "i" } },
+            { "address.state": { $regex: matchedLocation, $options: "i" } },
+            { "address.city": { $regex: matchedLocation, $options: "i" } },
+            { "address.street": { $regex: matchedLocation, $options: "i" } },
+          ],
+        });
+      }
+
+      // D. Détection des Équipements et Caractéristiques/Styles
+      const matchedAmenities = [];
+      const matchedFeatures = [];
+
+      Object.keys(KEYWORD_MAP).forEach((key) => {
+        if (normInput.includes(key)) {
+          const config = KEYWORD_MAP[key];
+          if (config.field === "amenities") {
+            matchedAmenities.push(config.regex);
+          } else if (config.field === "features") {
+            matchedFeatures.push(config.regex);
+          }
+        }
+      });
+
+      if (matchedAmenities.length > 0) {
+        andConditions.push({
+          $or: [
+            { amenities: { $in: matchedAmenities } },
+            { description: { $in: matchedAmenities } },
+          ],
+        });
+      }
+
+      if (matchedFeatures.length > 0) {
+        andConditions.push({
+          $or: [
+            { features: { $in: matchedFeatures } },
+            { description: { $in: matchedFeatures } },
+          ],
+        });
+      }
+
+      // E. Mots-clés restants pour recherche Titre / Description
+      const stopWords = [
+        "je",
+        "cherche",
+        "une",
+        "un",
+        "maison",
+        "dhote",
+        "d'hôte",
+        "hote",
+        "à",
+        "a",
+        "de",
+        "dans",
+        "avec",
+        "pour",
+        "le",
+        "la",
+        "les",
+        "du",
+        "tnd",
+        "dt",
+        "dinars",
+        "svp",
+        "bonjour",
+        "trouver",
+        "disponible",
+        "personnes",
+        "personne",
+        "voyageurs",
+        "avec",
+        "et",
+        "ou",
       ];
-      extractedDetails.push(`📍 Ville: **${filters.location}**`);
+
+      // Nettoyer la phrase de la ville repérée
+      let textRemaining = normInput;
+      if (matchedLocation) {
+        textRemaining = textRemaining.replace(
+          normalizeText(matchedLocation),
+          "",
+        );
+      }
+
+      const cleanKeywords = textRemaining
+        .split(" ")
+        .filter((w) => w.length > 2 && !stopWords.includes(w));
+
+      if (
+        cleanKeywords.length > 0 &&
+        !matchedLocation &&
+        matchedAmenities.length === 0 &&
+        matchedFeatures.length === 0
+      ) {
+        const keywordRegexes = cleanKeywords.map((k) => new RegExp(k, "i"));
+        andConditions.push({
+          $or: [
+            { title: { $in: keywordRegexes } },
+            { description: { $in: keywordRegexes } },
+            { location: { $in: keywordRegexes } },
+            { "address.city": { $in: keywordRegexes } },
+            { "address.state": { $in: keywordRegexes } },
+            { amenities: { $in: keywordRegexes } },
+            { features: { $in: keywordRegexes } },
+          ],
+        });
+      }
     }
 
-    if (filters.maxPrice) {
-      query.pricePerNight = { $lte: Number(filters.maxPrice) };
-      extractedDetails.push(`💰 Budget Max: **${filters.maxPrice} DT / nuit**`);
+    if (andConditions.length > 0) {
+      query.$and = andConditions;
     }
 
-    if (filters.guests) {
-      query.maxGuests = { $gte: Number(filters.guests) };
-      extractedDetails.push(`👥 Capacité: **${filters.guests}+ personnes**`);
-    }
-
-    if (filters.type) {
-      query.type = filters.type;
-      extractedDetails.push(`🏡 Type: **${filters.type}**`);
-    }
-
-    if (filters.amenities && filters.amenities.length > 0) {
-      // Flexible regex match for amenities
-      const amenityRegexes = filters.amenities.map((a) => new RegExp(a, "i"));
-      query.amenities = { $in: amenityRegexes };
-      extractedDetails.push(`✨ Équipement: **${filters.amenities[0]}**`);
-    }
-
-    // 3. Fetch up to 6 matching guest houses
-    let properties = await Property.find(query)
+    // Récupérer les propriétés avec TOUTES les informations nécessaires
+    const properties = await Property.find(query)
       .select(
-        "title pricePerNight location type images maxGuests bedrooms features amenities",
+        "title location address pricePerNight images maxGuests bedrooms bathrooms type amenities features coordinates description",
       )
-      .sort({ pricePerNight: 1 })
+      .sort({ createdAt: -1 })
       .limit(6);
 
-    // Fallback: If no strict matches found, relax price and amenity constraints
-    if (properties.length === 0 && (filters.maxPrice || filters.amenities)) {
-      delete query.pricePerNight;
-      delete query.amenities;
-      properties = await Property.find(query)
-        .select(
-          "title pricePerNight location type images maxGuests bedrooms features amenities",
-        )
-        .sort({ pricePerNight: 1 })
-        .limit(4);
-    }
-
-    // Construct response text
-    let replyMessage = "";
-    if (properties.length > 0) {
-      replyMessage =
-        extractedDetails.length > 0
-          ? `Voici les meilleures maisons d'hôte correspondant à vos critères :\n${extractedDetails.join("\n")}`
-          : "Voici une sélection de nos plus belles maisons d'hôte disponibles en Tunisie :";
-    } else {
-      replyMessage = `Désolé, aucune maison d'hôte ne correspond exactement à tous ces critères.\n\n💡 Essayez de réinitialiser les filtres ou d'élargir votre recherche.`;
-    }
-
-    return res.status(200).json({
-      success: true,
-      replyMessage,
-      extractedDetails,
-      propertiesCount: properties.length,
-      properties,
-    });
+    res.json({ success: true, count: properties.length, properties });
   } catch (error) {
-    console.error("Chatbot Search Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Erreur lors de la recherche des logements.",
-    });
+    console.error("Bot search error:", error);
+    res.status(500).json({ message: error.message });
   }
 };

@@ -9,14 +9,17 @@ const {
   updateProperty,
   deleteProperty,
   deleteImage,
-  searchChatbot,
+  botSearch,
+  getLocations,
 } = require("../controllers/propertyController");
 
 const router = express.Router();
 
 // Public
+router.get("/locations", getLocations);
 router.get("/", getProperties);
 router.get("/:id", getProperty);
+router.post("/bot-search", botSearch);
 
 // Admin only
 router.post(
@@ -66,7 +69,5 @@ router.put("/:id/images/:imageId/feature", protect, admin, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
-router.post("/chatbot", searchChatbot);
 
 module.exports = router;

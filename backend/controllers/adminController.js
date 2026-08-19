@@ -132,26 +132,54 @@ exports.getClients = async (req, res) => {
 
     let query = { role: "client" };
 
+    // Search by Name, Email, or Phone
     if (req.query.search) {
       query.$or = [
         { name: { $regex: req.query.search, $options: "i" } },
         { email: { $regex: req.query.search, $options: "i" } },
+        { phone: { $regex: req.query.search, $options: "i" } },
       ];
     }
 
+    // Filter by Active/Suspended status
+    if (req.query.status === "active") {
+      query.isActive = true;
+    } else if (req.query.status === "suspended") {
+      query.isActive = false;
+    }
+
+    // Dynamic Sorting
+    let sort = { createdAt: -1 }; // Default: Newest first
+    if (req.query.sort === "oldest") sort = { createdAt: 1 };
+    if (req.query.sort === "name_asc") sort = { name: 1 };
+    if (req.query.sort === "name_desc") sort = { name: -1 };
+
     const clients = await User.find(query)
       .select("-password")
-      .sort({ createdAt: -1 })
+      .sort(sort)
       .skip(skip)
       .limit(limit);
 
     const total = await User.countDocuments(query);
+    const activeClientsCount = await User.countDocuments({
+      role: "client",
+      isActive: true,
+    });
+    const suspendedClientsCount = await User.countDocuments({
+      role: "client",
+      isActive: false,
+    });
 
     res.json({
       clients,
       page,
       pages: Math.ceil(total / limit),
       total,
+      counts: {
+        total,
+        active: activeClientsCount,
+        suspended: suspendedClientsCount,
+      },
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

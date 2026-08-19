@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   AlertTriangle,
   Image,
-  Megaphone, // Added Megaphone icon for Promotional Banner
+  Megaphone,
 } from "lucide-react";
 
 const AdminLayout = () => {
@@ -57,16 +57,16 @@ const AdminLayout = () => {
       icon: Image,
     },
     {
-      label: "Promo Banner", // Added new nav item
+      label: "Promo Banner",
       path: "/admin/banner",
       icon: Megaphone,
     },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-stone-50/50 selection:bg-stone-200 selection:text-stone-900">
+    <div className="min-h-screen bg-stone-50/50 selection:bg-stone-200 selection:text-stone-900 flex flex-col">
       {/* Mobile Top Header */}
-      <header className="md:hidden bg-stone-950 text-white px-4 py-3.5 flex items-center justify-between border-b border-stone-800 sticky top-0 z-30">
+      <header className="md:hidden bg-stone-950 text-white px-4 py-3.5 flex items-center justify-between border-b border-stone-800 sticky top-0 z-30 shrink-0">
         <NavLink
           to="/admin/dashboard"
           className="flex items-center gap-1.5 text-xl font-extrabold tracking-tight"
@@ -99,15 +99,16 @@ const AdminLayout = () => {
         />
       )}
 
-      {/* Sidebar (Desktop & Mobile Drawer) */}
+      {/* Sidebar - Fixed Position & Viewport Height */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-50 w-72 bg-stone-950 text-stone-300 flex flex-col justify-between border-r border-stone-900 transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 z-50 h-[100dvh] w-72 bg-stone-950 text-stone-300 flex flex-col justify-between border-r border-stone-900 transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen
             ? "translate-x-0"
             : "-translate-x-full md:translate-x-0"
         }`}
       >
-        <div>
+        {/* Scrollable Navigation Area */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide">
           {/* Brand Header (Desktop) */}
           <div className="hidden md:flex items-center justify-between p-6 border-b border-stone-900">
             <NavLink
@@ -161,8 +162,8 @@ const AdminLayout = () => {
           </nav>
         </div>
 
-        {/* Sidebar Footer / Account Details */}
-        <div className="p-4 border-t border-stone-900 bg-stone-950/50">
+        {/* Sidebar Footer / Account Details - Fixed at Bottom */}
+        <div className="shrink-0 p-4 border-t border-stone-900 bg-stone-950/50">
           <div className="p-3.5 rounded-2xl bg-stone-900/80 border border-stone-800/80 mb-3 flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-stone-800 flex items-center justify-center shrink-0 border border-stone-700">
               <ShieldCheck className="w-4 h-4 text-stone-300" />
@@ -187,9 +188,11 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 p-4 sm:p-6 lg:p-10 max-w-7xl mx-auto w-full overflow-x-hidden">
-        <Outlet />
+      {/* Main Content Area - Offset by Sidebar Width on Desktop */}
+      <main className="flex-1 md:ml-72 flex flex-col min-h-screen">
+        <div className="flex-1 p-4 sm:p-6 lg:p-10 w-full max-w-7xl mx-auto overflow-x-hidden">
+          <Outlet />
+        </div>
       </main>
 
       {/* Logout Confirmation Modal */}

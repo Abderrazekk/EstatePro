@@ -146,7 +146,7 @@ const Hero = () => {
           >
             {/* Typed Destination Input */}
             <div className="md:col-span-5 relative bg-neutral-50/90 rounded-2xl p-3.5 border border-neutral-200/60 hover:bg-white hover:shadow-md transition-all">
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1 flex items-center gap-1.5">
+              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1 items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-black" />
                 Destination
               </label>
@@ -170,7 +170,7 @@ const Hero = () => {
 
             {/* Guests Picker */}
             <div className="md:col-span-4 relative bg-neutral-50/90 rounded-2xl p-3.5 border border-neutral-200/60 hover:bg-white hover:shadow-md transition-all">
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1 flex items-center gap-1.5">
+              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1 items-center gap-1.5">
                 <Users className="w-3.5 h-3.5 text-black" />
                 Guests
               </label>

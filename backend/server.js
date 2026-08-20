@@ -12,40 +12,16 @@ const enquiryRoutes = require("./routes/enquiryRoutes");
 const sponsorRoutes = require("./routes/sponsorRoutes");
 const bannerRoutes = require("./routes/bannerRoutes");
 
+// Load other env vars (PORT, MONGO_URI, JWT_SECRET) from .env
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 const app = express();
-
-// Allowed Origins List
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://estate-pro-henna.vercel.app",
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (e.g., mobile apps, Postman)
-    if (!origin) return callback(null, true);
-
-    const cleanOrigin = origin.replace(/\/$/, "");
-    if (
-      allowedOrigins.includes(cleanOrigin) ||
-      cleanOrigin.endsWith(".vercel.app")
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS policy violation"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
-
-// Enable CORS Pre-Flight and Middleware
-app.use(cors(corsOptions));
-app.options(/.*/, cors(corsOptions));
-
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://estate-pro-henna.vercel.app"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);

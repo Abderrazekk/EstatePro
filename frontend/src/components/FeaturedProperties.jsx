@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import PropertyCard from "./PropertyCard";
+import { Sparkles, ArrowRight } from "lucide-react";
 
-// Upgraded Hook
 const useScrollReveal = (threshold = 0.1) => {
   const [isVisible, setIsVisible] = useState(false);
   const [element, setElement] = useState(null);
@@ -37,7 +37,7 @@ const FeaturedProperties = () => {
         const res = await axios.get("/api/properties", {
           params: { isFeatured: true, limit: 8 },
         });
-        setProperties(res.data.properties);
+        setProperties(res.data.properties || []);
       } catch (error) {
         console.error("Failed to fetch featured properties:", error);
       } finally {
@@ -49,19 +49,18 @@ const FeaturedProperties = () => {
 
   if (loading) {
     return (
-      <section className="py-24 bg-white overflow-hidden">
+      <section className="py-16 sm:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-pulse">
-            <div className="h-6 w-32 bg-gray-200 rounded-full mx-auto mb-6"></div>
-            <div className="h-10 w-64 md:w-96 bg-gray-200 rounded-lg mx-auto mb-4"></div>
-            <div className="h-4 w-48 bg-gray-100 rounded-lg mx-auto"></div>
+          <div className="text-center mb-12 animate-pulse">
+            <div className="h-6 w-36 bg-neutral-200 rounded-full mx-auto mb-6" />
+            <div className="h-12 w-80 bg-neutral-200 rounded-2xl mx-auto mb-4" />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-8">
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse bg-gray-50 rounded-3xl h-[400px] w-full border border-gray-100 shadow-sm"
-              ></div>
+                className="animate-pulse bg-neutral-100 rounded-2xl sm:rounded-[2rem] h-[300px] sm:h-[420px] w-full border border-neutral-200"
+              />
             ))}
           </div>
         </div>
@@ -72,63 +71,74 @@ const FeaturedProperties = () => {
   if (properties.length === 0) return null;
 
   return (
-    <section ref={ref} className="py-24 bg-white overflow-hidden">
-      <style>{`
-        @keyframes fade-in-up {
-          0% { opacity: 0; transform: translateY(40px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-1 { animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
-        .animate-fade-in-2 { animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards; opacity: 0; }
-        .animate-fade-in-3 { animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards; opacity: 0; }
-        .animate-fade-in-4 { animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards; opacity: 0; }
-      `}</style>
-
+    <section ref={ref} className="py-16 sm:py-28 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <span
-            className={`${isVisible ? "animate-fade-in-1" : "opacity-0"} inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-gray-500 bg-gray-50 border border-gray-200 px-4 py-2 rounded-full shadow-sm mb-6`}
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+          <div
+            className={`transition-all duration-1000 transform ${
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-gray-900"></span>
-            Handpicked Stays
-          </span>
+            <span className="inline-flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase text-black bg-neutral-100 border border-neutral-300 px-5 py-2 rounded-full shadow-sm mb-6">
+              <Sparkles className="w-3.5 h-3.5 text-black" />
+              Handpicked Residences
+            </span>
+          </div>
+
           <h2
-            className={`${isVisible ? "animate-fade-in-2" : "opacity-0"} text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight`}
+            className={`transition-all duration-1000 delay-150 transform ${
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            } text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tight`}
           >
             Our{" "}
-            <span className="italic font-serif text-gray-400 font-light">
+            <span className="font-serif italic font-normal text-neutral-400">
               Finest
             </span>{" "}
             Retreats
           </h2>
+
           <p
-            className={`${isVisible ? "animate-fade-in-3" : "opacity-0"} text-lg text-gray-500 mt-4 max-w-xl mx-auto font-light leading-relaxed`}
+            className={`transition-all duration-1000 delay-300 transform ${
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            } text-sm sm:text-lg text-neutral-500 mt-3 sm:mt-5 font-light leading-relaxed`}
           >
-            Discover our most exceptional guesthouses, carefully selected by our
-            local experts for their unique charm and hospitality.
+            Carefully curated guesthouses chosen for their historical
+            architecture, private serenity, and extraordinary local hospitality.
           </p>
         </div>
 
+        {/* Property Grid: 2 columns on mobile, 4 on desktop */}
         <div
-          className={`${isVisible ? "animate-fade-in-4" : "opacity-0"} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8`}
+          className={`transition-all duration-1000 delay-600 transform ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+          } grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-8`}
         >
           {properties.map((property) => (
             <PropertyCard key={property._id} property={property} />
           ))}
         </div>
 
-        {properties.length > 0 && (
-          <div
-            className={`${isVisible ? "animate-fade-in-4" : "opacity-0"} text-center mt-16 pt-8 border-t border-gray-100`}
+        {/* Bottom Explorer Action */}
+        <div
+          className={`transition-all duration-1000 delay-700 transform ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          } text-center mt-12 sm:mt-20 pt-8 sm:pt-10 border-t border-neutral-100`}
+        >
+          <Link
+            to="/properties"
+            className="group inline-flex items-center justify-center gap-3 bg-black text-white border border-black px-8 sm:px-10 py-4 sm:py-5 rounded-full font-extrabold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all duration-300 shadow-2xl hover:scale-105"
           >
-            <Link
-              to="/properties"
-              className="inline-flex items-center justify-center bg-white border border-gray-200 text-gray-900 px-10 py-4 rounded-full font-bold hover:bg-gray-50 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5"
-            >
-              Explore All Homes
-            </Link>
-          </div>
-        )}
+            <span>Explore Entire Portfolio</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+          </Link>
+        </div>
       </div>
     </section>
   );

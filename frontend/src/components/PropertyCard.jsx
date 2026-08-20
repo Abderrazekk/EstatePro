@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import HeartIcon from "./HeartIcon";
-import { Users, Bed, Bath, MapPin } from "lucide-react";
+import { Users, Bed, Bath, MapPin, ArrowUpRight, Sparkles } from "lucide-react";
 
 const PropertyCard = ({ property, layout = "grid" }) => {
   const { user, toggleWishlist } = useAuth();
   const isList = layout === "list";
 
   const featuredImage =
-    property.images.find((img) => img.isFeatured) || property.images[0];
+    property.images?.find((img) => img.isFeatured) || property.images?.[0];
 
   const isWishlisted =
     user?.wishlist?.some((id) => id === property._id) ?? false;
@@ -22,120 +22,112 @@ const PropertyCard = ({ property, layout = "grid" }) => {
   return (
     <Link
       to={`/property/${property._id}`}
-      className={`group flex bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-gray-200 hover:-translate-y-1 ${
+      className={`group relative bg-white rounded-2xl sm:rounded-[2rem] border border-neutral-200/90 shadow-[0_10px_35px_rgba(0,0,0,0.04)] hover:shadow-[0_25px_65px_rgba(0,0,0,0.12)] hover:border-black transition-all duration-500 transform hover:-translate-y-2 overflow-hidden flex ${
         isList ? "flex-col md:flex-row" : "flex-col h-full"
       }`}
     >
-      {/* Image container */}
+      {/* Visual Image Shell */}
       <div
-        className={`relative bg-gray-100 overflow-hidden shrink-0 ${
-          isList ? "h-64 md:h-auto md:w-5/12 lg:w-1/3" : "h-64 w-full"
+        className={`relative bg-neutral-100 overflow-hidden shrink-0 ${
+          isList ? "h-64 md:h-auto md:w-5/12 lg:w-2/5" : "h-40 sm:h-72 w-full"
         }`}
       >
-        {/* Subtle gradient overlay for better badge visibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500" />
 
         {featuredImage ? (
           <img
             src={featuredImage.url}
             alt={property.title}
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
           />
         ) : (
-          <div className="absolute inset-0 w-full h-full flex items-center justify-center text-gray-300">
-            <svg
-              className="w-12 h-12"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
+          <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-neutral-100 text-neutral-300">
+            <Sparkles className="w-8 h-8 sm:w-10 sm:h-10" />
           </div>
         )}
 
         {/* Type Badge */}
-        <div className="absolute top-4 left-4 z-20">
-          <span className="px-4 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase bg-white/95 backdrop-blur-md text-gray-900 shadow-sm border border-white/20">
-            {property.type}
+        <div className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-20">
+          <span className="px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full text-[8px] sm:text-[10px] font-black tracking-widest uppercase bg-white/95 backdrop-blur-2xl text-black shadow-lg border border-white">
+            {property.type || "Maison d'Hôte"}
           </span>
         </div>
 
         {/* Wishlist Button */}
         {user && (
-          <div className="absolute top-4 right-4 z-20 bg-white/50 backdrop-blur-md rounded-full p-1.5 transition-colors hover:bg-white/90">
-            <HeartIcon filled={isWishlisted} onClick={handleWishlist} />
-          </div>
+          <button
+            onClick={handleWishlist}
+            className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 z-20 w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-white/95 backdrop-blur-2xl flex items-center justify-center text-black border border-white shadow-lg transition-transform duration-300 hover:scale-110 active:scale-95"
+          >
+            <HeartIcon filled={isWishlisted} />
+          </button>
         )}
+
+        {/* Price Floating Overlay Pill */}
+        <div className="absolute bottom-2.5 left-2.5 sm:bottom-4 sm:left-4 z-20">
+          <div className="bg-black/90 backdrop-blur-md text-white px-2.5 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-neutral-800 shadow-2xl flex items-baseline gap-1">
+            <span className="text-xs sm:text-lg font-black tracking-tight font-sans">
+              {property.pricePerNight?.toLocaleString()} TND
+            </span>
+            <span className="text-[8px] sm:text-[10px] font-medium text-neutral-400 uppercase">
+              / night
+            </span>
+          </div>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className={`p-6 flex flex-col flex-1 ${isList ? "md:p-8" : ""}`}>
+      {/* Property Details Content Area */}
+      <div
+        className={`p-3.5 sm:p-6 flex flex-col flex-1 ${isList ? "md:p-8" : ""}`}
+      >
         {/* Title */}
-        <h3 className="text-xl font-bold text-gray-900 truncate mb-2 group-hover:text-gray-600 transition-colors">
+        <h3 className="text-sm sm:text-xl font-extrabold text-black truncate mb-1 sm:mb-2 group-hover:text-neutral-600 transition-colors font-serif">
           {property.title}
         </h3>
 
         {/* Location */}
-        <p className="text-sm font-medium text-gray-500 flex items-center gap-1.5 mb-5">
-          <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
-          {property.location}
+        <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-neutral-400 flex items-center gap-1 mb-3 sm:mb-6 truncate">
+          <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
+          <span className="truncate">{property.location}</span>
         </p>
 
-        {/* Description Snippet (Only shows on the List/Rectangle view) */}
         {isList && property.description && (
-          <p className="hidden md:block text-sm text-gray-500 mb-6 line-clamp-2 leading-relaxed">
+          <p className="hidden md:block text-xs text-neutral-500 mb-6 line-clamp-2 leading-relaxed font-light">
             {property.description}
           </p>
         )}
 
-        {/* Guest House Capacity Stats */}
-        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-gray-600 mb-5">
-          <div className="flex items-center gap-1.5 bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100 whitespace-nowrap">
-            <Users className="w-4 h-4 text-gray-900 shrink-0" />
-            <span>{property.maxGuests} Invités</span>
+        {/* Stats Chips */}
+        <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-[9px] sm:text-[11px] font-bold text-neutral-700 mb-3 sm:mb-6 mt-auto">
+          <div className="flex items-center gap-1 bg-neutral-100/80 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl border border-neutral-200/60">
+            <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
+            <span>
+              {property.maxGuests}{" "}
+              <span className="hidden sm:inline">Guests</span>
+            </span>
           </div>
-          <div className="flex items-center gap-1.5 bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100 whitespace-nowrap">
-            <Bed className="w-4 h-4 text-gray-900 shrink-0" />
-            <span>{property.bedrooms} Chambres</span>
+          <div className="flex items-center gap-1 bg-neutral-100/80 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl border border-neutral-200/60">
+            <Bed className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
+            <span>
+              {property.bedrooms} <span className="hidden sm:inline">Beds</span>
+            </span>
           </div>
-          <div className="flex items-center gap-1.5 bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100 whitespace-nowrap">
-            <Bath className="w-4 h-4 text-gray-900 shrink-0" />
-            <span>{property.bathrooms} SDB</span>
+          <div className="flex items-center gap-1 bg-neutral-100/80 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl border border-neutral-200/60">
+            <Bath className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
+            <span>
+              {property.bathrooms}{" "}
+              <span className="hidden sm:inline">Baths</span>
+            </span>
           </div>
         </div>
 
-        {/* Price Per Night */}
-        <div className="pt-4 border-t border-gray-100 flex items-baseline justify-between mt-auto">
-          <div>
-            <span className="text-2xl font-extrabold text-gray-900 tracking-tight">
-              {property.pricePerNight?.toLocaleString()} TND
-            </span>
-            <span className="text-sm text-gray-500 font-medium ml-1">
-              / nuit
-            </span>
-          </div>
-
-          {/* Subtle arrow to indicate action */}
-          <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-gray-900 group-hover:text-white transition-colors duration-300">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+        {/* Action Trigger Line */}
+        <div className="pt-2 sm:pt-4 border-t border-neutral-100 flex items-center justify-between">
+          <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-black group-hover:underline truncate">
+            View Sanctuary
+          </span>
+          <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-black text-white flex items-center justify-center transition-all duration-300 group-hover:bg-neutral-800 group-hover:scale-110 shadow-md shrink-0">
+            <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
         </div>
       </div>

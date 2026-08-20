@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// Upgraded Hook
-const useScrollReveal = (threshold = 0.5) => {
+const useScrollReveal = (threshold = 0.3) => {
   const [isVisible, setIsVisible] = useState(false);
   const [element, setElement] = useState(null);
 
@@ -27,13 +26,13 @@ const useScrollReveal = (threshold = 0.5) => {
 const Sponsors = () => {
   const [sponsors, setSponsors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [ref, isVisible] = useScrollReveal(0.5);
+  const [ref, isVisible] = useScrollReveal(0.3);
 
   useEffect(() => {
     const fetchSponsors = async () => {
       try {
         const res = await axios.get("/api/sponsors");
-        setSponsors(res.data);
+        setSponsors(res.data || []);
       } catch (error) {
         console.error("Failed to fetch sponsors:", error);
       } finally {
@@ -50,7 +49,9 @@ const Sponsors = () => {
   return (
     <section
       ref={ref}
-      className={`py-12 bg-stone-50 border-t border-b border-stone-200/60 overflow-hidden transition-opacity duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}
+      className={`py-16 bg-neutral-50/80 border-t border-b border-neutral-200/80 overflow-hidden transition-opacity duration-1000 ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
     >
       <style>{`
         @keyframes scroll-right {
@@ -60,35 +61,34 @@ const Sponsors = () => {
         .animate-scroll-right {
           display: flex;
           width: max-content;
-          animation: scroll-right 25s linear infinite;
+          animation: scroll-right 30s linear infinite;
         }
         .animate-scroll-right:hover {
           animation-play-state: paused;
         }
       `}</style>
 
-      <div
-        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center transition-all duration-1000 delay-300 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
-      >
-        <p className="text-xs font-bold tracking-[0.2em] uppercase text-stone-400">
-          Our Valued Partners & Sponsors
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
+        <p className="text-[10px] font-black tracking-[0.3em] uppercase text-neutral-400">
+          Our Valued Cultural & Tourism Partners
         </p>
       </div>
 
       <div className="relative w-full overflow-hidden flex items-center">
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-stone-50 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-stone-50 to-transparent z-10 pointer-events-none" />
+        {/* Soft Vignette Gradients */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-neutral-50 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-neutral-50 to-transparent z-10 pointer-events-none" />
 
-        <div className="animate-scroll-right gap-16 md:gap-24 items-center">
+        <div className="animate-scroll-right gap-20 md:gap-28 items-center">
           {duplicatedSponsors.map((sponsor, index) => (
             <div
               key={`${sponsor._id}-${index}`}
-              className="flex-shrink-0 flex items-center justify-center w-32 md:w-40"
+              className="flex-shrink-0 flex items-center justify-center w-36 md:w-44"
             >
               <img
                 src={sponsor.imageUrl}
                 alt={sponsor.name}
-                className="max-h-12 md:max-h-14 w-auto object-contain filter grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                className="max-h-12 md:max-h-14 w-auto object-contain filter grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300 transform hover:scale-110 cursor-pointer"
               />
             </div>
           ))}

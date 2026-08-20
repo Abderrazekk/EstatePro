@@ -12,9 +12,13 @@ import {
   HeartHandshake,
   Phone,
   MessageCircle,
+  MapPin,
+  Sparkles,
+  ArrowRight,
+  CheckCircle2,
+  Star,
 } from "lucide-react";
 
-// Upgraded Hook
 const useScrollReveal = (threshold = 0.15) => {
   const [isVisible, setIsVisible] = useState(false);
   const [element, setElement] = useState(null);
@@ -39,158 +43,342 @@ const useScrollReveal = (threshold = 0.15) => {
 
 const Home = () => {
   const [promiseRef, promiseVisible] = useScrollReveal();
+  const [destinationsRef, destinationsVisible] = useScrollReveal();
+  const [conciergeRef, conciergeVisible] = useScrollReveal();
   const [ctaRef, ctaVisible] = useScrollReveal();
 
-  return (
-    <div className="min-h-screen flex flex-col bg-white selection:bg-stone-200 selection:text-stone-900">
-      <style>{`
-        @keyframes fade-in-up {
-          0% { opacity: 0; transform: translateY(40px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up { animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
-        .delay-100 { animation-delay: 150ms; }
-        .delay-200 { animation-delay: 300ms; }
-        .delay-300 { animation-delay: 450ms; }
-      `}</style>
+  const destinations = [
+    {
+      name: "Sidi Bou Saïd",
+      tag: "Coastal Blue & White Architecture",
+      image:
+        "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&w=800&q=80",
+      stays: "34 Luxury Palaces",
+    },
+    {
+      name: "Djerba Island",
+      tag: "Menzels & Olive Groves",
+      image:
+        "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80",
+      stays: "28 Private Estates",
+    },
+    {
+      name: "Tozeur & Nefta",
+      tag: "Saharan Brick Architecture",
+      image:
+        "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80",
+      stays: "19 Oasis Sanctuaries",
+    },
+    {
+      name: "Hammamet",
+      tag: "Mediterranean Gardens & Sea Stays",
+      image:
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+      stays: "42 Seafront Villas",
+    },
+  ];
 
+  return (
+    <div className="min-h-screen flex flex-col bg-white text-black font-sans selection:bg-black selection:text-white">
       <Navbar />
 
       <main className="flex-1">
         <Hero />
+
         <FeaturedProperties />
-        <PromoBanner />
-        <Sponsors />
 
-        {/* Why choose us – DarHôte Promise */}
+        {/* Tunisian Destinations Grid: 2 inline on mobile, 4 on desktop */}
         <section
-          ref={promiseRef}
-          className="py-24 bg-stone-50 overflow-hidden relative"
+          ref={destinationsRef}
+          className="py-16 sm:py-28 bg-neutral-50/90 border-t border-b border-neutral-200/70 overflow-hidden"
         >
-          <div
-            className="absolute inset-0 opacity-[0.03] pointer-events-none"
-            style={{
-              backgroundImage: "radial-gradient(#000 1px, transparent 1px)",
-              backgroundSize: "32px 32px",
-            }}
-          ></div>
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div
-              className={`text-center mb-20 ${promiseVisible ? "animate-fade-in-up" : "opacity-0"}`}
+              className={`text-center max-w-3xl mx-auto mb-10 sm:mb-16 transition-all duration-1000 transform ${
+                destinationsVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
             >
-              <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-stone-500 bg-white border border-stone-200 px-4 py-2 rounded-full shadow-sm mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-stone-800"></span>
-                The DarHôte Promise
+              <span className="inline-flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase text-black bg-white border border-neutral-300 px-5 py-2 rounded-full shadow-sm mb-6">
+                <MapPin className="w-3.5 h-3.5 text-black" />
+                Iconic Regions
               </span>
-              <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
-                Curated for{" "}
-                <span className="italic font-serif text-stone-500 font-light">
-                  tranquility
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tight">
+                Explore By{" "}
+                <span className="font-serif italic font-normal text-neutral-400">
+                  Destination
                 </span>
               </h2>
-              <p className="text-stone-500 mt-6 max-w-2xl mx-auto text-lg leading-relaxed font-light">
-                We combine local expertise with a seamless digital experience,
-                ensuring your getaway is effortless from booking to checkout.
+              <p className="text-neutral-500 mt-3 sm:mt-5 font-light text-sm sm:text-lg">
+                Immerse yourself in distinct local micro-cultures from northern
+                coastal cliffs to deep southern desert palmeries.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-              <div
-                className={`group p-10 rounded-[2rem] border border-stone-200/60 bg-white hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500 hover:-translate-y-2 ${promiseVisible ? "animate-fade-in-up delay-100" : "opacity-0"}`}
-              >
-                <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gray-900 transition-colors duration-500">
-                  <ShieldCheck className="w-8 h-8 text-stone-700 group-hover:text-white transition-colors duration-500 stroke-[1.5]" />
+            {/* Destinations 2x2 on Mobile Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+              {destinations.map((dst, idx) => (
+                <Link
+                  key={dst.name}
+                  to={`/properties?location=${encodeURIComponent(dst.name)}`}
+                  className={`group relative rounded-2xl sm:rounded-[2.5rem] overflow-hidden h-60 sm:h-96 border border-neutral-200/80 shadow-[0_15px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_25px_60px_rgba(0,0,0,0.18)] transition-all duration-700 transform hover:-translate-y-2 ${
+                    destinationsVisible
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-12"
+                  }`}
+                  style={{ transitionDelay: `${idx * 150}ms` }}
+                >
+                  <img
+                    src={dst.image}
+                    alt={dst.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+                  <div className="absolute inset-0 p-4 sm:p-8 flex flex-col justify-end text-white z-10">
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-300 mb-0.5 sm:mb-1">
+                      {dst.stays}
+                    </span>
+                    <h3 className="text-lg sm:text-2xl font-extrabold font-serif mb-1 sm:mb-2 group-hover:text-neutral-200 transition-colors truncate">
+                      {dst.name}
+                    </h3>
+                    <p className="text-[10px] sm:text-xs text-neutral-300 font-light leading-relaxed line-clamp-2">
+                      {dst.tag}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <PromoBanner />
+
+        {/* The Borgogo Luxury Promise */}
+        <section
+          ref={promiseRef}
+          className="py-16 sm:py-28 bg-white relative overflow-hidden"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div
+              className={`text-center max-w-3xl mx-auto mb-12 sm:mb-20 transition-all duration-1000 transform ${
+                promiseVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              <span className="inline-flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase text-black bg-neutral-100 border border-neutral-300 px-5 py-2 rounded-full shadow-sm mb-6">
+                <ShieldCheck className="w-3.5 h-3.5 text-black" />
+                The Borgogo Guarantee
+              </span>
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tight">
+                Curated for{" "}
+                <span className="font-serif italic font-normal text-neutral-400">
+                  Absolute Serenity
+                </span>
+              </h2>
+              <p className="text-neutral-500 mt-4 sm:mt-6 text-sm sm:text-lg font-light leading-relaxed">
+                We bridge local architectural heritage with global digital
+                standards, guaranteeing flawless reservations from moment of
+                request to checkout.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+              {[
+                {
+                  icon: ShieldCheck,
+                  title: "100% Vetted Estates",
+                  desc: "Every listed guest house undergoes rigorous multi-point visual, architectural, and hospitality inspections by local experts.",
+                },
+                {
+                  icon: Clock,
+                  title: "Direct Host Locking",
+                  desc: "Real-time direct owner communication prevents double bookings and secures seasonal rates transparently in local currency (TND).",
+                },
+                {
+                  icon: HeartHandshake,
+                  title: "Private Concierge Support",
+                  desc: "Dedicated hospitality managers available around the clock for private chefs, car transfers, and bespoke local itineraries.",
+                },
+              ].map((item, idx) => (
+                <div
+                  key={item.title}
+                  className={`group p-6 sm:p-10 rounded-2xl sm:rounded-[2.5rem] border border-neutral-200 bg-white hover:border-black hover:shadow-[0_25px_60px_rgba(0,0,0,0.1)] transition-all duration-500 transform hover:-translate-y-2 ${
+                    promiseVisible
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-12"
+                  }`}
+                  style={{ transitionDelay: `${idx * 150}ms` }}
+                >
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-neutral-100 rounded-xl sm:rounded-2xl flex items-center justify-center mb-6 sm:mb-8 group-hover:bg-black group-hover:text-white transition-colors duration-500 border border-neutral-200">
+                    <item.icon className="w-6 h-6 sm:w-8 sm:h-8 text-black group-hover:text-white transition-colors duration-500" />
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-black mb-3 sm:mb-4 font-serif">
+                    {item.title}
+                  </h3>
+                  <p className="text-neutral-500 leading-relaxed font-light text-xs sm:text-sm">
+                    {item.desc}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 tracking-tight">
-                  Hand-Verified Stays
-                </h3>
-                <p className="text-stone-500 leading-relaxed font-light">
-                  Every guesthouse is personally vetted by our local team. No
-                  hidden surprises—just authentic, beautiful homes waiting for
-                  you.
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Concierge Section */}
+        <section
+          ref={conciergeRef}
+          className="py-16 sm:py-28 bg-neutral-900 text-white overflow-hidden relative"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              <div
+                className={`lg:col-span-6 transition-all duration-1000 transform ${
+                  conciergeVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-12"
+                }`}
+              >
+                <span className="inline-flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase text-black bg-white px-5 py-2 rounded-full mb-6 sm:mb-8">
+                  <Sparkles className="w-3.5 h-3.5 text-black" />
+                  Exclusive Bespoke Services
+                </span>
+
+                <h2 className="text-3xl sm:text-5xl font-extrabold font-serif mb-4 sm:mb-6 leading-tight">
+                  Beyond A Room: <br />
+                  <span className="italic font-normal text-neutral-400">
+                    The Private Guest Experience
+                  </span>
+                </h2>
+
+                <p className="text-neutral-300 font-light leading-relaxed mb-6 sm:mb-8 text-sm sm:text-base">
+                  When you reserve through Borgogo, our dedicated concierge team
+                  handles everything from traditional culinary dinners prepared
+                  by local grandmothers to private Sahara excursions.
                 </p>
+
+                <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
+                  {[
+                    "Private Organic Farm-To-Table Breakfasts",
+                    "Guided Heritage Medina Architecture Walks",
+                    "Chauffeur-Driven Airport & Regional Transfers",
+                    "Exclusive Sunset Rooftop Tea Ceremonies",
+                  ].map((feat) => (
+                    <div key={feat} className="flex items-center gap-3">
+                      <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
+                      <span className="text-xs sm:text-sm font-medium text-neutral-200">
+                        {feat}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-extrabold text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all shadow-xl"
+                >
+                  <span>Inquire With Concierge</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
 
+              {/* Visual Frame */}
               <div
-                className={`group p-10 rounded-[2rem] border border-stone-200/60 bg-white hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500 hover:-translate-y-2 ${promiseVisible ? "animate-fade-in-up delay-200" : "opacity-0"}`}
+                className={`lg:col-span-6 transition-all duration-1000 delay-300 transform ${
+                  conciergeVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-12"
+                }`}
               >
-                <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gray-900 transition-colors duration-500">
-                  <Clock className="w-8 h-8 text-stone-700 group-hover:text-white transition-colors duration-500 stroke-[1.5]" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 tracking-tight">
-                  Effortless Booking
-                </h3>
-                <p className="text-stone-500 leading-relaxed font-light">
-                  From browsing to instant confirmation, our streamlined
-                  platform is designed to save you time and eliminate stress.
-                </p>
-              </div>
+                <div className="relative rounded-2xl sm:rounded-[3rem] overflow-hidden border border-neutral-800 shadow-2xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80"
+                    alt="Concierge Experience"
+                    className="w-full h-[320px] sm:h-[500px] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
 
-              <div
-                className={`group p-10 rounded-[2rem] border border-stone-200/60 bg-white hover:border-stone-300 hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500 hover:-translate-y-2 ${promiseVisible ? "animate-fade-in-up delay-300" : "opacity-0"}`}
-              >
-                <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gray-900 transition-colors duration-500">
-                  <HeartHandshake className="w-8 h-8 text-stone-700 group-hover:text-white transition-colors duration-500 stroke-[1.5]" />
+                  {/* Rating Badge */}
+                  <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-black/80 backdrop-blur-2xl p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-neutral-800 flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-1 text-amber-400 mb-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current"
+                          />
+                        ))}
+                      </div>
+                      <p className="text-xs font-bold text-white">
+                        4.98 / 5 Guest Satisfaction
+                      </p>
+                    </div>
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400">
+                      Verified Reviews
+                    </span>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 tracking-tight">
-                  Dedicated Concierge
-                </h3>
-                <p className="text-stone-500 leading-relaxed font-light">
-                  Enjoy round-the-clock support from our dedicated team, ready
-                  to assist with special requests and local recommendations.
-                </p>
               </div>
             </div>
           </div>
         </section>
 
+        <Sponsors />
+
         {/* CTA Banner */}
         <section
           ref={ctaRef}
-          className="bg-gray-900 py-24 relative overflow-hidden"
+          className="bg-black py-16 sm:py-28 relative overflow-hidden text-white"
         >
-          <div className="absolute inset-0 opacity-20 pointer-events-none">
-            <div
-              className="absolute -top-24 -left-24 w-96 h-96 bg-stone-500 rounded-full mix-blend-screen filter blur-[100px] animate-pulse"
-              style={{ animationDuration: "4s" }}
-            />
-            <div
-              className="absolute -bottom-24 -right-24 w-96 h-96 bg-stone-400 rounded-full mix-blend-screen filter blur-[100px] animate-pulse"
-              style={{ animationDuration: "6s" }}
-            />
-          </div>
-
-          <div
-            className={`relative z-10 max-w-4xl mx-auto px-4 text-center ${ctaVisible ? "animate-fade-in-up" : "opacity-0"}`}
-          >
-            <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight leading-tight">
+          <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <h2
+              className={`text-3xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-4 sm:mb-6 transition-all duration-1000 transform ${
+                ctaVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
               Ready to find your{" "}
-              <span className="italic font-serif text-stone-400 font-light">
+              <span className="font-serif italic font-normal text-neutral-400">
                 perfect retreat?
               </span>
             </h2>
-            <p className="text-stone-300 mb-12 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
-              Connect with our experts today. We are here to help you curate an
-              unforgettable experience in Tunisia's most beautiful homes.
+
+            <p
+              className={`text-neutral-400 text-sm sm:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-8 sm:mb-12 transition-all duration-1000 delay-150 transform ${
+                ctaVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              Connect directly with our local reservation concierges to curate
+              an unforgettable guesthouse experience across Tunisia.
             </p>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-6 items-center">
+            <div
+              className={`flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 items-center transition-all duration-1000 delay-300 transform ${
+                ctaVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
               <a
                 href="tel:+21671234567"
-                className="w-full sm:w-auto group bg-white text-gray-900 px-10 py-5 rounded-full font-bold hover:bg-stone-100 transition-all duration-300 shadow-xl shadow-black/20 hover:-translate-y-1 flex items-center justify-center gap-3 text-lg"
+                className="w-full sm:w-auto bg-white text-black px-8 sm:px-10 py-4 sm:py-5 rounded-full font-extrabold text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all duration-300 shadow-2xl flex items-center justify-center gap-3"
               >
-                <Phone className="w-5 h-5 text-stone-600 group-hover:text-gray-900 transition-colors" />
-                +216 71 234 567
+                <Phone className="w-4 h-4" />
+                <span>+216 71 234 567</span>
               </a>
               <a
                 href="https://wa.me/21612345678"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto group bg-transparent border border-stone-500 text-white px-10 py-5 rounded-full font-bold hover:bg-stone-800 hover:border-stone-400 transition-all duration-300 flex items-center justify-center gap-3 text-lg"
+                className="w-full sm:w-auto bg-neutral-900 border border-neutral-700 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-full font-extrabold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-3"
               >
-                <MessageCircle className="w-5 h-5 text-stone-400 group-hover:text-white transition-colors" />
-                Chat on WhatsApp
+                <MessageCircle className="w-4 h-4 text-emerald-400" />
+                <span>Chat on WhatsApp</span>
               </a>
             </div>
           </div>

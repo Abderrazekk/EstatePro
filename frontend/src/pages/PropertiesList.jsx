@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -25,6 +26,8 @@ const HERO_IMAGE_URL =
   "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=2000&q=80";
 
 const PropertiesList = () => {
+  const [searchParams] = useSearchParams();
+
   const [properties, setProperties] = useState([]);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
@@ -34,25 +37,44 @@ const PropertiesList = () => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [gridCols, setGridCols] = useState(4);
 
-  // Show More / Show Less States (Limit 8 by default)
+  // Show More / Show Less States
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [showAllFeatures, setShowAllFeatures] = useState(false);
 
-  // Filters State
-  const [search, setSearch] = useState("");
-  const [type, setType] = useState("");
-  const [status, setStatus] = useState("");
-  const [location, setLocation] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [guests, setGuests] = useState("");
-  const [bedrooms, setBedrooms] = useState("");
-  const [bathrooms, setBathrooms] = useState("");
-  const [minNights, setMinNights] = useState("");
+  // Synchronize initial filter states with URL parameters sent from Hero
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [type, setType] = useState(searchParams.get("type") || "");
+  const [status, setStatus] = useState(searchParams.get("status") || "");
+  const [location, setLocation] = useState(searchParams.get("location") || "");
+  const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
+  const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
+  const [guests, setGuests] = useState(searchParams.get("guests") || "");
+  const [bedrooms, setBedrooms] = useState(searchParams.get("bedrooms") || "");
+  const [bathrooms, setBathrooms] = useState(
+    searchParams.get("bathrooms") || "",
+  );
+  const [minNights, setMinNights] = useState(
+    searchParams.get("minNights") || "",
+  );
 
   const [amenities, setAmenities] = useState([]);
   const [features, setFeatures] = useState([]);
   const [sort, setSort] = useState("newest");
+
+  // React to URL changes if the user searches again while remaining on this page
+  useEffect(() => {
+    setLocation(searchParams.get("location") || "");
+    setGuests(searchParams.get("guests") || "");
+    setSearch(searchParams.get("search") || "");
+    setType(searchParams.get("type") || "");
+    setStatus(searchParams.get("status") || "");
+    setMinPrice(searchParams.get("minPrice") || "");
+    setMaxPrice(searchParams.get("maxPrice") || "");
+    setBedrooms(searchParams.get("bedrooms") || "");
+    setBathrooms(searchParams.get("bathrooms") || "");
+    setMinNights(searchParams.get("minNights") || "");
+    setPage(1);
+  }, [searchParams]);
 
   // Dynamically extract unique amenities from existing properties
   const availableAmenities = useMemo(() => {
@@ -227,7 +249,6 @@ const PropertiesList = () => {
           {/* Full-Width Control Bar at Bottom of Hero Banner */}
           <div className="absolute bottom-0 inset-x-0 bg-stone-950/50 backdrop-blur-md border-t border-white/15 py-3 px-4 sm:px-6 lg:px-8 2xl:px-10 z-20">
             <div className="w-full flex items-center justify-between gap-4">
-              {/* Grid Columns Switcher */}
               <div className="hidden lg:flex items-center gap-1.5 bg-white/10 backdrop-blur-md p-1 rounded-xl border border-white/15">
                 {[3, 4, 5].map((num) => (
                   <button
@@ -244,12 +265,10 @@ const PropertiesList = () => {
                 ))}
               </div>
 
-              {/* Total count badge for mobile */}
               <div className="text-xs font-medium text-stone-300 lg:hidden">
                 {total} résidences disponibles
               </div>
 
-              {/* Sort Dropdown */}
               <div className="flex items-center gap-2 ml-auto">
                 <ListFilter className="w-4 h-4 text-amber-300 shrink-0" />
                 <select
@@ -283,10 +302,10 @@ const PropertiesList = () => {
           </div>
         </div>
 
-        {/* Full-Width Layout Area */}
+        {/* Layout Area */}
         <div className="w-full px-4 sm:px-6 lg:px-8 2xl:px-10 py-10">
           <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
-            {/* Sidebar Filters - Max Left Alignment */}
+            {/* Sidebar Filters */}
             <aside className="w-full lg:w-[320px] xl:w-[340px] shrink-0 lg:sticky lg:top-24 z-10">
               <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-xl shadow-stone-200/40 lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto custom-scrollbar">
                 <div
@@ -490,7 +509,7 @@ const PropertiesList = () => {
                     </div>
                   </div>
 
-                  {/* Dynamic Amenities Section */}
+                  {/* Dynamic Amenities */}
                   {availableAmenities.length > 0 && (
                     <>
                       <hr className="border-stone-100" />
@@ -570,7 +589,7 @@ const PropertiesList = () => {
                     </>
                   )}
 
-                  {/* Dynamic Features Section */}
+                  {/* Dynamic Features */}
                   {availableFeatures.length > 0 && (
                     <>
                       <hr className="border-stone-100" />
@@ -662,7 +681,6 @@ const PropertiesList = () => {
                     ))}
                   </div>
 
-                  {/* Pagination Section (Displays when total properties exceed 16) */}
                   {total > 16 && (
                     <div className="mt-14 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-stone-200/80 pt-8">
                       <div className="text-xs font-semibold text-stone-500">
@@ -676,7 +694,6 @@ const PropertiesList = () => {
                       </div>
 
                       <div className="flex items-center gap-2">
-                        {/* Previous Button */}
                         <button
                           onClick={() => setPage(Math.max(1, page - 1))}
                           disabled={page === 1}
@@ -686,7 +703,6 @@ const PropertiesList = () => {
                           <span>Précédent</span>
                         </button>
 
-                        {/* Page Numbers */}
                         <div className="flex items-center gap-1">
                           {Array.from({ length: pages }, (_, i) => i + 1).map(
                             (p) => (
@@ -705,7 +721,6 @@ const PropertiesList = () => {
                           )}
                         </div>
 
-                        {/* Next Button */}
                         <button
                           onClick={() => setPage(Math.min(pages, page + 1))}
                           disabled={page === pages}

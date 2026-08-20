@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import {
   Menu,
   X,
-  Home as HomeIcon,
+  Home,
   Building,
   Heart,
   MessageSquare,
@@ -13,7 +13,6 @@ import {
   LogIn,
   UserPlus,
   AlertTriangle,
-  Sparkles,
 } from "lucide-react";
 
 const Navbar = () => {
@@ -33,94 +32,82 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-2xl border-b border-neutral-100 transition-all duration-300">
+      <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-stone-200/80 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-22 py-4">
-            {/* Logo Mark */}
+          <div className="flex items-center justify-between h-20">
+            {/* Logo (left) */}
             <Link
               to="/"
-              className="flex items-center gap-2 group shrink-0"
+              className="flex items-center gap-1 text-2xl font-extrabold tracking-tight shrink-0"
               onClick={closeMobile}
             >
-              <div className="w-10 h-10 bg-[#0A0A0A] rounded-2xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-black/10 group-hover:scale-105 transition-transform duration-300">
-                B
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-black tracking-tighter text-[#0A0A0A]">
-                  BORGOGO
-                  <span className="text-neutral-400 font-light">.TN</span>
-                </span>
-                <span className="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-semibold -mt-1">
-                  Maisons d'Hôte
-                </span>
-              </div>
+              <span className="text-gray-900">Bor</span>
+              <span className="text-stone-400">gogo.</span>
             </Link>
 
-            {/* Floating Navigation Pill */}
-            <nav className="hidden md:flex items-center gap-1 bg-neutral-100/80 p-1.5 rounded-full border border-neutral-200/60 shadow-inner">
-              <Link
-                to="/"
-                className="px-5 py-2 text-xs font-bold tracking-wide uppercase text-[#0A0A0A] bg-white rounded-full shadow-sm hover:shadow transition-all"
-              >
-                Home
-              </Link>
-              <Link
-                to="/properties"
-                className="px-5 py-2 text-xs font-bold tracking-wide uppercase text-neutral-600 hover:text-[#0A0A0A] rounded-full hover:bg-white/50 transition-all"
-              >
-                Our Homes
-              </Link>
-              {user && (
-                <>
-                  <Link
-                    to="/wishlist"
-                    className="px-5 py-2 text-xs font-bold tracking-wide uppercase text-neutral-600 hover:text-[#0A0A0A] rounded-full hover:bg-white/50 transition-all"
-                  >
-                    Wishlist
-                  </Link>
-                  <Link
-                    to="/enquiries"
-                    className="px-5 py-2 text-xs font-bold tracking-wide uppercase text-neutral-600 hover:text-[#0A0A0A] rounded-full hover:bg-white/50 transition-all"
-                  >
-                    Enquiries
-                  </Link>
-                </>
-              )}
-            </nav>
+            {/* Centered desktop navigation links */}
+            <div className="hidden md:flex items-center justify-center flex-1 mx-8">
+              <div className="flex items-center gap-8">
+                <Link
+                  to="/"
+                  className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/properties"
+                  className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
+                >
+                  Our Homes
+                </Link>
 
-            {/* Auth CTAs */}
+                {user && (
+                  <>
+                    <Link
+                      to="/wishlist"
+                      className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
+                    >
+                      Wishlist
+                    </Link>
+                    <Link
+                      to="/enquiries"
+                      className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
+                    >
+                      My Enquiries
+                    </Link>
+                    <Link
+                      to="/profile"
+                      className="text-sm text-stone-600 hover:text-gray-900 transition-colors font-semibold"
+                    >
+                      Profile
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Right section (auth buttons) */}
             <div className="hidden md:flex items-center gap-3 shrink-0">
               {user ? (
-                <div className="flex items-center gap-3">
-                  <Link
-                    to="/profile"
-                    className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] bg-neutral-100 border border-neutral-200 rounded-full hover:bg-neutral-200 transition-all"
-                  >
-                    <User className="w-3.5 h-3.5" />
-                    Profile
-                  </Link>
-                  <button
-                    onClick={() => setShowLogoutConfirm(true)}
-                    className="p-2.5 text-neutral-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-full transition-all"
-                    title="Sign Out"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </button>
-                </div>
+                <button
+                  onClick={() => setShowLogoutConfirm(true)}
+                  className="px-5 py-2.5 text-sm font-bold text-stone-800 bg-stone-100 border border-stone-200 rounded-full hover:bg-stone-200 transition-all"
+                >
+                  Sign Out
+                </button>
               ) : (
                 <>
                   <Link
                     to="/login"
-                    className="px-6 py-2.5 text-xs font-bold tracking-wider uppercase text-[#0A0A0A] hover:bg-neutral-100 rounded-full transition-all"
+                    className="px-5 py-2.5 text-sm font-bold text-gray-900 hover:bg-stone-100 rounded-full transition-all"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold tracking-wider uppercase text-white bg-[#0A0A0A] rounded-full hover:bg-neutral-800 transition-all shadow-lg shadow-black/10 hover:-translate-y-0.5 active:translate-y-0"
+                    className="px-6 py-2.5 text-sm font-bold text-white bg-gray-900 rounded-full hover:bg-stone-800 transition-all shadow-sm"
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                    <span>Register</span>
+                    Register
                   </Link>
                 </>
               )}
@@ -131,7 +118,7 @@ const Navbar = () => {
               <button
                 onClick={toggleMobile}
                 aria-label="Toggle navigation menu"
-                className="p-2.5 text-[#0A0A0A] hover:bg-neutral-100 rounded-2xl focus:outline-none transition-colors border border-neutral-200"
+                className="p-2 text-gray-900 hover:bg-stone-100 rounded-2xl focus:outline-none transition-colors border border-stone-200"
               >
                 {mobileOpen ? (
                   <X className="w-5 h-5" />
@@ -142,59 +129,57 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-      </header>
+      </nav>
 
       {/* Mobile Drawer Overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 md:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-stone-950/60 backdrop-blur-sm z-50 md:hidden transition-opacity duration-300"
           onClick={closeMobile}
         />
       )}
 
       {/* Mobile Left-Side Drawer */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-80 bg-white flex flex-col justify-between border-r border-neutral-200 shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-white flex flex-col justify-between border-r border-stone-200 shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div>
-          <div className="flex items-center justify-between p-6 border-b border-neutral-100">
+          {/* Drawer Top Header */}
+          <div className="flex items-center justify-between p-6 border-b border-stone-100">
             <Link
               to="/"
               onClick={closeMobile}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 text-2xl font-extrabold tracking-tight"
             >
-              <div className="w-8 h-8 bg-[#0A0A0A] rounded-xl flex items-center justify-center text-white font-black text-base">
-                B
-              </div>
-              <span className="text-lg font-black tracking-tighter text-[#0A0A0A]">
-                BORGOGO.TN
-              </span>
+              <span className="text-gray-900">Bor</span>
+              <span className="text-stone-400">gogo.</span>
             </Link>
             <button
               onClick={closeMobile}
-              className="p-2 text-neutral-400 hover:text-[#0A0A0A] rounded-full hover:bg-neutral-100 transition-colors"
+              className="p-2 text-stone-400 hover:text-gray-900 rounded-full hover:bg-stone-100 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <nav className="p-4 space-y-2">
+          {/* Navigation Links */}
+          <nav className="p-4 space-y-1.5">
             <Link
               to="/"
               onClick={closeMobile}
-              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-[#0A0A0A] hover:bg-neutral-100 transition-all"
+              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
             >
-              <HomeIcon className="w-4 h-4 text-neutral-400" />
+              <Home className="w-4 h-4 text-stone-400" />
               <span>Home</span>
             </Link>
             <Link
               to="/properties"
               onClick={closeMobile}
-              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-[#0A0A0A] hover:bg-neutral-100 transition-all"
+              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
             >
-              <Building className="w-4 h-4 text-neutral-400" />
+              <Building className="w-4 h-4 text-stone-400" />
               <span>Our Homes</span>
             </Link>
 
@@ -203,25 +188,25 @@ const Navbar = () => {
                 <Link
                   to="/wishlist"
                   onClick={closeMobile}
-                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-[#0A0A0A] hover:bg-neutral-100 transition-all"
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
                 >
-                  <Heart className="w-4 h-4 text-neutral-400" />
+                  <Heart className="w-4 h-4 text-stone-400" />
                   <span>Wishlist</span>
                 </Link>
                 <Link
                   to="/enquiries"
                   onClick={closeMobile}
-                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-[#0A0A0A] hover:bg-neutral-100 transition-all"
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
                 >
-                  <MessageSquare className="w-4 h-4 text-neutral-400" />
+                  <MessageSquare className="w-4 h-4 text-stone-400" />
                   <span>My Enquiries</span>
                 </Link>
                 <Link
                   to="/profile"
                   onClick={closeMobile}
-                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-[#0A0A0A] hover:bg-neutral-100 transition-all"
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-stone-700 hover:bg-stone-100 hover:text-gray-900 transition-all"
                 >
-                  <User className="w-4 h-4 text-neutral-400" />
+                  <User className="w-4 h-4 text-stone-400" />
                   <span>Profile</span>
                 </Link>
               </>
@@ -229,14 +214,15 @@ const Navbar = () => {
           </nav>
         </div>
 
-        <div className="p-4 border-t border-neutral-100 bg-neutral-50/50">
+        {/* Drawer Bottom Actions */}
+        <div className="p-4 border-t border-stone-100 bg-stone-50/50">
           {user ? (
             <button
               onClick={() => {
                 closeMobile();
                 setShowLogoutConfirm(true);
               }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-neutral-100 hover:bg-red-50 text-neutral-800 hover:text-red-600 border border-neutral-200 rounded-2xl text-sm font-bold transition-all"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-stone-100 hover:bg-rose-50 text-stone-700 hover:text-rose-600 border border-stone-200 rounded-2xl text-sm font-bold transition-all"
             >
               <LogOut className="w-4 h-4" />
               <span>Sign Out</span>
@@ -246,7 +232,7 @@ const Navbar = () => {
               <Link
                 to="/login"
                 onClick={closeMobile}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-white hover:bg-neutral-100 border border-neutral-200 text-[#0A0A0A] rounded-2xl text-sm font-bold transition-all"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-white hover:bg-stone-100 border border-stone-200 text-gray-900 rounded-2xl text-sm font-bold transition-all"
               >
                 <LogIn className="w-4 h-4" />
                 <span>Sign In</span>
@@ -254,7 +240,7 @@ const Navbar = () => {
               <Link
                 to="/register"
                 onClick={closeMobile}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-[#0A0A0A] hover:bg-neutral-800 text-white rounded-2xl text-sm font-bold transition-all shadow-md"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-gray-900 hover:bg-stone-800 text-white rounded-2xl text-sm font-bold transition-all shadow-md"
               >
                 <UserPlus className="w-4 h-4" />
                 <span>Register</span>
@@ -266,29 +252,35 @@ const Navbar = () => {
 
       {/* Logout Confirmation Modal */}
       {showLogoutConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-          <div className="bg-white rounded-3xl p-8 max-w-sm w-full border border-neutral-200 shadow-2xl space-y-6 text-center">
-            <div className="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center mx-auto text-[#0A0A0A] border border-neutral-200">
-              <AlertTriangle className="w-6 h-6 text-neutral-800" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-md animate-fade-in">
+          <div
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full border border-stone-200 shadow-2xl space-y-6 text-center"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="w-14 h-14 bg-stone-100 rounded-full flex items-center justify-center mx-auto text-stone-900 border border-stone-200">
+              <AlertTriangle className="w-6 h-6 text-stone-800" />
             </div>
+
             <div className="space-y-2">
-              <h3 className="text-xl font-extrabold text-[#0A0A0A] tracking-tight">
+              <h3 className="text-xl font-extrabold text-stone-900 tracking-tight">
                 Confirm Sign Out
               </h3>
-              <p className="text-sm text-neutral-500 font-light leading-relaxed">
-                Are you sure you want to log out of Borgogo?
+              <p className="text-sm text-stone-500 font-light leading-relaxed">
+                Are you sure you want to log out? You can sign back in anytime.
               </p>
             </div>
+
             <div className="grid grid-cols-2 gap-3 pt-2">
               <button
                 onClick={() => setShowLogoutConfirm(false)}
-                className="w-full py-3 px-4 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-bold rounded-full text-xs uppercase tracking-wider transition-colors"
+                className="w-full py-3 px-4 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-full text-sm transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleLogout}
-                className="w-full py-3 px-4 bg-[#0A0A0A] hover:bg-red-600 text-white font-bold rounded-full text-xs uppercase tracking-wider transition-colors shadow-md"
+                className="w-full py-3 px-4 bg-stone-900 hover:bg-rose-600 text-white font-bold rounded-full text-sm transition-colors shadow-md"
               >
                 Sign Out
               </button>

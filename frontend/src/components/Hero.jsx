@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { ArrowRight, UserPlus, Sparkles } from "lucide-react";
 
+// Upgraded Hook: Uses setElement to wait for the component to mount
 const useScrollReveal = (threshold = 0.1) => {
   const [isVisible, setIsVisible] = useState(false);
   const [element, setElement] = useState(null);
@@ -28,141 +28,129 @@ const useScrollReveal = (threshold = 0.1) => {
 const Hero = () => {
   const { user } = useAuth();
   const [ref, isVisible] = useScrollReveal(0.1);
-  const [currentBg, setCurrentBg] = useState(0);
-
-  // Background Carousel Images
-  const backgroundImages = [
-    "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-    "https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  ];
-
-  // Crossfade Animation Logic
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [backgroundImages.length]);
 
   return (
     <section
       ref={ref}
-      className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden pt-8 pb-16 px-4 sm:px-6 lg:px-8"
+      className="relative min-h-[100dvh] lg:min-h-[90vh] flex items-center justify-start overflow-hidden bg-gray-900"
     >
-      {/* Cinematic Background Carousel with Ken Burns Zoom */}
-      <div className="absolute inset-0 z-0 bg-[#0A0A0A]">
-        {backgroundImages.map((img, index) => (
-          <div
-            key={img}
-            className={`absolute inset-0 transition-opacity duration-[2500ms] ease-in-out ${
-              index === currentBg ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <img
-              src={img}
-              alt="Luxury Tunisian Stay"
-              className={`w-full h-full object-cover transform-gpu transition-transform duration-[10000ms] ease-out ${
-                index === currentBg ? "scale-105" : "scale-100"
-              }`}
-            />
-          </div>
-        ))}
-        {/* Dark Gradient Overlay for optimal contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 z-0" />
+      <style>{`
+        @keyframes slow-zoom {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.15); }
+        }
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(30px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slow-zoom {
+          animation: slow-zoom 25s ease-in-out infinite alternate;
+        }
+        .animate-fade-in-up-1 { animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .animate-fade-in-up-2 { animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; opacity: 0; }
+        .animate-fade-in-up-3 { animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; opacity: 0; }
+        .animate-fade-in-up-4 { animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards; opacity: 0; }
+      `}</style>
+
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+          alt="Luxury Tunisian Guesthouse"
+          className="w-full h-full object-cover animate-slow-zoom"
+        />
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto text-center flex flex-col items-center mt-12">
-        {/* Top Tagline Pill */}
-        <div
-          className={`transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-        >
-          <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[11px] font-black uppercase tracking-[0.25em] text-white shadow-xl mb-8">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            Curated Tunisian Sanctuary Escapes
-          </span>
-        </div>
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/95 via-black/70 to-black/30 md:bg-gradient-to-r md:from-black/95 md:via-black/50 md:to-transparent" />
+      <div className="absolute inset-0 z-0 bg-black/20" />
 
-        {/* Editorial Heading */}
-        <h1
-          className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white tracking-tight leading-[1.05] max-w-5xl mb-8 drop-shadow-2xl transition-all duration-700 delay-100 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          Redefining the Art of{" "}
-          <span className="font-serif italic font-normal text-amber-50">
-            Sanctuary
-          </span>{" "}
-          Living.
-        </h1>
-
-        <p
-          className={`text-lg sm:text-xl text-neutral-200 font-light max-w-2xl leading-relaxed mb-12 drop-shadow-md transition-all duration-700 delay-200 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          Discover Tunisia's most exclusive *Maisons d'Hôte*. From seaside
-          authentic palazzos to desert retreats, experience luxury grounded in
-          heritage.
-        </p>
-
-        {/* Dynamic Auth-based CTA Action Buttons */}
-        <div
-          className={`flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto transition-all duration-700 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <Link
-            to="/properties"
-            className="w-full sm:w-auto px-9 py-4 rounded-full bg-white text-[#0A0A0A] font-extrabold text-xs uppercase tracking-widest hover:bg-neutral-100 transition-all duration-300 shadow-2xl hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-28 pb-16 sm:pt-32 lg:py-20 flex flex-col justify-center">
+        <div className="max-w-2xl">
+          <div
+            className={`${isVisible ? "animate-fade-in-up-1" : "opacity-0"} mb-6 sm:mb-8 inline-flex items-center gap-2 text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-white bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full shadow-lg`}
           >
-            <span>Explore Stays</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            Authentic Escapes
+          </div>
 
-          {!user && (
+          <h1
+            className={`${isVisible ? "animate-fade-in-up-2" : "opacity-0"} text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight drop-shadow-lg mb-4 sm:mb-6`}
+          >
+            Discover the art of{" "}
+            <span className="italic font-serif text-gray-300 relative inline-block">
+              slow living
+              <svg
+                className="absolute -bottom-1 left-0 w-full h-2 sm:h-3 text-white/40"
+                viewBox="0 0 100 10"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0 5 Q 25 10 50 5 Q 75 0 100 5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                />
+              </svg>
+            </span>{" "}
+            <br className="hidden sm:block" />
+            in Tunisia.
+          </h1>
+
+          <p
+            className={`${isVisible ? "animate-fade-in-up-3" : "opacity-0"} text-base sm:text-lg md:text-xl text-gray-200 leading-relaxed drop-shadow-md mb-8 sm:mb-10 max-w-xl font-light`}
+          >
+            Escape the ordinary. Book unique, verified guesthouses that offer
+            authentic hospitality, serene landscapes, and unforgettable
+            memories.
+          </p>
+
+          <div
+            className={`${isVisible ? "animate-fade-in-up-4" : "opacity-0"} flex flex-col sm:flex-row flex-wrap gap-4 mb-12 sm:mb-16`}
+          >
             <Link
-              to="/register"
-              className="w-full sm:w-auto px-9 py-4 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/30 font-extrabold text-xs uppercase tracking-widest hover:bg-white/20 hover:border-white/50 transition-all duration-300 shadow-xl hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+              to="/properties"
+              className="bg-white text-gray-900 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 text-center w-full sm:w-auto"
             >
-              <UserPlus className="w-4 h-4 text-amber-300" />
-              <span>Register</span>
+              Explore Homes
             </Link>
-          )}
-        </div>
+            {!user && (
+              <Link
+                to="/register"
+                className="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full font-bold hover:bg-white/20 transition-all duration-300 shadow-lg text-center w-full sm:w-auto"
+              >
+                Join DarHôte
+              </Link>
+            )}
+          </div>
 
-        {/* Key Metrics Stats */}
-        <div
-          className={`grid grid-cols-3 gap-8 sm:gap-16 mt-20 pt-8 border-t border-white/20 text-center transition-all duration-700 delay-400 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <div>
-            <p className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
-              180+
-            </p>
-            <p className="text-[10px] font-black tracking-widest uppercase text-neutral-300 mt-1">
-              Handpicked Homes
-            </p>
-          </div>
-          <div>
-            <p className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
-              100%
-            </p>
-            <p className="text-[10px] font-black tracking-widest uppercase text-neutral-300 mt-1">
-              Verified Hosts
-            </p>
-          </div>
-          <div>
-            <p className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
-              4.98
-              <span className="text-neutral-300 text-2xl font-light">/5</span>
-            </p>
-            <p className="text-[10px] font-black tracking-widest uppercase text-neutral-300 mt-1">
-              Guest Rating
-            </p>
+          <div
+            className={`${isVisible ? "animate-fade-in-up-4" : "opacity-0"} bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 sm:p-6 md:p-8 inline-block shadow-2xl w-full sm:w-auto`}
+          >
+            <div className="flex flex-row flex-wrap justify-between sm:justify-start gap-6 sm:gap-10 md:gap-16">
+              <div>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white drop-shadow-md">
+                  150<span className="text-gray-300">+</span>
+                </p>
+                <p className="text-[10px] sm:text-xs md:text-sm font-medium text-gray-300 mt-1 uppercase tracking-wider">
+                  Unique Stays
+                </p>
+              </div>
+              <div>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white drop-shadow-md">
+                  4.9<span className="text-gray-300">/5</span>
+                </p>
+                <p className="text-[10px] sm:text-xs md:text-sm font-medium text-gray-300 mt-1 uppercase tracking-wider">
+                  Guest Rating
+                </p>
+              </div>
+              <div>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white drop-shadow-md">
+                  24<span className="text-gray-300">/7</span>
+                </p>
+                <p className="text-[10px] sm:text-xs md:text-sm font-medium text-gray-300 mt-1 uppercase tracking-wider">
+                  Concierge
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

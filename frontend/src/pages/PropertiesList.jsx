@@ -207,16 +207,17 @@ const PropertiesList = () => {
     ? availableFeatures
     : availableFeatures.slice(0, 8);
 
+  // Changed base layout to grid-cols-2 for mobile
   const getGridClass = () => {
     switch (gridCols) {
       case 3:
-        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+        return "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3";
       case 4:
-        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+        return "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
       case 5:
-        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5";
+        return "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5";
       default:
-        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+        return "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
     }
   };
 
@@ -675,7 +676,7 @@ const PropertiesList = () => {
                 </div>
               ) : (
                 <>
-                  <div className={`grid gap-6 ${getGridClass()}`}>
+                  <div className={`grid gap-3 sm:gap-6 ${getGridClass()}`}>
                     {properties.map((property) => (
                       <PropertyCard key={property._id} property={property} />
                     ))}

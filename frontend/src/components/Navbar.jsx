@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import {
   Menu,
   X,
@@ -15,9 +16,9 @@ import {
   AlertTriangle,
   Sparkles,
   ArrowRight,
+  Globe,
 } from "lucide-react";
 
-// Custom SVGs to prevent any import crashes from lucide-react versions
 const InstagramIcon = ({ className }) => (
   <svg
     className={className}
@@ -56,10 +57,17 @@ const TikTokIcon = ({ className }) => (
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { t, i18n } = useTranslation("navbar");
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  const currentLang = i18n.language?.slice(0, 2) === "it" ? "it" : "en";
+
+  const toggleLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+  };
 
   const handleLogout = () => {
     logout();
@@ -70,7 +78,6 @@ const Navbar = () => {
   const toggleMobile = () => setMobileOpen(!mobileOpen);
   const closeMobile = () => setMobileOpen(false);
 
-  // Helper function to check if link matches current path
   const isActive = (path) => {
     if (path === "/") {
       return location.pathname === "/";
@@ -88,24 +95,48 @@ const Navbar = () => {
       ? "flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-bold text-black bg-neutral-100 transition-all"
       : "flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-bold text-neutral-700 hover:bg-neutral-100 hover:text-black transition-all";
 
+  const LanguageSwitch = () => (
+    <div className="flex items-center bg-neutral-100 border border-neutral-200/80 p-1 rounded-full shadow-inner">
+      <Globe className="w-3.5 h-3.5 text-neutral-500 ml-1.5 mr-1" />
+      <button
+        onClick={() => toggleLanguage("en")}
+        className={`px-2.5 py-1 text-[10px] font-extrabold tracking-wider rounded-full transition-all ${
+          currentLang === "en"
+            ? "bg-black text-white shadow-sm"
+            : "text-neutral-500 hover:text-black"
+        }`}
+      >
+        EN
+      </button>
+      <button
+        onClick={() => toggleLanguage("it")}
+        className={`px-2.5 py-1 text-[10px] font-extrabold tracking-wider rounded-full transition-all ${
+          currentLang === "it"
+            ? "bg-black text-white shadow-sm"
+            : "text-neutral-500 hover:text-black"
+        }`}
+      >
+        IT
+      </button>
+    </div>
+  );
+
   return (
     <>
       {/* Top Architectural Notice Bar with Socials */}
       <div className="bg-black text-white py-2.5 px-4 border-b border-neutral-800 flex items-center justify-between w-full">
-        {/* Left Aligned Text Content */}
         <div className="flex items-center gap-2 text-[9px] sm:text-[11px] font-medium tracking-[0.15em] sm:tracking-[0.25em] uppercase truncate overflow-hidden">
           <Sparkles className="w-3 h-3 text-neutral-400 animate-pulse shrink-0" />
           <span className="truncate">
-            Curated Luxury Guesthouses{" "}
-            <span className="hidden sm:inline">Across Tunisia</span>
+            {t("notice.tagline")}{" "}
+            <span className="hidden sm:inline">{t("notice.location")}</span>
           </span>
           <span className="hidden md:inline text-neutral-600 shrink-0">|</span>
           <span className="hidden md:inline text-neutral-400 lowercase font-serif italic tracking-normal text-xs shrink-0">
-            Authentic Escapes Guaranteed
+            {t("notice.subtitle")}
           </span>
         </div>
 
-        {/* Right Aligned Social Links - Visible on ALL devices */}
         <div className="flex items-center gap-4 sm:gap-5 shrink-0 ml-4">
           <a
             href="https://instagram.com"
@@ -141,7 +172,6 @@ const Navbar = () => {
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-2xl border-b border-neutral-200/80 transition-all duration-500 shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-22 py-4">
-            {/* Brand Logo */}
             <Link
               to="/"
               className="group flex items-center gap-2 text-2xl sm:text-3xl font-extrabold tracking-tighter shrink-0 transition-transform duration-300 hover:scale-[1.02]"
@@ -160,16 +190,15 @@ const Navbar = () => {
               </div>
             </Link>
 
-            {/* Desktop Navigation Link Capsule */}
             <nav className="hidden md:flex items-center justify-center bg-neutral-100/80 p-1.5 rounded-full border border-neutral-200/60 shadow-inner">
               <Link to="/" className={desktopLinkClass("/")}>
-                Home
+                {t("links.home")}
               </Link>
               <Link
                 to="/properties"
                 className={desktopLinkClass("/properties")}
               >
-                Our Stays
+                {t("links.ourStays")}
               </Link>
 
               {user && (
@@ -178,29 +207,29 @@ const Navbar = () => {
                     to="/wishlist"
                     className={desktopLinkClass("/wishlist")}
                   >
-                    Wishlist
+                    {t("links.wishlist")}
                   </Link>
                   <Link
                     to="/enquiries"
                     className={desktopLinkClass("/enquiries")}
                   >
-                    My Enquiries
+                    {t("links.myEnquiries")}
                   </Link>
                   <Link to="/profile" className={desktopLinkClass("/profile")}>
-                    Profile
+                    {t("links.profile")}
                   </Link>
                 </>
               )}
             </nav>
 
-            {/* Right Action Bar */}
             <div className="hidden md:flex items-center gap-3 shrink-0">
+              <LanguageSwitch />
               {user ? (
                 <button
                   onClick={() => setShowLogoutConfirm(true)}
                   className="px-6 py-2.5 text-xs font-extrabold uppercase tracking-widest text-black bg-neutral-100 border border-neutral-300 rounded-full hover:bg-neutral-200 transition-all duration-300 hover:shadow-md"
                 >
-                  Sign Out
+                  {t("auth.signOut")}
                 </button>
               ) : (
                 <>
@@ -208,21 +237,21 @@ const Navbar = () => {
                     to="/login"
                     className="px-5 py-2.5 text-xs font-extrabold uppercase tracking-widest text-black hover:bg-neutral-100 rounded-full transition-all duration-300"
                   >
-                    Sign In
+                    {t("auth.signIn")}
                   </Link>
                   <Link
                     to="/register"
                     className="group relative inline-flex items-center gap-2 px-6 py-3 text-xs font-extrabold uppercase tracking-widest text-white bg-black rounded-full hover:bg-neutral-800 transition-all duration-300 shadow-xl shadow-black/10 hover:shadow-2xl hover:-translate-y-0.5"
                   >
-                    <span>Register</span>
+                    <span>{t("auth.signUp")}</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </>
               )}
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center">
+            <div className="md:hidden flex items-center gap-2">
+              <LanguageSwitch />
               <button
                 onClick={toggleMobile}
                 aria-label="Toggle navigation menu"
@@ -239,7 +268,6 @@ const Navbar = () => {
         </div>
       </header>
 
-      {/* Mobile Drawer Overlay */}
       {mobileOpen && (
         <div
           className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 md:hidden transition-opacity duration-300"
@@ -247,7 +275,6 @@ const Navbar = () => {
         />
       )}
 
-      {/* Mobile Left-Side Modern Drawer */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-80 bg-white flex flex-col justify-between border-r border-neutral-200 shadow-[0_0_50px_rgba(0,0,0,0.2)] transition-transform duration-500 cubic-bezier(0.16,1,0.3,1) md:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
@@ -278,7 +305,7 @@ const Navbar = () => {
               <HomeIcon
                 className={`w-4 h-4 ${isActive("/") ? "text-black" : "text-neutral-400"}`}
               />
-              <span>Home</span>
+              <span>{t("links.home")}</span>
             </Link>
             <Link
               to="/properties"
@@ -288,7 +315,7 @@ const Navbar = () => {
               <Building
                 className={`w-4 h-4 ${isActive("/properties") ? "text-black" : "text-neutral-400"}`}
               />
-              <span>Our Stays</span>
+              <span>{t("links.ourStays")}</span>
             </Link>
 
             {user && (
@@ -301,7 +328,7 @@ const Navbar = () => {
                   <Heart
                     className={`w-4 h-4 ${isActive("/wishlist") ? "text-black" : "text-neutral-400"}`}
                   />
-                  <span>Wishlist</span>
+                  <span>{t("links.wishlist")}</span>
                 </Link>
                 <Link
                   to="/enquiries"
@@ -311,7 +338,7 @@ const Navbar = () => {
                   <MessageSquare
                     className={`w-4 h-4 ${isActive("/enquiries") ? "text-black" : "text-neutral-400"}`}
                   />
-                  <span>My Enquiries</span>
+                  <span>{t("links.myEnquiries")}</span>
                 </Link>
                 <Link
                   to="/profile"
@@ -321,7 +348,7 @@ const Navbar = () => {
                   <User
                     className={`w-4 h-4 ${isActive("/profile") ? "text-black" : "text-neutral-400"}`}
                   />
-                  <span>Profile</span>
+                  <span>{t("links.profile")}</span>
                 </Link>
               </>
             )}
@@ -338,7 +365,7 @@ const Navbar = () => {
               className="w-full flex items-center justify-center gap-2 px-4 py-4 bg-white hover:bg-rose-50 text-black hover:text-rose-600 border border-neutral-300 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all shadow-sm"
             >
               <LogOut className="w-4 h-4" />
-              <span>Sign Out</span>
+              <span>{t("auth.signOut")}</span>
             </button>
           ) : (
             <div className="space-y-2.5">
@@ -348,7 +375,7 @@ const Navbar = () => {
                 className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-white hover:bg-neutral-100 border border-neutral-300 text-black rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all"
               >
                 <LogIn className="w-4 h-4" />
-                <span>Sign In</span>
+                <span>{t("auth.signIn")}</span>
               </Link>
               <Link
                 to="/register"
@@ -356,14 +383,13 @@ const Navbar = () => {
                 className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-black hover:bg-neutral-800 text-white rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all shadow-lg shadow-black/10"
               >
                 <UserPlus className="w-4 h-4" />
-                <span>Register</span>
+                <span>{t("auth.signUp")}</span>
               </Link>
             </div>
           )}
         </div>
       </aside>
 
-      {/* Modal Confirmation */}
       {showLogoutConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
           <div
@@ -377,10 +403,10 @@ const Navbar = () => {
 
             <div className="space-y-2">
               <h3 className="text-2xl font-extrabold text-black tracking-tight font-serif">
-                Sign Out?
+                {t("logoutModal.title")}
               </h3>
               <p className="text-xs text-neutral-500 font-sans leading-relaxed">
-                Are you sure you wish to exit your Borgogo session?
+                {t("logoutModal.message")}
               </p>
             </div>
 
@@ -389,13 +415,13 @@ const Navbar = () => {
                 onClick={() => setShowLogoutConfirm(false)}
                 className="w-full py-3.5 px-4 bg-neutral-100 hover:bg-neutral-200 text-black font-extrabold text-xs uppercase tracking-wider rounded-2xl transition-colors border border-neutral-200"
               >
-                Cancel
+                {t("logoutModal.cancel")}
               </button>
               <button
                 onClick={handleLogout}
                 className="w-full py-3.5 px-4 bg-black hover:bg-rose-600 text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl transition-colors shadow-lg shadow-black/20"
               >
-                Sign Out
+                {t("logoutModal.confirm")}
               </button>
             </div>
           </div>

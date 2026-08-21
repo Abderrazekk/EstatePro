@@ -1,0 +1,25 @@
+{
+  "badge": "La Collezione Sovrana • 2026",
+  "title": {
+    "line1": "Vita Raffinata nei",
+    "italic": "Santuari più Sacri",
+    "line2": "della Tunisia."
+  },
+  "subtitle": "Maison d'hôte selezionate, palazzi costieri e rifugi nel deserto con architettura privata, servizio su misura e autentico slow living.",
+  "buttons": {
+    "explore": "Esplora Collezione",
+    "join": "Accesso Riservato"
+  },
+  "search": {
+    "destinationLabel": "Destinazione",
+    "destinationPlaceholder": "Es: Djerba, Sidi Bou Said...",
+    "guestsLabel": "Ospiti",
+    "guestOptions": {
+      "1": "1 Ospite (Soggiorno Privato)",
+      "2": "2 Ospiti (Fuga di Coppia)",
+      "4": "4 Ospiti (Villa Familiare)",
+      "6": "6+ Ospiti (Tenuta Privata Completa)"
+    },
+    "button": "Cerca Soggiorni"
+  }
+}

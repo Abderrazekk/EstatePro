@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import PropertyCard from "./PropertyCard";
+import { useTranslation } from "react-i18next";
 import { Sparkles, ArrowRight } from "lucide-react";
 
 const useScrollReveal = (threshold = 0.1) => {
@@ -27,6 +28,7 @@ const useScrollReveal = (threshold = 0.1) => {
 };
 
 const FeaturedProperties = () => {
+  const { t } = useTranslation("featuredProperties");
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [ref, isVisible] = useScrollReveal(0.1);
@@ -71,7 +73,10 @@ const FeaturedProperties = () => {
   if (properties.length === 0) return null;
 
   return (
-    <section ref={ref} className="py-16 sm:py-10 bg-white relative overflow-hidden">
+    <section
+      ref={ref}
+      className="py-16 sm:py-10 bg-white relative overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
@@ -84,7 +89,7 @@ const FeaturedProperties = () => {
           >
             <span className="inline-flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase text-black bg-neutral-100 border border-neutral-300 px-5 py-2 rounded-full shadow-sm mb-6">
               <Sparkles className="w-3.5 h-3.5 text-black" />
-              Handpicked Residences
+              {t("badge")}
             </span>
           </div>
 
@@ -95,11 +100,11 @@ const FeaturedProperties = () => {
                 : "opacity-0 translate-y-8"
             } text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tight`}
           >
-            Our{" "}
+            {t("title.our")}{" "}
             <span className="font-serif italic font-normal text-neutral-400">
-              Finest
+              {t("title.finest")}
             </span>{" "}
-            Retreats
+            {t("title.retreats")}
           </h2>
 
           <p
@@ -109,12 +114,11 @@ const FeaturedProperties = () => {
                 : "opacity-0 translate-y-8"
             } text-sm sm:text-lg text-neutral-500 mt-3 sm:mt-5 font-light leading-relaxed`}
           >
-            Carefully curated guesthouses chosen for their historical
-            architecture, private serenity, and extraordinary local hospitality.
+            {t("subtitle")}
           </p>
         </div>
 
-        {/* Property Grid: 2 columns on mobile, 4 on desktop */}
+        {/* Property Grid */}
         <div
           className={`transition-all duration-1000 delay-600 transform ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
@@ -135,7 +139,7 @@ const FeaturedProperties = () => {
             to="/properties"
             className="group inline-flex items-center justify-center gap-3 bg-black text-white border border-black px-8 sm:px-10 py-4 sm:py-5 rounded-full font-extrabold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all duration-300 shadow-2xl hover:scale-105"
           >
-            <span>Explore Entire Portfolio</span>
+            <span>{t("button")}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
           </Link>
         </div>

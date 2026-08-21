@@ -6,6 +6,7 @@ import Sponsors from "../components/Sponsors";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   ShieldCheck,
   Clock,
@@ -42,6 +43,7 @@ const useScrollReveal = (threshold = 0.15) => {
 };
 
 const Home = () => {
+  const { t } = useTranslation("home");
   const [promiseRef, promiseVisible] = useScrollReveal();
   const [destinationsRef, destinationsVisible] = useScrollReveal();
   const [conciergeRef, conciergeVisible] = useScrollReveal();
@@ -49,33 +51,62 @@ const Home = () => {
 
   const destinations = [
     {
-      name: "Sidi Bou Saïd",
-      tag: "Coastal Blue & White Architecture",
+      queryParam: "Sidi Bou Saïd",
+      name: t("destinations.items.sidiBouSaid.name"),
+      tag: t("destinations.items.sidiBouSaid.tag"),
       image:
         "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&w=800&q=80",
-      stays: "34 Luxury Palaces",
+      stays: t("destinations.items.sidiBouSaid.stays"),
     },
     {
-      name: "Djerba Island",
-      tag: "Menzels & Olive Groves",
+      queryParam: "Djerba Island",
+      name: t("destinations.items.djerba.name"),
+      tag: t("destinations.items.djerba.tag"),
       image:
         "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80",
-      stays: "28 Private Estates",
+      stays: t("destinations.items.djerba.stays"),
     },
     {
-      name: "Tozeur & Nefta",
-      tag: "Saharan Brick Architecture",
+      queryParam: "Tozeur & Nefta",
+      name: t("destinations.items.tozeur.name"),
+      tag: t("destinations.items.tozeur.tag"),
       image:
         "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80",
-      stays: "19 Oasis Sanctuaries",
+      stays: t("destinations.items.tozeur.stays"),
     },
     {
-      name: "Hammamet",
-      tag: "Mediterranean Gardens & Sea Stays",
+      queryParam: "Hammamet",
+      name: t("destinations.items.hammamet.name"),
+      tag: t("destinations.items.hammamet.tag"),
       image:
         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
-      stays: "42 Seafront Villas",
+      stays: t("destinations.items.hammamet.stays"),
     },
+  ];
+
+  const promiseItems = [
+    {
+      icon: ShieldCheck,
+      title: t("promise.items.vetted.title"),
+      desc: t("promise.items.vetted.desc"),
+    },
+    {
+      icon: Clock,
+      title: t("promise.items.locking.title"),
+      desc: t("promise.items.locking.desc"),
+    },
+    {
+      icon: HeartHandshake,
+      title: t("promise.items.concierge.title"),
+      desc: t("promise.items.concierge.desc"),
+    },
+  ];
+
+  const conciergeFeatures = [
+    t("concierge.features.breakfast"),
+    t("concierge.features.walks"),
+    t("concierge.features.transfers"),
+    t("concierge.features.tea"),
   ];
 
   return (
@@ -87,7 +118,7 @@ const Home = () => {
 
         <FeaturedProperties />
 
-        {/* Tunisian Destinations Grid: 2 inline on mobile, 4 on desktop */}
+        {/* Tunisian Destinations Grid */}
         <section
           ref={destinationsRef}
           className="py-16 sm:py-28 bg-neutral-50/90 border-t border-b border-neutral-200/70 overflow-hidden"
@@ -102,17 +133,16 @@ const Home = () => {
             >
               <span className="inline-flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase text-black bg-white border border-neutral-300 px-5 py-2 rounded-full shadow-sm mb-6">
                 <MapPin className="w-3.5 h-3.5 text-black" />
-                Iconic Regions
+                {t("destinations.badge")}
               </span>
               <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tight">
-                Explore By{" "}
+                {t("destinations.title.exploreBy")}{" "}
                 <span className="font-serif italic font-normal text-neutral-400">
-                  Destination
+                  {t("destinations.title.destination")}
                 </span>
               </h2>
               <p className="text-neutral-500 mt-3 sm:mt-5 font-light text-sm sm:text-lg">
-                Immerse yourself in distinct local micro-cultures from northern
-                coastal cliffs to deep southern desert palmeries.
+                {t("destinations.subtitle")}
               </p>
             </div>
 
@@ -120,8 +150,8 @@ const Home = () => {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
               {destinations.map((dst, idx) => (
                 <Link
-                  key={dst.name}
-                  to={`/properties?location=${encodeURIComponent(dst.name)}`}
+                  key={dst.queryParam}
+                  to={`/properties?location=${encodeURIComponent(dst.queryParam)}`}
                   className={`group relative rounded-2xl sm:rounded-[2.5rem] overflow-hidden h-60 sm:h-96 border border-neutral-200/80 shadow-[0_15px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_25px_60px_rgba(0,0,0,0.18)] transition-all duration-700 transform hover:-translate-y-2 ${
                     destinationsVisible
                       ? "opacity-100 translate-y-0"
@@ -170,39 +200,21 @@ const Home = () => {
             >
               <span className="inline-flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase text-black bg-neutral-100 border border-neutral-300 px-5 py-2 rounded-full shadow-sm mb-6">
                 <ShieldCheck className="w-3.5 h-3.5 text-black" />
-                The Borgogo Guarantee
+                {t("promise.badge")}
               </span>
               <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tight">
-                Curated for{" "}
+                {t("promise.title.curatedFor")}{" "}
                 <span className="font-serif italic font-normal text-neutral-400">
-                  Absolute Serenity
+                  {t("promise.title.serenity")}
                 </span>
               </h2>
               <p className="text-neutral-500 mt-4 sm:mt-6 text-sm sm:text-lg font-light leading-relaxed">
-                We bridge local architectural heritage with global digital
-                standards, guaranteeing flawless reservations from moment of
-                request to checkout.
+                {t("promise.subtitle")}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {[
-                {
-                  icon: ShieldCheck,
-                  title: "100% Vetted Estates",
-                  desc: "Every listed guest house undergoes rigorous multi-point visual, architectural, and hospitality inspections by local experts.",
-                },
-                {
-                  icon: Clock,
-                  title: "Direct Host Locking",
-                  desc: "Real-time direct owner communication prevents double bookings and secures seasonal rates transparently in local currency (TND).",
-                },
-                {
-                  icon: HeartHandshake,
-                  title: "Private Concierge Support",
-                  desc: "Dedicated hospitality managers available around the clock for private chefs, car transfers, and bespoke local itineraries.",
-                },
-              ].map((item, idx) => (
+              {promiseItems.map((item, idx) => (
                 <div
                   key={item.title}
                   className={`group p-6 sm:p-10 rounded-2xl sm:rounded-[2.5rem] border border-neutral-200 bg-white hover:border-black hover:shadow-[0_25px_60px_rgba(0,0,0,0.1)] transition-all duration-500 transform hover:-translate-y-2 ${
@@ -243,29 +255,22 @@ const Home = () => {
               >
                 <span className="inline-flex items-center gap-2 text-xs font-black tracking-[0.25em] uppercase text-black bg-white px-5 py-2 rounded-full mb-6 sm:mb-8">
                   <Sparkles className="w-3.5 h-3.5 text-black" />
-                  Exclusive Bespoke Services
+                  {t("concierge.badge")}
                 </span>
 
                 <h2 className="text-3xl sm:text-5xl font-extrabold font-serif mb-4 sm:mb-6 leading-tight">
-                  Beyond A Room: <br />
+                  {t("concierge.title.line1")} <br />
                   <span className="italic font-normal text-neutral-400">
-                    The Private Guest Experience
+                    {t("concierge.title.italic")}
                   </span>
                 </h2>
 
                 <p className="text-neutral-300 font-light leading-relaxed mb-6 sm:mb-8 text-sm sm:text-base">
-                  When you reserve through Borgogo, our dedicated concierge team
-                  handles everything from traditional culinary dinners prepared
-                  by local grandmothers to private Sahara excursions.
+                  {t("concierge.subtitle")}
                 </p>
 
                 <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
-                  {[
-                    "Private Organic Farm-To-Table Breakfasts",
-                    "Guided Heritage Medina Architecture Walks",
-                    "Chauffeur-Driven Airport & Regional Transfers",
-                    "Exclusive Sunset Rooftop Tea Ceremonies",
-                  ].map((feat) => (
+                  {conciergeFeatures.map((feat) => (
                     <div key={feat} className="flex items-center gap-3">
                       <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
                       <span className="text-xs sm:text-sm font-medium text-neutral-200">
@@ -279,7 +284,7 @@ const Home = () => {
                   to="/contact"
                   className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-extrabold text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all shadow-xl"
                 >
-                  <span>Inquire With Concierge</span>
+                  <span>{t("concierge.button")}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -312,11 +317,11 @@ const Home = () => {
                         ))}
                       </div>
                       <p className="text-xs font-bold text-white">
-                        4.98 / 5 Guest Satisfaction
+                        {t("concierge.satisfaction")}
                       </p>
                     </div>
                     <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400">
-                      Verified Reviews
+                      {t("concierge.verified")}
                     </span>
                   </div>
                 </div>
@@ -340,9 +345,9 @@ const Home = () => {
                   : "opacity-0 translate-y-8"
               }`}
             >
-              Ready to find your{" "}
+              {t("cta.title.ready")}{" "}
               <span className="font-serif italic font-normal text-neutral-400">
-                perfect retreat?
+                {t("cta.title.italic")}
               </span>
             </h2>
 
@@ -353,8 +358,7 @@ const Home = () => {
                   : "opacity-0 translate-y-8"
               }`}
             >
-              Connect directly with our local reservation concierges to curate
-              an unforgettable guesthouse experience across Tunisia.
+              {t("cta.subtitle")}
             </p>
 
             <div
@@ -378,7 +382,7 @@ const Home = () => {
                 className="w-full sm:w-auto bg-neutral-900 border border-neutral-700 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-full font-extrabold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-3"
               >
                 <MessageCircle className="w-4 h-4 text-emerald-400" />
-                <span>Chat on WhatsApp</span>
+                <span>{t("cta.whatsapp")}</span>
               </a>
             </div>
           </div>

@@ -1,0 +1,57 @@
+{
+  "hero": {
+    "badge": "Curated Stays",
+    "title": "Discover Homes & Retreats",
+    "subtitle": "{{total}} exceptional residences available for your unforgettable stays."
+  },
+  "controlBar": {
+    "available": "{{total}} residences available",
+    "sort": {
+      "newest": "Newest",
+      "popular": "Most Popular",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low"
+    }
+  },
+  "filters": {
+    "advanced": "Advanced Filters",
+    "reset": "Reset",
+    "keywords": "Keywords",
+    "keywordsPlaceholder": "Name, city, style...",
+    "region": "Region / City",
+    "regionPlaceholder": "Ex: Djerba, Sidi Bou Said...",
+    "type": "Property Type",
+    "allTypes": "All Types",
+    "types": {
+      "maisonHote": "Maison d'Hôte",
+      "darTraditionnelle": "Dar Traditionnelle",
+      "villaCharme": "Villa de Charme",
+      "giteRural": "Gîte Rural",
+      "chambreHote": "Chambre d'Hôte"
+    },
+    "capacity": "Capacity & Interior",
+    "guests": "Guests (min)",
+    "bedrooms": "Bedrooms (min)",
+    "bathrooms": "Bathrooms (min)",
+    "price": "Price per Night (TND)",
+    "min": "Min",
+    "max": "Max",
+    "amenities": "Included Amenities",
+    "features": "Features",
+    "showLess": "Show less",
+    "showMore": "Show more ({{count}})",
+    "seeResults": "See results ({{total}})"
+  },
+  "empty": {
+    "title": "No residences found",
+    "desc": "Modify your search criteria or remove filters.",
+    "resetAll": "Reset all filters"
+  },
+  "pagination": {
+    "page": "Page",
+    "of": "of",
+    "totalInfo": "({{total}} residences in total)",
+    "prev": "Previous",
+    "next": "Next"
+  }
+}

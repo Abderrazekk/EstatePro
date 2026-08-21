@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import { Search, MapPin, Users, ArrowRight, ChevronDown } from "lucide-react";
 
 const useScrollReveal = (threshold = 0.1) => {
@@ -27,6 +28,7 @@ const useScrollReveal = (threshold = 0.1) => {
 
 const Hero = () => {
   const { user } = useAuth();
+  const { t } = useTranslation("hero");
   const navigate = useNavigate();
   const [ref, isVisible] = useScrollReveal(0.1);
 
@@ -53,9 +55,8 @@ const Hero = () => {
         }
       `}</style>
 
-      {/* Top Hero Container - Golden Ratio Height for Mobile (min-h-[460px], pb-20) */}
+      {/* Top Hero Container */}
       <div className="relative w-full bg-black rounded-b-[2.5rem] sm:rounded-b-[4rem] lg:rounded-b-[5rem] overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.15)] pt-10 sm:pt-16 lg:pt-24 xl:pt-28 pb-20 sm:pb-24 lg:pb-44 xl:pb-52 min-h-[460px] sm:min-h-[580px] lg:min-h-[620px] xl:min-h-[680px] px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
-        {/* Background Image & Overlay Layers */}
         <img
           src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=85"
           alt="Luxury Tunisian Maison d'Hôte"
@@ -75,7 +76,7 @@ const Hero = () => {
           >
             <span className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-black tracking-[0.2em] sm:tracking-[0.25em] uppercase text-black bg-white/95 backdrop-blur-2xl border border-white px-3.5 py-1.5 sm:px-5 sm:py-2.5 rounded-full shadow-2xl mb-4 sm:mb-8">
               <span className="w-2 h-2 rounded-full bg-black animate-ping" />
-              The Sovereign Collection • 2026
+              {t("badge")}
             </span>
           </div>
 
@@ -86,11 +87,11 @@ const Hero = () => {
                 : "opacity-0 translate-y-8"
             } text-2xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.15] sm:leading-[1.12] tracking-tight mb-3 sm:mb-6`}
           >
-            Refined Living in <br className="hidden sm:block" />
+            {t("title.line1")} <br className="hidden sm:block" />
             <span className="font-serif italic font-normal text-neutral-300">
-              Tunisia’s Most Sacred
+              {t("title.italic")}
             </span>{" "}
-            Sanctuaries.
+            {t("title.line2")}
           </h1>
 
           <p
@@ -100,11 +101,9 @@ const Hero = () => {
                 : "opacity-0 translate-y-8"
             } text-xs sm:text-base lg:text-lg text-neutral-200 leading-relaxed font-light mb-5 sm:mb-8 max-w-xl`}
           >
-            Curated guest houses, coastal palazzos, and desert retreats offering
-            private architecture, bespoke service, and true slow living.
+            {t("subtitle")}
           </p>
 
-          {/* Inline Mobile Action Buttons */}
           <div
             className={`transition-all duration-1000 delay-450 transform ${
               isVisible
@@ -116,7 +115,7 @@ const Hero = () => {
               to="/properties"
               className="group flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 sm:gap-3 bg-white text-black px-3.5 py-3 sm:px-8 sm:py-4 rounded-full font-extrabold text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest hover:bg-neutral-100 transition-all duration-300 shadow-2xl hover:scale-105 whitespace-nowrap"
             >
-              <span>Explore Collection</span>
+              <span>{t("buttons.explore")}</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             {!user && (
@@ -124,14 +123,14 @@ const Hero = () => {
                 to="/register"
                 className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-black/40 backdrop-blur-xl border border-white/30 text-white px-3.5 py-3 sm:px-8 sm:py-4 rounded-full font-extrabold text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest hover:bg-white hover:text-black transition-all duration-300 whitespace-nowrap"
               >
-                Join Private Access
+                {t("buttons.join")}
               </Link>
             )}
           </div>
         </div>
       </div>
 
-      {/* Floating Search Bar (Perfect 50/50 straddle over curved hero bottom) */}
+      {/* Floating Search Bar */}
       <div
         className={`relative z-20 max-w-5xl mx-auto px-4 -mt-12 sm:-mt-16 md:mt-0 md:translate-y-[-50%] transition-all duration-1000 delay-600 transform ${
           isVisible
@@ -147,12 +146,12 @@ const Hero = () => {
           <div className="md:col-span-5 flex flex-row md:flex-col items-center md:items-start justify-between md:justify-center bg-neutral-50 rounded-xl sm:rounded-2xl px-3.5 py-2.5 md:p-3.5 border border-neutral-200/70 hover:bg-white hover:shadow-md transition-all gap-2">
             <label className="flex items-center gap-1.5 shrink-0 text-[10px] font-black uppercase tracking-widest text-neutral-400 md:mb-1">
               <MapPin className="w-3.5 h-3.5 text-black" />
-              <span>Destination</span>
+              <span>{t("search.destinationLabel")}</span>
             </label>
             <input
               type="text"
               list="hero-tunisia-regions"
-              placeholder="Ex: Djerba, Sidi Bou Said..."
+              placeholder={t("search.destinationPlaceholder")}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="w-full bg-transparent font-bold text-xs sm:text-sm text-black placeholder:text-neutral-400 focus:outline-none text-right md:text-left truncate"
@@ -171,7 +170,7 @@ const Hero = () => {
           <div className="md:col-span-4 flex flex-row md:flex-col items-center md:items-start justify-between md:justify-center bg-neutral-50 rounded-xl sm:rounded-2xl px-3.5 py-2.5 md:p-3.5 border border-neutral-200/70 hover:bg-white hover:shadow-md transition-all gap-2 relative">
             <label className="flex items-center gap-1.5 shrink-0 text-[10px] font-black uppercase tracking-widest text-neutral-400 md:mb-1">
               <Users className="w-3.5 h-3.5 text-black" />
-              <span>Guests</span>
+              <span>{t("search.guestsLabel")}</span>
             </label>
             <div className="relative w-full flex items-center justify-end md:justify-start">
               <select
@@ -179,10 +178,10 @@ const Hero = () => {
                 onChange={(e) => setGuests(e.target.value)}
                 className="w-full bg-transparent font-bold text-xs sm:text-sm text-black focus:outline-none cursor-pointer appearance-none text-right md:text-left pr-5 md:pr-6 truncate"
               >
-                <option value="1">1 Guest (Private Stay)</option>
-                <option value="2">2 Guests (Couple Escape)</option>
-                <option value="4">4 Guests (Family Villa)</option>
-                <option value="6">6+ Guests (Full Private Estate)</option>
+                <option value="1">{t("search.guestOptions.1")}</option>
+                <option value="2">{t("search.guestOptions.2")}</option>
+                <option value="4">{t("search.guestOptions.4")}</option>
+                <option value="6">{t("search.guestOptions.6")}</option>
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-neutral-400 absolute right-0 md:right-1 pointer-events-none" />
             </div>
@@ -195,7 +194,7 @@ const Hero = () => {
               className="w-full py-3 md:py-0 md:h-full md:min-h-[58px] bg-black text-white hover:bg-neutral-800 rounded-xl sm:rounded-2xl font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-300 shadow-xl shadow-black/20 hover:scale-[1.01]"
             >
               <Search className="w-4 h-4" />
-              <span>Search Stays</span>
+              <span>{t("search.button")}</span>
             </button>
           </div>
         </form>

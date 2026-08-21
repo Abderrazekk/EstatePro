@@ -1,0 +1,22 @@
+{
+  "tagline": "Your gateway to authentic Tunisian escapes. We connect discerning travelers with exceptional guesthouses, villas, and serene retreats.",
+  "explore": {
+    "title": "Explore",
+    "ourHomes": "Our Homes",
+    "join": "Join Borgogo",
+    "signIn": "Sign In",
+    "myProfile": "My Profile"
+  },
+  "support": {
+    "title": "Support",
+    "contact": "Contact Concierge",
+    "faq": "FAQ & Help Center",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "address": "123 Avenue Habib Bourguiba, Tunis 1000, Tunisia"
+  },
+  "copyright": "Borgogo. All rights reserved."
+}

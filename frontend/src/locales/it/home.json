@@ -1,0 +1,79 @@
+{
+  "destinations": {
+    "badge": "Regioni Iconiche",
+    "title": {
+      "exploreBy": "Esplora Per",
+      "destination": "Destinazione"
+    },
+    "subtitle": "Immergiti nelle micro-culture locali, dalle scogliere costiere del nord alle oasi di palme del deserto meridionale.",
+    "items": {
+      "sidiBouSaid": {
+        "name": "Sidi Bou Saïd",
+        "tag": "Architettura Costiera Bianco e Blu",
+        "stays": "34 Palazzi di Lusso"
+      },
+      "djerba": {
+        "name": "Isola di Djerba",
+        "tag": "Menzel e Uliveti",
+        "stays": "28 Tenute Private"
+      },
+      "tozeur": {
+        "name": "Tozeur & Nefta",
+        "tag": "Architettura in Mattoni Sahariana",
+        "stays": "19 Santuari nell'Oasi"
+      },
+      "hammamet": {
+        "name": "Hammamet",
+        "tag": "Giardini Mediterranei e Soggiorni sul Mare",
+        "stays": "42 Ville Fronte Mare"
+      }
+    }
+  },
+  "promise": {
+    "badge": "La Garanzia Borgogo",
+    "title": {
+      "curatedFor": "Selezionato per una",
+      "serenity": "Serenità Assoluta"
+    },
+    "subtitle": "Uniamo il patrimonio architettonico locale con standard digitali globali, garantendo prenotazioni impeccabili dalla richiesta al checkout.",
+    "items": {
+      "vetted": {
+        "title": "Tenute Verificate al 100%",
+        "desc": "Ogni maison d'hôte elencata viene sottoposta a rigorose ispezioni visive, architettoniche e di ospitalità da parte di esperti locali."
+      },
+      "locking": {
+        "title": "Contatto Diretto con l'Ospitante",
+        "desc": "La comunicazione diretta in tempo reale con il proprietario evita doppi book e assicura tariffe stagionali trasparenti in valuta locale (TND)."
+      },
+      "concierge": {
+        "title": "Servizio Concierge Privato",
+        "desc": "Manager dell'ospitalità dedicati disponibili h24 per chef privati, trasferimenti e itinerari locali su misura."
+      }
+    }
+  },
+  "concierge": {
+    "badge": "Servizi Esclusivi su Misura",
+    "title": {
+      "line1": "Oltre una Camera:",
+      "italic": "L'Esperienza Privata dell'Ospite"
+    },
+    "subtitle": "Quando prenoti tramite Borgogo, il nostro team dedicato di concierge si occupa di tutto, dalle cene tradizionali preparate da cuoche locali alle escursioni private nel Sahara.",
+    "features": {
+      "breakfast": "Colazioni Biologiche Private a Km 0",
+      "walks": "Passeggiate Guidate nell'Architettura della Medina",
+      "transfers": "Trasferimenti Aeroportuali e Regionali con Conducente",
+      "tea": "Esclusive Cerimonie del Tè al Tramonto in Terrazza"
+    },
+    "button": "Richiedi al Concierge",
+    "satisfaction": "4.98 / 5 Soddisfazione Ospiti",
+    "verified": "Recensioni Verificate"
+  },
+  "cta": {
+    "title": {
+      "ready": "Pronto a trovare il tuo",
+      "italic": "rifugio perfetto?"
+    },
+    "subtitle": "Contatta direttamente i nostri concierge locali per organizzare un'esperienza indimenticabile in Tunisia.",
+    "whatsapp": "Chatta su WhatsApp"
+  }
+}

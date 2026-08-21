@@ -1,0 +1,25 @@
+{
+  "badge": "The Sovereign Collection • 2026",
+  "title": {
+    "line1": "Refined Living in",
+    "italic": "Tunisia’s Most Sacred",
+    "line2": "Sanctuaries."
+  },
+  "subtitle": "Curated guest houses, coastal palazzos, and desert retreats offering private architecture, bespoke service, and true slow living.",
+  "buttons": {
+    "explore": "Explore Collection",
+    "join": "Join Private Access"
+  },
+  "search": {
+    "destinationLabel": "Destination",
+    "destinationPlaceholder": "Ex: Djerba, Sidi Bou Said...",
+    "guestsLabel": "Guests",
+    "guestOptions": {
+      "1": "1 Guest (Private Stay)",
+      "2": "2 Guests (Couple Escape)",
+      "4": "4 Guests (Family Villa)",
+      "6": "6+ Guests (Full Private Estate)"
+    },
+    "button": "Search Stays"
+  }
+}

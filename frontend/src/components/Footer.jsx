@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MapPin, Phone, Mail } from "lucide-react";
 
 const Footer = () => {
+  const { t } = useTranslation("footer");
   const currentYear = new Date().getFullYear();
 
   return (
@@ -19,16 +21,14 @@ const Footer = () => {
               <span className="text-stone-500">gogo.</span>
             </Link>
             <p className="text-sm leading-relaxed text-stone-500 max-w-xs font-light">
-              Your gateway to authentic Tunisian escapes. We connect discerning
-              travelers with exceptional guesthouses, villas, and serene
-              retreats.
+              {t("tagline")}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
             <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-xs">
-              Explore
+              {t("explore.title")}
             </h4>
             <ul className="space-y-4">
               <li>
@@ -36,7 +36,7 @@ const Footer = () => {
                   to="/properties"
                   className="text-stone-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-sm"
                 >
-                  Our Homes
+                  {t("explore.ourHomes")}
                 </Link>
               </li>
               <li>
@@ -44,7 +44,7 @@ const Footer = () => {
                   to="/register"
                   className="text-stone-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-sm"
                 >
-                  Join Borgogo
+                  {t("explore.join")}
                 </Link>
               </li>
               <li>
@@ -52,7 +52,7 @@ const Footer = () => {
                   to="/login"
                   className="text-stone-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-sm"
                 >
-                  Sign In
+                  {t("explore.signIn")}
                 </Link>
               </li>
               <li>
@@ -60,7 +60,7 @@ const Footer = () => {
                   to="/profile"
                   className="text-stone-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-sm"
                 >
-                  My Profile
+                  {t("explore.myProfile")}
                 </Link>
               </li>
             </ul>
@@ -69,7 +69,7 @@ const Footer = () => {
           {/* Support */}
           <div>
             <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-xs">
-              Support
+              {t("support.title")}
             </h4>
             <ul className="space-y-4">
               <li>
@@ -77,7 +77,7 @@ const Footer = () => {
                   to="/contact"
                   className="text-stone-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-sm"
                 >
-                  Contact Concierge
+                  {t("support.contact")}
                 </Link>
               </li>
               <li>
@@ -85,7 +85,7 @@ const Footer = () => {
                   to="/faq"
                   className="text-stone-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-sm"
                 >
-                  FAQ & Help Center
+                  {t("support.faq")}
                 </Link>
               </li>
               <li>
@@ -93,7 +93,7 @@ const Footer = () => {
                   to="/privacy"
                   className="text-stone-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-sm"
                 >
-                  Privacy Policy
+                  {t("support.privacy")}
                 </Link>
               </li>
               <li>
@@ -101,7 +101,7 @@ const Footer = () => {
                   to="/terms"
                   className="text-stone-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-sm"
                 >
-                  Terms of Service
+                  {t("support.terms")}
                 </Link>
               </li>
             </ul>
@@ -110,7 +110,7 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-xs">
-              Get in Touch
+              {t("contact.title")}
             </h4>
             <ul className="space-y-5 text-sm">
               <li className="flex items-start gap-4 group">
@@ -118,7 +118,7 @@ const Footer = () => {
                   <MapPin className="w-4 h-4 text-stone-400 group-hover:text-stone-900 transition-colors duration-300" />
                 </div>
                 <span className="text-stone-400 mt-1.5 leading-relaxed">
-                  123 Avenue Habib Bourguiba, Tunis 1000, Tunisia
+                  {t("contact.address")}
                 </span>
               </li>
               <li className="flex items-center gap-4 group">
@@ -140,16 +140,14 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-sm text-stone-600 font-light">
-            &copy; {currentYear} Borgogo. All rights reserved.
+            &copy; {currentYear} {t("copyright")}
           </p>
 
           {/* Social Icons */}
           <div className="flex gap-4">
-            
-            {/* FACEBOOK */}
             <a
-              href="#" /* <-- INSERT FACEBOOK LINK HERE (e.g., "https://facebook.com/darhote") */
-              target="_blank" 
+              href="#"
+              target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
               className="w-10 h-10 rounded-full border border-stone-800 flex items-center justify-center text-stone-500 hover:text-white hover:border-white hover:-translate-y-1 transition-all duration-300"
@@ -159,10 +157,9 @@ const Footer = () => {
               </svg>
             </a>
 
-            {/* INSTAGRAM */}
             <a
-              href="#" /* <-- INSERT INSTAGRAM LINK HERE (e.g., "https://instagram.com/darhote") */
-              target="_blank" 
+              href="#"
+              target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
               className="w-10 h-10 rounded-full border border-stone-800 flex items-center justify-center text-stone-500 hover:text-white hover:border-white hover:-translate-y-1 transition-all duration-300"
@@ -172,19 +169,17 @@ const Footer = () => {
               </svg>
             </a>
 
-            {/* TIKTOK */}
             <a
-              href="#" /* <-- INSERT TIKTOK LINK HERE (e.g., "https://tiktok.com/@darhote") */
-              target="_blank" 
+              href="#"
+              target="_blank"
               rel="noopener noreferrer"
               aria-label="TikTok"
               className="w-10 h-10 rounded-full border border-stone-800 flex items-center justify-center text-stone-500 hover:text-white hover:border-white hover:-translate-y-1 transition-all duration-300"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.23-1.13 4.41-2.9 5.82-1.73 1.39-4.08 1.95-6.22 1.5-2.18-.46-4.06-1.92-5.06-3.89-1-1.98-1.07-4.4-.18-6.42 1-2.29 3.25-4.06 5.75-4.41 1.2-.17 2.43-.07 3.59.3v4.11c-.76-.23-1.57-.31-2.37-.16-.86.16-1.64.67-2.13 1.39-.49.71-.65 1.64-.44 2.49.21.84.8 1.56 1.56 1.95.76.39 1.68.45 2.49.19.82-.25 1.49-.86 1.84-1.63.35-.77.42-1.66.38-2.5v-15.2z"/>
+                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.23-1.13 4.41-2.9 5.82-1.73 1.39-4.08 1.95-6.22 1.5-2.18-.46-4.06-1.92-5.06-3.89-1-1.98-1.07-4.4-.18-6.42 1-2.29 3.25-4.06 5.75-4.41 1.2-.17 2.43-.07 3.59.3v4.11c-.76-.23-1.57-.31-2.37-.16-.86.16-1.64.67-2.13 1.39-.49.71-.65 1.64-.44 2.49.21.84.8 1.56 1.56 1.95.76.39 1.68.45 2.49.19.82-.25 1.49-.86 1.84-1.63.35-.77.42-1.66.38-2.5v-15.2z" />
               </svg>
             </a>
-            
           </div>
         </div>
       </div>

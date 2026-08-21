@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PropertyCard from "../components/PropertyCard";
@@ -26,6 +27,7 @@ const HERO_IMAGE_URL =
   "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=2000&q=80";
 
 const PropertiesList = () => {
+  const { t } = useTranslation("propertiesList");
   const [searchParams] = useSearchParams();
 
   const [properties, setProperties] = useState([]);
@@ -236,14 +238,14 @@ const PropertiesList = () => {
 
           <div className="relative z-10 pt-16 pb-28 sm:pt-20 sm:pb-32 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto flex flex-col items-center">
             <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-amber-200 bg-stone-900/60 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full shadow-lg mb-6">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Curated Stays
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />{" "}
+              {t("hero.badge")}
             </span>
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white drop-shadow-lg">
-              Découvrir les Maisons & Retraites
+              {t("hero.title")}
             </h1>
             <p className="text-stone-200 mt-4 text-sm sm:text-base font-light max-w-lg leading-relaxed drop-shadow">
-              {total} résidences d'exception disponibles pour vos séjours
-              inoubliables.
+              {t("hero.subtitle", { total })}
             </p>
           </div>
 
@@ -267,7 +269,7 @@ const PropertiesList = () => {
               </div>
 
               <div className="text-xs font-medium text-stone-300 lg:hidden">
-                {total} résidences disponibles
+                {t("controlBar.available", { total })}
               </div>
 
               <div className="flex items-center gap-2 ml-auto">
@@ -286,16 +288,16 @@ const PropertiesList = () => {
                   }}
                 >
                   <option value="newest" className="text-gray-900 bg-white">
-                    Plus Récents
+                    {t("controlBar.sort.newest")}
                   </option>
                   <option value="popular" className="text-gray-900 bg-white">
-                    Plus Populaires
+                    {t("controlBar.sort.popular")}
                   </option>
                   <option value="price_asc" className="text-gray-900 bg-white">
-                    Prix: Croissant
+                    {t("controlBar.sort.priceAsc")}
                   </option>
                   <option value="price_desc" className="text-gray-900 bg-white">
-                    Prix: Décroissant
+                    {t("controlBar.sort.priceDesc")}
                   </option>
                 </select>
               </div>
@@ -316,7 +318,7 @@ const PropertiesList = () => {
                   <div className="flex items-center gap-2 text-gray-900 font-bold">
                     <SlidersHorizontal className="w-5 h-5" />
                     <span>
-                      Filtres Avancés{" "}
+                      {t("filters.advanced")}{" "}
                       {activeFiltersCount > 0 && (
                         <span className="ml-2 bg-gray-900 text-white text-[10px] px-2 py-0.5 rounded-full">
                           {activeFiltersCount}
@@ -333,7 +335,9 @@ const PropertiesList = () => {
                       className="text-xs text-stone-500 hover:text-gray-900 font-bold flex items-center gap-1 transition-colors"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />{" "}
-                      <span className="hidden lg:inline">Réinitialiser</span>
+                      <span className="hidden lg:inline">
+                        {t("filters.reset")}
+                      </span>
                     </button>
                   )}
                   <div className="lg:hidden ml-1 flex items-center justify-center bg-stone-50 rounded-full w-8 h-8 border border-stone-200">
@@ -356,13 +360,13 @@ const PropertiesList = () => {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 mb-2">
-                        Mots-clés
+                        {t("filters.keywords")}
                       </label>
                       <div className="relative">
                         <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                         <input
                           type="text"
-                          placeholder="Nom, ville, style..."
+                          placeholder={t("filters.keywordsPlaceholder")}
                           value={search}
                           onChange={(e) => {
                             setSearch(e.target.value);
@@ -374,14 +378,14 @@ const PropertiesList = () => {
                     </div>
                     <div>
                       <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 mb-2">
-                        Région / Ville
+                        {t("filters.region")}
                       </label>
                       <div className="relative">
                         <MapPin className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                         <input
                           type="text"
                           list="tunisia-regions"
-                          placeholder="Ex: Djerba, Sidi Bou Said..."
+                          placeholder={t("filters.regionPlaceholder")}
                           value={location}
                           onChange={(e) => {
                             setLocation(e.target.value);
@@ -405,7 +409,7 @@ const PropertiesList = () => {
                   {/* Type */}
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 mb-2">
-                      Type de Logement
+                      {t("filters.type")}
                     </label>
                     <select
                       value={type}
@@ -415,14 +419,22 @@ const PropertiesList = () => {
                       }}
                       className="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-gray-900 outline-none cursor-pointer"
                     >
-                      <option value="">Tous les Types</option>
-                      <option value="Maison d'Hôte">Maison d'Hôte</option>
-                      <option value="Dar Traditionnelle">
-                        Dar Traditionnelle
+                      <option value="">{t("filters.allTypes")}</option>
+                      <option value="Maison d'Hôte">
+                        {t("filters.types.maisonHote")}
                       </option>
-                      <option value="Villa de Charme">Villa de Charme</option>
-                      <option value="Gîte Rural">Gîte Rural</option>
-                      <option value="Chambre d'Hôte">Chambre d'Hôte</option>
+                      <option value="Dar Traditionnelle">
+                        {t("filters.types.darTraditionnelle")}
+                      </option>
+                      <option value="Villa de Charme">
+                        {t("filters.types.villaCharme")}
+                      </option>
+                      <option value="Gîte Rural">
+                        {t("filters.types.giteRural")}
+                      </option>
+                      <option value="Chambre d'Hôte">
+                        {t("filters.types.chambreHote")}
+                      </option>
                     </select>
                   </div>
 
@@ -431,7 +443,7 @@ const PropertiesList = () => {
                   {/* Capacity */}
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 mb-3">
-                      Capacité & Intérieur
+                      {t("filters.capacity")}
                     </label>
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
@@ -439,7 +451,7 @@ const PropertiesList = () => {
                         <input
                           type="number"
                           min="1"
-                          placeholder="Personnes (min)"
+                          placeholder={t("filters.guests")}
                           value={guests}
                           onChange={(e) => {
                             setGuests(e.target.value);
@@ -453,7 +465,7 @@ const PropertiesList = () => {
                         <input
                           type="number"
                           min="1"
-                          placeholder="Chambres (min)"
+                          placeholder={t("filters.bedrooms")}
                           value={bedrooms}
                           onChange={(e) => {
                             setBedrooms(e.target.value);
@@ -467,7 +479,7 @@ const PropertiesList = () => {
                         <input
                           type="number"
                           min="1"
-                          placeholder="Salles de bain (min)"
+                          placeholder={t("filters.bathrooms")}
                           value={bathrooms}
                           onChange={(e) => {
                             setBathrooms(e.target.value);
@@ -484,12 +496,12 @@ const PropertiesList = () => {
                   {/* Price */}
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 mb-2">
-                      Prix par Nuitée (TND)
+                      {t("filters.price")}
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       <input
                         type="number"
-                        placeholder="Min"
+                        placeholder={t("filters.min")}
                         value={minPrice}
                         onChange={(e) => {
                           setMinPrice(e.target.value);
@@ -499,7 +511,7 @@ const PropertiesList = () => {
                       />
                       <input
                         type="number"
-                        placeholder="Max"
+                        placeholder={t("filters.max")}
                         value={maxPrice}
                         onChange={(e) => {
                           setMaxPrice(e.target.value);
@@ -516,7 +528,7 @@ const PropertiesList = () => {
                       <hr className="border-stone-100" />
                       <div>
                         <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 mb-3">
-                          Équipements Inclus
+                          {t("filters.amenities")}
                         </label>
                         <div className="space-y-2">
                           {visibleAmenities.map((amenity) => (
@@ -576,12 +588,15 @@ const PropertiesList = () => {
                           >
                             {showAllAmenities ? (
                               <>
-                                <Minus className="w-3 h-3" /> Voir moins
+                                <Minus className="w-3 h-3" />{" "}
+                                {t("filters.showLess")}
                               </>
                             ) : (
                               <>
-                                <Plus className="w-3 h-3" /> Voir plus (
-                                {availableAmenities.length - 8})
+                                <Plus className="w-3 h-3" />{" "}
+                                {t("filters.showMore", {
+                                  count: availableAmenities.length - 8,
+                                })}
                               </>
                             )}
                           </button>
@@ -596,7 +611,7 @@ const PropertiesList = () => {
                       <hr className="border-stone-100" />
                       <div>
                         <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 mb-3">
-                          Caractéristiques
+                          {t("filters.features")}
                         </label>
                         <div className="flex flex-wrap gap-1.5">
                           {visibleFeatures.map((feature) => (
@@ -624,12 +639,15 @@ const PropertiesList = () => {
                           >
                             {showAllFeatures ? (
                               <>
-                                <Minus className="w-3 h-3" /> Voir moins
+                                <Minus className="w-3 h-3" />{" "}
+                                {t("filters.showLess")}
                               </>
                             ) : (
                               <>
-                                <Plus className="w-3 h-3" /> Voir plus (
-                                {availableFeatures.length - 8})
+                                <Plus className="w-3 h-3" />{" "}
+                                {t("filters.showMore", {
+                                  count: availableFeatures.length - 8,
+                                })}
                               </>
                             )}
                           </button>
@@ -643,7 +661,7 @@ const PropertiesList = () => {
                       onClick={() => setIsMobileFilterOpen(false)}
                       className="w-full bg-gray-900 text-white rounded-xl py-3.5 text-sm font-bold shadow-md active:scale-95 transition-transform"
                     >
-                      Voir les résultats ({total})
+                      {t("filters.seeResults", { total })}
                     </button>
                   </div>
                 </div>
@@ -660,17 +678,17 @@ const PropertiesList = () => {
                 <div className="text-center py-32 bg-white rounded-3xl border border-stone-200/80 shadow-sm p-8">
                   <Search className="mx-auto w-14 h-14 text-stone-300 mb-5" />
                   <h3 className="text-2xl font-bold text-gray-900">
-                    Aucune résidence trouvée
+                    {t("empty.title")}
                   </h3>
                   <p className="text-stone-500 text-sm mt-2 max-w-sm mx-auto leading-relaxed">
-                    Modifiez vos critères de recherche ou supprimez des filtres.
+                    {t("empty.desc")}
                   </p>
                   {activeFiltersCount > 0 && (
                     <button
                       onClick={clearFilters}
                       className="mt-8 bg-gray-900 hover:bg-stone-800 text-white px-8 py-3.5 rounded-full text-sm font-bold transition shadow-sm"
                     >
-                      Réinitialiser tous les filtres
+                      {t("empty.resetAll")}
                     </button>
                   )}
                 </div>
@@ -685,13 +703,13 @@ const PropertiesList = () => {
                   {total > 16 && (
                     <div className="mt-14 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-stone-200/80 pt-8">
                       <div className="text-xs font-semibold text-stone-500">
-                        Page{" "}
+                        {t("pagination.page")}{" "}
                         <span className="text-stone-900 font-bold">{page}</span>{" "}
-                        sur{" "}
+                        {t("pagination.of")}{" "}
                         <span className="text-stone-900 font-bold">
                           {pages}
                         </span>{" "}
-                        ({total} résidences au total)
+                        {t("pagination.totalInfo", { total })}
                       </div>
 
                       <div className="flex items-center gap-2">
@@ -701,7 +719,7 @@ const PropertiesList = () => {
                           className="px-3.5 py-2 text-xs font-bold rounded-xl border border-stone-200 text-stone-700 hover:bg-white hover:text-gray-900 disabled:opacity-30 disabled:hover:bg-transparent transition shadow-sm flex items-center gap-1.5"
                         >
                           <ChevronLeft className="w-4 h-4" />
-                          <span>Précédent</span>
+                          <span>{t("pagination.prev")}</span>
                         </button>
 
                         <div className="flex items-center gap-1">
@@ -727,7 +745,7 @@ const PropertiesList = () => {
                           disabled={page === pages}
                           className="px-3.5 py-2 text-xs font-bold rounded-xl border border-stone-200 text-stone-700 hover:bg-white hover:text-gray-900 disabled:opacity-30 disabled:hover:bg-transparent transition shadow-sm flex items-center gap-1.5"
                         >
-                          <span>Suivant</span>
+                          <span>{t("pagination.next")}</span>
                           <ChevronRight className="w-4 h-4" />
                         </button>
                       </div>

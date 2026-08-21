@@ -1,0 +1,22 @@
+{
+  "tagline": "La tua porta d'accesso ad autentiche fughe in Tunisia. Connettiamo viaggiatori raffinati con maison d'hôte eccezionali, ville e rifugi sereni.",
+  "explore": {
+    "title": "Esplora",
+    "ourHomes": "Le Nostre Dimore",
+    "join": "Unisciti a Borgogo",
+    "signIn": "Accedi",
+    "myProfile": "Il Mio Profilo"
+  },
+  "support": {
+    "title": "Assistenza",
+    "contact": "Contatta il Concierge",
+    "faq": "FAQ e Centro Assistenza",
+    "privacy": "Informativa sulla Privacy",
+    "terms": "Termini di Servizio"
+  },
+  "contact": {
+    "title": "Contatti",
+    "address": "123 Avenue Habib Bourguiba, Tunisi 1000, Tunisia"
+  },
+  "copyright": "Borgogo. Tutti i diritti riservati."
+}

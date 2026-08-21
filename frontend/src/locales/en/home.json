@@ -1,0 +1,79 @@
+{
+  "destinations": {
+    "badge": "Iconic Regions",
+    "title": {
+      "exploreBy": "Explore By",
+      "destination": "Destination"
+    },
+    "subtitle": "Immerse yourself in distinct local micro-cultures from northern coastal cliffs to deep southern desert palmeries.",
+    "items": {
+      "sidiBouSaid": {
+        "name": "Sidi Bou Saïd",
+        "tag": "Coastal Blue & White Architecture",
+        "stays": "34 Luxury Palaces"
+      },
+      "djerba": {
+        "name": "Djerba Island",
+        "tag": "Menzels & Olive Groves",
+        "stays": "28 Private Estates"
+      },
+      "tozeur": {
+        "name": "Tozeur & Nefta",
+        "tag": "Saharan Brick Architecture",
+        "stays": "19 Oasis Sanctuaries"
+      },
+      "hammamet": {
+        "name": "Hammamet",
+        "tag": "Mediterranean Gardens & Sea Stays",
+        "stays": "42 Seafront Villas"
+      }
+    }
+  },
+  "promise": {
+    "badge": "The Borgogo Guarantee",
+    "title": {
+      "curatedFor": "Curated for",
+      "serenity": "Absolute Serenity"
+    },
+    "subtitle": "We bridge local architectural heritage with global digital standards, guaranteeing flawless reservations from moment of request to checkout.",
+    "items": {
+      "vetted": {
+        "title": "100% Vetted Estates",
+        "desc": "Every listed guest house undergoes rigorous multi-point visual, architectural, and hospitality inspections by local experts."
+      },
+      "locking": {
+        "title": "Direct Host Locking",
+        "desc": "Real-time direct owner communication prevents double bookings and secures seasonal rates transparently in local currency (TND)."
+      },
+      "concierge": {
+        "title": "Private Concierge Support",
+        "desc": "Dedicated hospitality managers available around the clock for private chefs, car transfers, and bespoke local itineraries."
+      }
+    }
+  },
+  "concierge": {
+    "badge": "Exclusive Bespoke Services",
+    "title": {
+      "line1": "Beyond A Room:",
+      "italic": "The Private Guest Experience"
+    },
+    "subtitle": "When you reserve through Borgogo, our dedicated concierge team handles everything from traditional culinary dinners prepared by local grandmothers to private Sahara excursions.",
+    "features": {
+      "breakfast": "Private Organic Farm-To-Table Breakfasts",
+      "walks": "Guided Heritage Medina Architecture Walks",
+      "transfers": "Chauffeur-Driven Airport & Regional Transfers",
+      "tea": "Exclusive Sunset Rooftop Tea Ceremonies"
+    },
+    "button": "Inquire With Concierge",
+    "satisfaction": "4.98 / 5 Guest Satisfaction",
+    "verified": "Verified Reviews"
+  },
+  "cta": {
+    "title": {
+      "ready": "Ready to find your",
+      "italic": "perfect retreat?"
+    },
+    "subtitle": "Connect directly with our local reservation concierges to curate an unforgettable guesthouse experience across Tunisia.",
+    "whatsapp": "Chat on WhatsApp"
+  }
+}

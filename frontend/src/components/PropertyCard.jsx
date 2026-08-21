@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import HeartIcon from "./HeartIcon";
 import { Users, Bed, Bath, MapPin, ArrowUpRight, Sparkles } from "lucide-react";
 
 const PropertyCard = ({ property, layout = "grid" }) => {
   const { user, toggleWishlist } = useAuth();
+  const { t } = useTranslation("propertyCard");
   const isList = layout === "list";
 
   const featuredImage =
@@ -49,7 +51,7 @@ const PropertyCard = ({ property, layout = "grid" }) => {
         {/* Type Badge */}
         <div className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-20">
           <span className="px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full text-[8px] sm:text-[10px] font-black tracking-widest uppercase bg-white/95 backdrop-blur-2xl text-black shadow-lg border border-white">
-            {property.type || "Maison d'Hôte"}
+            {property.type || t("defaultType")}
           </span>
         </div>
 
@@ -70,7 +72,7 @@ const PropertyCard = ({ property, layout = "grid" }) => {
               {property.pricePerNight?.toLocaleString()} TND
             </span>
             <span className="text-[8px] sm:text-[10px] font-medium text-neutral-400 uppercase">
-              / night
+              {t("perNight")}
             </span>
           </div>
         </div>
@@ -103,20 +105,21 @@ const PropertyCard = ({ property, layout = "grid" }) => {
             <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
             <span>
               {property.maxGuests}{" "}
-              <span className="hidden sm:inline">Guests</span>
+              <span className="hidden sm:inline">{t("guests")}</span>
             </span>
           </div>
           <div className="flex items-center gap-1 bg-neutral-100/80 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl border border-neutral-200/60">
             <Bed className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
             <span>
-              {property.bedrooms} <span className="hidden sm:inline">Beds</span>
+              {property.bedrooms}{" "}
+              <span className="hidden sm:inline">{t("beds")}</span>
             </span>
           </div>
           <div className="flex items-center gap-1 bg-neutral-100/80 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl border border-neutral-200/60">
             <Bath className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
             <span>
               {property.bathrooms}{" "}
-              <span className="hidden sm:inline">Baths</span>
+              <span className="hidden sm:inline">{t("baths")}</span>
             </span>
           </div>
         </div>
@@ -124,7 +127,7 @@ const PropertyCard = ({ property, layout = "grid" }) => {
         {/* Action Trigger Line */}
         <div className="pt-2 sm:pt-4 border-t border-neutral-100 flex items-center justify-between">
           <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-black group-hover:underline truncate">
-            View Sanctuary
+            {t("viewSanctuary")}
           </span>
           <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-black text-white flex items-center justify-center transition-all duration-300 group-hover:bg-neutral-800 group-hover:scale-110 shadow-md shrink-0">
             <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

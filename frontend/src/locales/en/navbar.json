@@ -1,0 +1,25 @@
+{
+  "notice": {
+    "tagline": "Curated Luxury Guesthouses",
+    "location": "Across Tunisia",
+    "subtitle": "Authentic Escapes Guaranteed"
+  },
+  "links": {
+    "home": "Home",
+    "ourStays": "Our Stays",
+    "wishlist": "Wishlist",
+    "myEnquiries": "My Enquiries",
+    "profile": "Profile"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Register",
+    "signOut": "Sign Out"
+  },
+  "logoutModal": {
+    "title": "Sign Out?",
+    "message": "Are you sure you wish to exit your Borgogo session?",
+    "cancel": "Cancel",
+    "confirm": "Sign Out"
+  }
+}

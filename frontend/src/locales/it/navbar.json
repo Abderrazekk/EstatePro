@@ -1,0 +1,25 @@
+{
+  "notice": {
+    "tagline": "Maison d'Hôte Esclusive",
+    "location": "in tutta la Tunisia",
+    "subtitle": "Fughe Autentiche Garantite"
+  },
+  "links": {
+    "home": "Home",
+    "ourStays": "I Nostri Soggiorni",
+    "wishlist": "Preferiti",
+    "myEnquiries": "Le Mie Richieste",
+    "profile": "Profilo"
+  },
+  "auth": {
+    "signIn": "Accedi",
+    "signUp": "Registrati",
+    "signOut": "Esci"
+  },
+  "logoutModal": {
+    "title": "Disconnettersi?",
+    "message": "Sei sicuro di voler uscire dalla tua sessione Borgogo?",
+    "cancel": "Annulla",
+    "confirm": "Esci"
+  }
+}

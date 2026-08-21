@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const useScrollReveal = (threshold = 0.3) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -24,6 +25,7 @@ const useScrollReveal = (threshold = 0.3) => {
 };
 
 const Sponsors = () => {
+  const { t } = useTranslation("sponsors");
   const [sponsors, setSponsors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [ref, isVisible] = useScrollReveal(0.3);
@@ -70,7 +72,7 @@ const Sponsors = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
         <p className="text-[10px] font-black tracking-[0.3em] uppercase text-neutral-400">
-          Our Valued Cultural & Tourism Partners
+          {t("title")}
         </p>
       </div>
 

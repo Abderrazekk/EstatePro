@@ -1,0 +1,57 @@
+{
+  "hero": {
+    "badge": "Soggiorni Selezionati",
+    "title": "Scopri Case e Rifugi",
+    "subtitle": "{{total}} residenze eccezionali disponibili per i tuoi soggiorni indimenticabili."
+  },
+  "controlBar": {
+    "available": "{{total}} residenze disponibili",
+    "sort": {
+      "newest": "Più Recenti",
+      "popular": "Più Popolari",
+      "priceAsc": "Prezzo: Crescente",
+      "priceDesc": "Prezzo: Decrescente"
+    }
+  },
+  "filters": {
+    "advanced": "Filtri Avanzati",
+    "reset": "Ripristina",
+    "keywords": "Parole chiave",
+    "keywordsPlaceholder": "Nome, città, stile...",
+    "region": "Regione / Città",
+    "regionPlaceholder": "Es: Djerba, Sidi Bou Said...",
+    "type": "Tipo di Proprietà",
+    "allTypes": "Tutti i Tipi",
+    "types": {
+      "maisonHote": "Maison d'Hôte",
+      "darTraditionnelle": "Dar Traditionnelle",
+      "villaCharme": "Villa di Charme",
+      "giteRural": "Gîte Rurale",
+      "chambreHote": "Chambre d'Hôte"
+    },
+    "capacity": "Capacità e Interni",
+    "guests": "Ospiti (min)",
+    "bedrooms": "Camere da letto (min)",
+    "bathrooms": "Bagni (min)",
+    "price": "Prezzo per Notte (TND)",
+    "min": "Min",
+    "max": "Max",
+    "amenities": "Servizi Inclusi",
+    "features": "Caratteristiche",
+    "showLess": "Mostra meno",
+    "showMore": "Mostra altro ({{count}})",
+    "seeResults": "Vedi i risultati ({{total}})"
+  },
+  "empty": {
+    "title": "Nessuna residenza trovata",
+    "desc": "Modifica i tuoi criteri di ricerca o rimuovi i filtri.",
+    "resetAll": "Ripristina tutti i filtri"
+  },
+  "pagination": {
+    "page": "Pagina",
+    "of": "di",
+    "totalInfo": "({{total}} residenze in totale)",
+    "prev": "Precedente",
+    "next": "Successivo"
+  }
+}

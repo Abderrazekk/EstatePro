@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import {
@@ -18,37 +19,41 @@ import {
   Receipt,
 } from "lucide-react";
 
-const statusConfig = {
-  pending: {
-    label: "Pending Review",
-    badge: "bg-amber-50 text-amber-800 border-amber-200/80",
-    icon: Clock,
-  },
-  unread: {
-    label: "Pending Review",
-    badge: "bg-amber-50 text-amber-800 border-amber-200/80",
-    icon: Clock,
-  },
-  read: {
-    label: "Under Review",
-    badge: "bg-sky-50 text-sky-800 border-sky-200/80",
-    icon: Eye,
-  },
-  confirmed: {
-    label: "Confirmed Stay",
-    badge: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
-    icon: CheckCircle2,
-  },
-  refused: {
-    label: "Declined",
-    badge: "bg-rose-50 text-rose-800 border-rose-200/80",
-    icon: XCircle,
-  },
-};
-
 const MyEnquiries = () => {
+  const { t } = useTranslation("userPages");
   const [enquiries, setEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const statusConfig = useMemo(
+    () => ({
+      pending: {
+        label: t("myEnquiries.status.pending"),
+        badge: "bg-amber-50 text-amber-800 border-amber-200/80",
+        icon: Clock,
+      },
+      unread: {
+        label: t("myEnquiries.status.unread"),
+        badge: "bg-amber-50 text-amber-800 border-amber-200/80",
+        icon: Clock,
+      },
+      read: {
+        label: t("myEnquiries.status.read"),
+        badge: "bg-sky-50 text-sky-800 border-sky-200/80",
+        icon: Eye,
+      },
+      confirmed: {
+        label: t("myEnquiries.status.confirmed"),
+        badge: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
+        icon: CheckCircle2,
+      },
+      refused: {
+        label: t("myEnquiries.status.refused"),
+        badge: "bg-rose-50 text-rose-800 border-rose-200/80",
+        icon: XCircle,
+      },
+    }),
+    [t],
+  );
 
   useEffect(() => {
     const fetchEnquiries = async () => {
@@ -100,13 +105,13 @@ const MyEnquiries = () => {
         <div className="mb-10 text-center sm:text-left">
           <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-stone-500 bg-white border border-stone-200 px-4 py-2 rounded-full shadow-sm mb-3">
             <Sparkles className="w-3.5 h-3.5 text-stone-700" />
-            Booking History
+            {t("myEnquiries.header.badge")}
           </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
-            My Reservations
+            {t("myEnquiries.header.title")}
           </h1>
           <p className="text-stone-500 mt-2 text-base font-light">
-            Review and track all your luxury stay requests and host responses.
+            {t("myEnquiries.header.subtitle")}
           </p>
         </div>
 
@@ -117,17 +122,16 @@ const MyEnquiries = () => {
               <Inbox className="w-8 h-8" strokeWidth={1.5} />
             </div>
             <h3 className="text-xl font-bold text-gray-900">
-              No Reservations Yet
+              {t("myEnquiries.empty.title")}
             </h3>
             <p className="text-stone-500 text-sm mt-2 max-w-md mx-auto font-light leading-relaxed">
-              You haven't submitted booking enquiries to any host yet. Explore
-              our curated residences to plan your next retreat.
+              {t("myEnquiries.empty.description")}
             </p>
             <Link
               to="/properties"
               className="inline-flex items-center gap-2 mt-6 px-6 py-3.5 bg-gray-900 hover:bg-stone-800 text-white rounded-full text-sm font-bold transition shadow-sm"
             >
-              <span>Browse Our Homes</span>
+              <span>{t("myEnquiries.empty.button")}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -152,7 +156,9 @@ const MyEnquiries = () => {
                     {enq.property?.images?.[0] ? (
                       <img
                         src={enq.property.images[0].url}
-                        alt={enq.property?.title || "Property image"}
+                        alt={
+                          enq.property?.title || t("myEnquiries.card.imageAlt")
+                        }
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -168,7 +174,7 @@ const MyEnquiries = () => {
                       <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
                         <h3 className="text-xl font-bold text-gray-900 tracking-tight">
                           {enq.property?.title ||
-                            "Residence Listing Unavailable"}
+                            t("myEnquiries.card.unavailableTitle")}
                         </h3>
 
                         {/* Status Badge */}
@@ -223,7 +229,9 @@ const MyEnquiries = () => {
                     {/* Rejection Reason Notice */}
                     {enq.status === "refused" && enq.rejectionReason && (
                       <div className="mt-3 p-3 bg-rose-50 border border-rose-200/60 rounded-2xl text-xs text-rose-800">
-                        <strong className="font-bold">Host feedback: </strong>
+                        <strong className="font-bold">
+                          {t("myEnquiries.card.hostFeedback")}{" "}
+                        </strong>
                         <span>{enq.rejectionReason}</span>
                       </div>
                     )}

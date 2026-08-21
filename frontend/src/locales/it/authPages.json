@@ -1,0 +1,54 @@
+{
+  "login": {
+    "errors": {
+      "invalid": "Email o password non validi",
+      "googleFail": "Autenticazione Google non riuscita"
+    },
+    "header": {
+      "title": "Bentornato",
+      "subtitle": "Accedi per visualizzare il tuo account."
+    },
+    "form": {
+      "email": "Indirizzo Email",
+      "emailPlaceholder": "tu@esempio.com",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "submitting": "Accesso in corso...",
+      "submit": "Accedi"
+    },
+    "divider": "Oppure continua con",
+    "footer": {
+      "text": "Non hai un account?",
+      "link": "Creane uno"
+    }
+  },
+  "register": {
+    "errors": {
+      "passwordMismatch": "Le password non corrispondono",
+      "registrationFailed": "Registrazione non riuscita",
+      "googleFail": "Registrazione Google non riuscita"
+    },
+    "header": {
+      "title": "Crea il tuo account",
+      "subtitle": "Inizia la tua esperienza di soggiorno di lusso in Tunisia."
+    },
+    "form": {
+      "name": "Nome Completo",
+      "namePlaceholder": "Mario Rossi",
+      "phone": "Numero di Telefono",
+      "phonePlaceholder": "+216 12 345 678",
+      "email": "Indirizzo Email",
+      "emailPlaceholder": "tu@esempio.com",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "confirmPassword": "Conferma Password",
+      "submitting": "Creazione Account...",
+      "submit": "Crea Account"
+    },
+    "divider": "Oppure continua con",
+    "footer": {
+      "text": "Hai già un account?",
+      "link": "Accedi"
+    }
+  }
+}

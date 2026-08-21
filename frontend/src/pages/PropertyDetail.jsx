@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import HeartIcon from "../components/HeartIcon";
@@ -37,14 +38,8 @@ import {
   Palmtree,
   Sparkles,
   Award,
-  Building,
-  Flower2,
-  Lock,
   Compass,
   CheckCircle2,
-  Sliders,
-  Tv2,
-  Volume2,
 } from "lucide-react";
 
 import DatePicker from "react-datepicker";
@@ -153,11 +148,12 @@ const getOptionIcon = (label = "") => {
   if (normalized.includes("calme") || normalized.includes("tranquille"))
     return Compass;
 
-  return CheckCircle2; // Fallback icon
+  return CheckCircle2;
 };
 
 const PropertyDetail = () => {
   const { id } = useParams();
+  const { t } = useTranslation("propertyDetail");
   const [property, setProperty] = useState(null);
   const [similarProperties, setSimilarProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -337,7 +333,7 @@ const PropertyDetail = () => {
           <div className="text-center">
             <p className="text-sm font-medium text-blue-600 mb-2">404</p>
             <h1 className="text-2xl font-semibold text-gray-900">
-              Cette maison d'hôte n'est plus disponible
+              {t("notFound.title")}
             </h1>
           </div>
         </main>
@@ -480,7 +476,7 @@ const PropertyDetail = () => {
               }}
               className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-900 shadow-lg hover:bg-white transition-colors z-10"
             >
-              Afficher toutes les photos
+              {t("gallery.showAll")}
             </button>
           </div>
 
@@ -542,7 +538,7 @@ const PropertyDetail = () => {
                 <button
                   onClick={handleShare}
                   className="relative p-2 rounded-full hover:bg-gray-50 text-gray-500 hover:text-gray-900 transition-colors"
-                  title="Partager ce logement"
+                  title={t("share.tooltip")}
                 >
                   {copied ? (
                     <Check size={20} className="text-green-600" />
@@ -551,7 +547,7 @@ const PropertyDetail = () => {
                   )}
                   {copied && (
                     <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap">
-                      Lien copié !
+                      {t("share.copied")}
                     </span>
                   )}
                 </button>
@@ -570,22 +566,22 @@ const PropertyDetail = () => {
               {property.title}
             </h1>
             <p className="text-gray-500 mt-2 text-lg font-medium">
-              {property.location}, Tunisie
+              {property.location}, {t("location.country")}
             </p>
           </div>
           <div className="sm:text-right shrink-0 mt-2 sm:mt-0">
             <p className="text-3xl md:text-4xl font-bold text-gray-900">
               {property.pricePerNight?.toLocaleString()}{" "}
-              <span className="text-xl">TND</span>
+              <span className="text-xl">{t("pricing.currency")}</span>
               <span className="text-sm font-medium text-gray-500 block sm:inline sm:ml-2">
-                / nuit
+                {t("pricing.perNight")}
               </span>
             </p>
             <button
               onClick={() => setShowModal(true)}
               className="mt-4 bg-gray-900 hover:bg-gray-800 text-white px-8 py-3.5 rounded-xl text-base font-semibold transition-colors w-full sm:w-auto shadow-sm"
             >
-              Réserver maintenant
+              {t("pricing.bookNow")}
             </button>
           </div>
         </div>
@@ -594,29 +590,29 @@ const PropertyDetail = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-8 border-b border-gray-100">
           <Stat
             icon={Users}
-            label="Capacité Max"
-            value={`${property.maxGuests} Personnes`}
+            label={t("stats.maxCapacity")}
+            value={`${property.maxGuests} ${t("stats.persons")}`}
           />
           <Stat
             icon={BedDouble}
-            label="Chambres"
-            value={`${property.bedrooms} Chambres`}
+            label={t("stats.bedrooms")}
+            value={`${property.bedrooms} ${t("stats.bedrooms")}`}
           />
           <Stat
             icon={Bath}
-            label="Salles de Bain"
-            value={`${property.bathrooms} SDB`}
+            label={t("stats.bathrooms")}
+            value={`${property.bathrooms} ${t("stats.sdb")}`}
           />
           <Stat
             icon={Moon}
-            label="Séjour Min"
-            value={`${property.minNights} Nuitée(s)`}
+            label={t("stats.minStay")}
+            value={`${property.minNights} ${t("stats.nights")}`}
           />
         </div>
 
         <div className="flex flex-col md:flex-row gap-12 pt-10">
           <div className="md:w-2/3">
-            <Section title="À propos du logement">
+            <Section title={t("sections.about")}>
               <p className="text-gray-600 leading-relaxed whitespace-pre-line text-lg">
                 {property.description}
               </p>
@@ -625,7 +621,7 @@ const PropertyDetail = () => {
             {/* PROFESSIONAL DYNAMIC AMENITIES & FEATURES SECTION WITH ICONS */}
             {(property.amenities?.length > 0 ||
               property.features?.length > 0) && (
-              <Section title="Équipements et Caractéristiques">
+              <Section title={t("sections.amenities")}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                   {/* Amenities List with Specific Icons */}
                   {property.amenities?.map((amenity, index) => {
@@ -668,7 +664,7 @@ const PropertyDetail = () => {
 
             {/* Video Section */}
             {property.video?.url && (
-              <Section title="Visite Vidéo">
+              <Section title={t("sections.video")}>
                 <div className="relative w-full rounded-2xl overflow-hidden bg-black shadow-md aspect-video border border-gray-100">
                   <video
                     src={property.video.url}
@@ -676,13 +672,13 @@ const PropertyDetail = () => {
                     preload="metadata"
                     className="w-full h-full object-contain"
                   >
-                    Votre navigateur ne supporte pas la lecture de vidéos.
+                    {t("sections.videoUnsupported")}
                   </video>
                 </div>
               </Section>
             )}
 
-            <Section title="Localisation">
+            <Section title={t("sections.location")}>
               <div className="relative z-0 isolate rounded-2xl overflow-hidden border border-gray-100 shadow-sm h-80">
                 <PropertyMap
                   lat={property.coordinates?.lat}
@@ -702,7 +698,7 @@ const PropertyDetail = () => {
             <div className="sticky top-8 space-y-6">
               <div className="border border-gray-100 rounded-3xl p-6 bg-white shadow-sm ring-1 ring-gray-900/5">
                 <h3 className="text-lg font-bold text-gray-900 mb-5">
-                  Disponibilité
+                  {t("sidebar.availability")}
                 </h3>
                 <div className="custom-calendar-wrapper w-full">
                   <DatePicker
@@ -715,11 +711,11 @@ const PropertyDetail = () => {
                 <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500 font-medium">
                   <span className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-gray-200"></div>{" "}
-                    Réservé
+                    {t("sidebar.booked")}
                   </span>
                   <span className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full border-2 border-gray-300"></div>{" "}
-                    Libre
+                    {t("sidebar.available")}
                   </span>
                 </div>
               </div>
@@ -727,7 +723,7 @@ const PropertyDetail = () => {
               {/* Host Section */}
               <div className="border border-gray-100 rounded-3xl p-6 bg-gray-50/50">
                 <h3 className="text-lg font-bold text-gray-900 mb-4">
-                  Hôte de la maison
+                  {t("sidebar.hostTitle")}
                 </h3>
                 {property.host?.name ? (
                   <div>
@@ -740,7 +736,7 @@ const PropertyDetail = () => {
                           {property.host.name}
                         </p>
                         <p className="text-sm font-medium text-green-600 flex items-center gap-1">
-                          ✓ Hôte vérifié
+                          {t("sidebar.verified")}
                         </p>
                       </div>
                     </div>
@@ -748,12 +744,12 @@ const PropertyDetail = () => {
                       onClick={() => setShowModal(true)}
                       className="w-full bg-white border border-gray-200 text-gray-900 py-3 rounded-xl text-base font-semibold hover:bg-gray-50 transition-colors shadow-sm"
                     >
-                      Contacter l'hôte
+                      {t("sidebar.contact")}
                     </button>
                   </div>
                 ) : (
                   <p className="text-gray-500 text-sm font-medium">
-                    Aucune information sur l'hôte.
+                    {t("sidebar.noInfo")}
                   </p>
                 )}
               </div>
@@ -767,10 +763,10 @@ const PropertyDetail = () => {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
-                  Logements similaires
+                  {t("similar.title")}
                 </h2>
                 <p className="text-gray-500 mt-1 text-base">
-                  Découvrez d'autres sélections qui pourraient vous plaire
+                  {t("similar.subtitle")}
                 </p>
               </div>
             </div>
@@ -819,7 +815,7 @@ const PropertyDetail = () => {
                             className="text-blue-600 shrink-0"
                           />
                           <span className="truncate">
-                            {item.location}, Tunisie
+                            {item.location}, {t("location.country")}
                           </span>
                         </div>
                         <Link to={`/properties/${item._id}`}>
@@ -832,16 +828,17 @@ const PropertyDetail = () => {
                       <div className="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
                         <div>
                           <span className="text-lg font-bold text-gray-900">
-                            {item.pricePerNight?.toLocaleString()} TND
+                            {item.pricePerNight?.toLocaleString()}{" "}
+                            {t("pricing.currency")}
                           </span>
                           <span className="text-xs text-gray-500 block">
-                            par nuit
+                            {t("similar.perNight")}
                           </span>
                         </div>
                         <Link
                           to={`/properties/${item._id}`}
                           className="bg-gray-50 hover:bg-blue-600 hover:text-white text-gray-900 p-2.5 rounded-xl transition-colors shadow-sm"
-                          title="Voir le logement"
+                          title={t("similar.view")}
                         >
                           <ArrowRight size={18} />
                         </Link>

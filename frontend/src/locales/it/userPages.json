@@ -1,0 +1,60 @@
+{
+  "myEnquiries": {
+    "status": {
+      "pending": "In Attesa di Revisione",
+      "unread": "In Attesa di Revisione",
+      "read": "In Revisione",
+      "confirmed": "Soggiorno Confermato",
+      "refused": "Rifiutato"
+    },
+    "header": {
+      "badge": "Cronologia Prenotazioni",
+      "title": "Le Mie Prenotazioni",
+      "subtitle": "Esamina e monitora tutte le tue richieste di soggiorno di lusso e le risposte degli host."
+    },
+    "empty": {
+      "title": "Nessuna Prenotazione Ancora",
+      "description": "Non hai ancora inviato richieste di prenotazione a nessun host. Esplora le nostre residenze selezionate per pianificare il tuo prossimo ritiro.",
+      "button": "Esplora le Nostre Case"
+    },
+    "card": {
+      "imageAlt": "Immagine della proprietà",
+      "unavailableTitle": "Annuncio Residenza Non Disponibile",
+      "hostFeedback": "Feedback dell'host:"
+    }
+  },
+  "wishlist": {
+    "header": {
+      "badge": "Residenze Salvate",
+      "title": "I Miei Soggiorni Salvati",
+      "subtitle": "Tieni traccia delle tue case vacanze e ritiri preferiti per la tua prossima fuga."
+    },
+    "empty": {
+      "title": "La tua lista dei desideri è vuota",
+      "description": "Esplora la nostra selezione curata di maisons d'hôte tunisine e salva le tue residenze preferite per visualizzarle in seguito.",
+      "button": "Esplora le Case"
+    }
+  },
+  "profile": {
+    "header": {
+      "badge": "Gestione Account",
+      "title": "Dettagli Personali"
+    },
+    "messages": {
+      "success": "Profilo aggiornato con successo!",
+      "error": "Aggiornamento fallito. Riprova per favore."
+    },
+    "photo": {
+      "title": "Foto Profilo",
+      "subtitle": "PNG, JPG o WEBP. Dimensione massima 5MB."
+    },
+    "form": {
+      "fullName": "Nome Completo",
+      "phoneNumber": "Numero di Telefono",
+      "emailAddress": "Indirizzo Email",
+      "cannotChange": "(Non può essere modificato)",
+      "saving": "Salvataggio in corso...",
+      "save": "Salva Modifiche"
+    }
+  }
+}

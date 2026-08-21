@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 
 const Profile = () => {
+  const { t } = useTranslation("userPages");
   const { user, refreshUser } = useAuth();
   const [name, setName] = useState(user?.name || "");
   const [phone, setPhone] = useState(user?.phone || "");
@@ -44,10 +46,10 @@ const Profile = () => {
       await axios.put("/api/users/profile", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setMessage({ text: "Profile updated successfully!", type: "success" });
+      setMessage({ text: t("profile.messages.success"), type: "success" });
       await refreshUser();
     } catch (error) {
-      setMessage({ text: "Update failed. Please try again.", type: "error" });
+      setMessage({ text: t("profile.messages.error"), type: "error" });
     } finally {
       setIsSubmitting(false);
     }
@@ -72,10 +74,10 @@ const Profile = () => {
         <div className="text-center mb-10">
           <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-stone-500 bg-white border border-stone-200 px-4 py-2 rounded-full shadow-sm mb-4">
             <Sparkles className="w-3.5 h-3.5 text-stone-700" />
-            Account Management
+            {t("profile.header.badge")}
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-            Personal Details
+            {t("profile.header.title")}
           </h1>
         </div>
 
@@ -129,10 +131,10 @@ const Profile = () => {
 
               <div className="text-center sm:text-left">
                 <h3 className="font-bold text-gray-900 text-lg">
-                  Profile Photo
+                  {t("profile.photo.title")}
                 </h3>
                 <p className="text-sm text-stone-500 font-light mt-1">
-                  PNG, JPG or WEBP. Max file size 5MB.
+                  {t("profile.photo.subtitle")}
                 </p>
               </div>
             </div>
@@ -142,7 +144,7 @@ const Profile = () => {
               {/* Name Input */}
               <div>
                 <label className="block text-sm font-bold text-gray-900 mb-2">
-                  Full Name
+                  {t("profile.form.fullName")}
                 </label>
                 <div className="relative">
                   <User className="w-5 h-5 text-stone-400 absolute left-4 top-1/2 -translate-y-1/2" />
@@ -159,7 +161,7 @@ const Profile = () => {
               {/* Phone Input */}
               <div>
                 <label className="block text-sm font-bold text-gray-900 mb-2">
-                  Phone Number
+                  {t("profile.form.phoneNumber")}
                 </label>
                 <div className="relative">
                   <Phone className="w-5 h-5 text-stone-400 absolute left-4 top-1/2 -translate-y-1/2" />
@@ -176,9 +178,9 @@ const Profile = () => {
               {/* Email Input (Disabled) */}
               <div>
                 <label className="block text-sm font-bold text-stone-400 mb-2">
-                  Email Address{" "}
+                  {t("profile.form.emailAddress")}{" "}
                   <span className="text-xs font-normal">
-                    (Cannot be changed)
+                    {t("profile.form.cannotChange")}
                   </span>
                 </label>
                 <div className="relative">
@@ -200,7 +202,9 @@ const Profile = () => {
                 disabled={isSubmitting}
                 className="w-full sm:w-auto bg-gray-900 hover:bg-stone-800 text-white px-8 py-4 rounded-full font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50"
               >
-                {isSubmitting ? "Saving Changes..." : "Save Changes"}
+                {isSubmitting
+                  ? t("profile.form.saving")
+                  : t("profile.form.save")}
               </button>
             </div>
           </form>

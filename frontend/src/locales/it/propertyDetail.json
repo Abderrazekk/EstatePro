@@ -1,0 +1,51 @@
+{
+  "notFound": {
+    "title": "Questa pensione non è più disponibile"
+  },
+  "gallery": {
+    "showAll": "Mostra tutte le foto"
+  },
+  "share": {
+    "tooltip": "Condividi questo alloggio",
+    "copied": "Link copiato!"
+  },
+  "location": {
+    "country": "Tunisia"
+  },
+  "pricing": {
+    "currency": "TND",
+    "perNight": "/ notte",
+    "bookNow": "Prenota ora"
+  },
+  "stats": {
+    "maxCapacity": "Capacità Max",
+    "persons": "Persone",
+    "bedrooms": "Camere",
+    "bathrooms": "Bagni",
+    "sdb": "Bagni",
+    "minStay": "Soggiorno Min",
+    "nights": "Notte/i"
+  },
+  "sections": {
+    "about": "Informazioni sull'alloggio",
+    "amenities": "Servizi e Caratteristiche",
+    "video": "Tour Video",
+    "videoUnsupported": "Il tuo browser non supporta la riproduzione di video.",
+    "location": "Posizione"
+  },
+  "sidebar": {
+    "availability": "Disponibilità",
+    "booked": "Prenotato",
+    "available": "Disponibile",
+    "hostTitle": "Host della struttura",
+    "verified": "✓ Host verificato",
+    "contact": "Contatta l'host",
+    "noInfo": "Nessuna informazione sull'host disponibile."
+  },
+  "similar": {
+    "title": "Alloggi simili",
+    "subtitle": "Scopri altre selezioni che potrebbero piacerti",
+    "perNight": "a notte",
+    "view": "Vedi alloggio"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "login": {
+    "errors": {
+      "invalid": "Invalid email or password",
+      "googleFail": "Google authentication failed"
+    },
+    "header": {
+      "title": "Welcome back",
+      "subtitle": "Please sign in to access your account."
+    },
+    "form": {
+      "email": "Email Address",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "submitting": "Signing In...",
+      "submit": "Sign In"
+    },
+    "divider": "Or continue with",
+    "footer": {
+      "text": "Don't have an account?",
+      "link": "Create one"
+    }
+  },
+  "register": {
+    "errors": {
+      "passwordMismatch": "Passwords do not match",
+      "registrationFailed": "Registration failed",
+      "googleFail": "Google registration failed"
+    },
+    "header": {
+      "title": "Create your account",
+      "subtitle": "Begin your luxury stay experience across Tunisia."
+    },
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "John Doe",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+216 12 345 678",
+      "email": "Email Address",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "confirmPassword": "Confirm Password",
+      "submitting": "Creating Account...",
+      "submit": "Create Account"
+    },
+    "divider": "Or continue with",
+    "footer": {
+      "text": "Already have an account?",
+      "link": "Sign in"
+    }
+  }
+}

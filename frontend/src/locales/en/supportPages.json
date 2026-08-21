@@ -1,0 +1,123 @@
+{
+  "contact": {
+    "header": {
+      "title": "Contact",
+      "subtitle": "Concierge",
+      "description": "Whether you need assistance booking a stay, arranging special requests, or simply have a question, our dedicated team is here to help."
+    },
+    "details": {
+      "call": {
+        "title": "Call Us",
+        "availability": "Available Mon-Sat, 9am - 6pm (CET)"
+      },
+      "email": {
+        "title": "Email Us",
+        "replyTime": "We typically reply within 24 hours."
+      },
+      "office": {
+        "title": "Office",
+        "addressLine1": "123 Avenue Habib Bourguiba",
+        "addressLine2": "Tunis 1000, Tunisia"
+      }
+    },
+    "form": {
+      "title": "Send us a message",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "message": "Message",
+      "submit": "Send Message"
+    }
+  },
+  "faq": {
+    "header": {
+      "title": "FAQ &",
+      "subtitle": "Help Center",
+      "description": "Find answers to common questions about booking, staying, and hosting with DarHôte."
+    },
+    "questions": [
+      {
+        "question": "How do I make a reservation?",
+        "answer": "You can book directly through our platform by navigating to 'Our Homes', selecting your desired property and dates, and clicking the 'Book Now' button. You will be prompted to log in or create an account to finalize your reservation."
+      },
+      {
+        "question": "What is your cancellation policy?",
+        "answer": "Cancellation policies vary by property. Generally, you can cancel for a full refund up to 14 days before your check-in date. Please refer to the specific terms listed on the property's detail page."
+      },
+      {
+        "question": "Are pets allowed in the guesthouses?",
+        "answer": "Some of our properties are pet-friendly, while others are not due to allergies or owner preferences. You can filter properties by 'Pet Friendly' when searching on our platform."
+      },
+      {
+        "question": "How do I contact the host?",
+        "answer": "Once your booking is confirmed, you will receive the host's direct contact information. You can also message them directly through the 'My Enquiries' section in your DarHôte dashboard."
+      },
+      {
+        "question": "Is my payment secure?",
+        "answer": "Yes, we use industry-standard encryption and partner with trusted payment gateways to ensure your financial information is fully protected."
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated: August 2026",
+    "sections": [
+      {
+        "title": "1. Introduction",
+        "content": "At DarHôte, we respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you."
+      },
+      {
+        "title": "2. The Data We Collect About You",
+        "content": "We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:",
+        "list": [
+          "Identity Data: includes first name, last name, username or similar identifier.",
+          "Contact Data: includes billing address, email address, and telephone numbers.",
+          "Transaction Data: includes details about payments to and from you and other details of properties you have booked through us."
+        ]
+      },
+      {
+        "title": "3. How We Use Your Personal Data",
+        "content": "We will only use your personal data when the law allows us to. Most commonly, we will use your personal data to perform the contract we are about to enter into or have entered into with you (such as a booking), or where it is necessary for our legitimate interests."
+      },
+      {
+        "title": "4. Data Security",
+        "content": "We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorized way, altered, or disclosed."
+      },
+      {
+        "title": "5. Contact Us",
+        "content": "If you have any questions about this privacy policy or our privacy practices, please contact us at privacy@darhote.tn."
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "effectiveDate": "Effective Date: August 2026",
+    "sections": [
+      {
+        "title": "1. Agreement to Terms",
+        "content": "These Terms of Service constitute a legally binding agreement made between you and DarHôte concerning your access to and use of the website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto."
+      },
+      {
+        "title": "2. Bookings and Payments",
+        "content": "By booking a property on DarHôte, you agree to pay all charges associated with your booking, including the nightly rate, applicable taxes, and any cleaning fees. Payments are processed securely via our third-party payment providers. DarHôte acts as an intermediary between the guest and the property host."
+      },
+      {
+        "title": "3. User Responsibilities",
+        "content": "As a user of our platform, you agree to:",
+        "list": [
+          "Provide accurate, current, and complete registration information.",
+          "Respect the property rules as stated by the host on the property listing page.",
+          "Not use the site for any illegal or unauthorized purpose."
+        ]
+      },
+      {
+        "title": "4. Liability",
+        "content": "DarHôte is not liable for any injuries, damages, or losses sustained during a stay at a property booked through our platform. All disputes related to the property condition or experience must be handled primarily between the guest and the host."
+      },
+      {
+        "title": "5. Modifications to Terms",
+        "content": "We reserve the right, in our sole discretion, to make changes or modifications to these Terms of Service at any time and for any reason. We will alert you about any changes by updating the \"Effective Date\" of these terms."
+      }
+    ]
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "contact": {
+    "header": {
+      "title": "Contatta",
+      "subtitle": "il Concierge",
+      "description": "Se hai bisogno di assistenza per prenotare un soggiorno, organizzare richieste speciali o semplicemente fare una domanda, il nostro team dedicato è qui per aiutarti."
+    },
+    "details": {
+      "call": {
+        "title": "Chiamaci",
+        "availability": "Disponibile Lun-Sab, 9:00 - 18:00 (CET)"
+      },
+      "email": {
+        "title": "Scrivici",
+        "replyTime": "Rispondiamo solitamente entro 24 ore."
+      },
+      "office": {
+        "title": "Ufficio",
+        "addressLine1": "123 Avenue Habib Bourguiba",
+        "addressLine2": "Tunisi 1000, Tunisia"
+      }
+    },
+    "form": {
+      "title": "Inviaci un messaggio",
+      "firstName": "Nome",
+      "lastName": "Cognome",
+      "email": "Indirizzo Email",
+      "message": "Messaggio",
+      "submit": "Invia Messaggio"
+    }
+  },
+  "faq": {
+    "header": {
+      "title": "FAQ e",
+      "subtitle": "Centro Assistenza",
+      "description": "Trova le risposte alle domande frequenti sulla prenotazione, il soggiorno e l'ospitalità con DarHôte."
+    },
+    "questions": [
+      {
+        "question": "Come effettuo una prenotazione?",
+        "answer": "Puoi prenotare direttamente tramite la nostra piattaforma navigando su 'Le Nostre Case', selezionando la proprietà e le date desiderate e cliccando sul pulsante 'Prenota Ora'. Ti verrà chiesto di accedere o creare un account per finalizzare la prenotazione."
+      },
+      {
+        "question": "Qual è la vostra politica di cancellazione?",
+        "answer": "Le politiche di cancellazione variano in base alla struttura. In genere, puoi annullare per ottenere un rimborso completo fino a 14 giorni prima della data di check-in. Si prega di fare riferimento ai termini specifici elencati nella pagina di dettaglio della struttura."
+      },
+      {
+        "question": "Gli animali domestici sono ammessi?",
+        "answer": "Alcune delle nostre strutture accettano animali domestici, mentre altre no. Puoi filtrare le strutture tramite l'opzione 'Animali Ammessi' durante la ricerca sulla nostra piattaforma."
+      },
+      {
+        "question": "Come posso contattare l'host?",
+        "answer": "Una volta confermata la prenotazione, riceverai le informazioni di contatto diretto dell'host. Puoi anche inviare messaggi direttamente tramite la sezione 'Le mie richieste' nella tua dashboard di DarHôte."
+      },
+      {
+        "question": "Il mio pagamento è sicuro?",
+        "answer": "Sì, utilizziamo la crittografia standard del settore e collaboriamo con gateway di pagamento affidabili per garantire che le tue informazioni finanziarie siano completamente protette."
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Informativa sulla Privacy",
+    "lastUpdated": "Ultimo aggiornamento: Agosto 2026",
+    "sections": [
+      {
+        "title": "1. Introduzione",
+        "content": "Noi di DarHôte rispettiamo la tua privacy e ci impegniamo a proteggere i tuoi dati personali. Questa informativa ti informerà su come ci prendiamo cura dei tuoi dati e sui tuoi diritti alla privacy."
+      },
+      {
+        "title": "2. I Dati Che Raccogliamo",
+        "content": "Possiamo raccogliere, utilizzare, archiviare e trasferire diversi tipi di dati personali:",
+        "list": [
+          "Dati di identità: include nome, cognome, nome utente o identificatore simile.",
+          "Dati di contatto: include indirizzo di fatturazione, e-mail e numeri di telefono.",
+          "Dati di transazione: include dettagli sui pagamenti da e verso te e altri dettagli delle proprietà prenotate."
+        ]
+      },
+      {
+        "title": "3. Come Utilizziamo i Tuoi Dati Personali",
+        "content": "Utilizzeremo i tuoi dati personali solo quando la legge ce lo consente, più comunemente per eseguire il contratto che stiamo per stipulare o abbiamo stipulato con te."
+      },
+      {
+        "title": "4. Sicurezza dei Dati",
+        "content": "Abbiamo messo in atto adeguate misure di sicurezza per evitare che i tuoi dati personali vengano persi, utilizzati o consultati in modo non autorizzato."
+      },
+      {
+        "title": "5. Contattaci",
+        "content": "Per qualsiasi domanda su questa informativa sulla privacy, contattaci all'indirizzo privacy@darhote.tn."
+      }
+    ]
+  },
+  "terms": {
+    "title": "Termini di Servizio",
+    "effectiveDate": "Data di validità: Agosto 2026",
+    "sections": [
+      {
+        "title": "1. Accettazione dei Termini",
+        "content": "Questi Termini di Servizio costituiscono un accordo legalmente vincolante stipulato tra te e DarHôte."
+      },
+      {
+        "title": "2. Prenotazioni e Pagamenti",
+        "content": "Prenotando una struttura su DarHôte, accetti di pagare tutti i costi associati, tra cui la tariffa notturna, le tasse e le spese di pulizia. DarHôte funge da intermediario tra l'ospite e l'host."
+      },
+      {
+        "title": "3. Responsabilità dell'Utente",
+        "content": "Come utente della nostra piattaforma, accetti di:",
+        "list": [
+          "Fornire informazioni di registrazione accurate, aggiornate e complete.",
+          "Rispettare le regole della struttura come indicato dall'host.",
+          "Non utilizzare il sito per scopi illegali o non autorizzati."
+        ]
+      },
+      {
+        "title": "4. Responsabilità",
+        "content": "DarHôte non è responsabile per infortuni, danni o perdite subite durante un soggiorno in una struttura prenotata tramite la nostra piattaforma."
+      },
+      {
+        "title": "5. Modifiche ai Termini",
+        "content": "Ci riserviamo il diritto di apportare modifiche a questi Termini di Servizio in qualsiasi momento. Ti avviseremo aggiornando la 'Data di validità' di questi termini."
+      }
+    ]
+  }
+}

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PropertyCard from "../components/PropertyCard";
 import { Heart, Sparkles, ArrowRight } from "lucide-react";
 
 const Wishlist = () => {
+  const { t } = useTranslation("userPages");
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,14 +35,13 @@ const Wishlist = () => {
         <div className="mb-10 text-center sm:text-left">
           <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-stone-500 bg-white border border-stone-200 px-4 py-2 rounded-full shadow-sm mb-3">
             <Sparkles className="w-3.5 h-3.5 text-stone-700" />
-            Saved Residences
+            {t("wishlist.header.badge")}
           </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
-            My Saved Stays
+            {t("wishlist.header.title")}
           </h1>
           <p className="text-stone-500 mt-2 text-base font-light">
-            Keep track of your favorite guest houses and retreats for your next
-            escape.
+            {t("wishlist.header.subtitle")}
           </p>
         </div>
 
@@ -66,17 +67,16 @@ const Wishlist = () => {
               <Heart className="w-8 h-8" strokeWidth={1.5} />
             </div>
             <h3 className="text-xl font-bold text-gray-900">
-              Your wishlist is empty
+              {t("wishlist.empty.title")}
             </h3>
             <p className="text-stone-500 text-sm mt-2 max-w-md mx-auto font-light leading-relaxed">
-              Explore our curated selection of Tunisian *maisons d'hôte* and
-              save your favorite residences to view them later.
+              {t("wishlist.empty.description")}
             </p>
             <Link
               to="/properties"
               className="inline-flex items-center gap-2 mt-6 px-6 py-3.5 bg-gray-900 hover:bg-stone-800 text-white rounded-full text-sm font-bold transition shadow-sm"
             >
-              <span>Explore Houses</span>
+              <span>{t("wishlist.empty.button")}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

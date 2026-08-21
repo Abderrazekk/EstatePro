@@ -1,0 +1,60 @@
+{
+  "myEnquiries": {
+    "status": {
+      "pending": "Pending Review",
+      "unread": "Pending Review",
+      "read": "Under Review",
+      "confirmed": "Confirmed Stay",
+      "refused": "Declined"
+    },
+    "header": {
+      "badge": "Booking History",
+      "title": "My Reservations",
+      "subtitle": "Review and track all your luxury stay requests and host responses."
+    },
+    "empty": {
+      "title": "No Reservations Yet",
+      "description": "You haven't submitted booking enquiries to any host yet. Explore our curated residences to plan your next retreat.",
+      "button": "Browse Our Homes"
+    },
+    "card": {
+      "imageAlt": "Property image",
+      "unavailableTitle": "Residence Listing Unavailable",
+      "hostFeedback": "Host feedback:"
+    }
+  },
+  "wishlist": {
+    "header": {
+      "badge": "Saved Residences",
+      "title": "My Saved Stays",
+      "subtitle": "Keep track of your favorite guest houses and retreats for your next escape."
+    },
+    "empty": {
+      "title": "Your wishlist is empty",
+      "description": "Explore our curated selection of Tunisian maisons d'hôte and save your favorite residences to view them later.",
+      "button": "Explore Houses"
+    }
+  },
+  "profile": {
+    "header": {
+      "badge": "Account Management",
+      "title": "Personal Details"
+    },
+    "messages": {
+      "success": "Profile updated successfully!",
+      "error": "Update failed. Please try again."
+    },
+    "photo": {
+      "title": "Profile Photo",
+      "subtitle": "PNG, JPG or WEBP. Max file size 5MB."
+    },
+    "form": {
+      "fullName": "Full Name",
+      "phoneNumber": "Phone Number",
+      "emailAddress": "Email Address",
+      "cannotChange": "(Cannot be changed)",
+      "saving": "Saving Changes...",
+      "save": "Save Changes"
+    }
+  }
+}

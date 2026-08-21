@@ -1,0 +1,51 @@
+{
+  "notFound": {
+    "title": "This guesthouse is no longer available"
+  },
+  "gallery": {
+    "showAll": "Show all photos"
+  },
+  "share": {
+    "tooltip": "Share this accommodation",
+    "copied": "Link copied!"
+  },
+  "location": {
+    "country": "Tunisia"
+  },
+  "pricing": {
+    "currency": "TND",
+    "perNight": "/ night",
+    "bookNow": "Book now"
+  },
+  "stats": {
+    "maxCapacity": "Max Capacity",
+    "persons": "Persons",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "sdb": "Baths",
+    "minStay": "Min Stay",
+    "nights": "Night(s)"
+  },
+  "sections": {
+    "about": "About the accommodation",
+    "amenities": "Amenities and Features",
+    "video": "Video Tour",
+    "videoUnsupported": "Your browser does not support video playback.",
+    "location": "Location"
+  },
+  "sidebar": {
+    "availability": "Availability",
+    "booked": "Booked",
+    "available": "Available",
+    "hostTitle": "Property Host",
+    "verified": "✓ Verified Host",
+    "contact": "Contact Host",
+    "noInfo": "No host information available."
+  },
+  "similar": {
+    "title": "Similar accommodations",
+    "subtitle": "Discover other selections you might like",
+    "perNight": "per night",
+    "view": "View accommodation"
+  }
+}

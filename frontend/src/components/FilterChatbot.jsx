@@ -359,7 +359,7 @@ const FilterChatbot = () => {
                         key={prop._id}
                         to={`/property/${prop._id}`}
                         onClick={() => setIsOpen(false)}
-                        className="group bg-white rounded-2xl border border-stone-200 p-2.5 flex items-center gap-3 hover:border-gray-900 hover:shadow-md transition-all duration-200 block"
+                        className="group bg-white rounded-2xl border border-stone-200 p-2.5 flex items-center gap-3 hover:border-gray-900 hover:shadow-md transition-all duration-200"
                       >
                         {/* Image Thumbnail */}
                         <div className="w-20 h-20 rounded-xl bg-stone-100 overflow-hidden shrink-0 relative">

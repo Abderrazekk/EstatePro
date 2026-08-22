@@ -48,9 +48,9 @@ const FilterChatbot = () => {
   ];
 
   const getPriceOptions = () => [
-    { label: "150 TND", value: 150 },
-    { label: "300 TND", value: 300 },
-    { label: "500 TND", value: 500 },
+    { label: "150 Euro", value: 150 },
+    { label: "300 Euro", value: 300 },
+    { label: "500 Euro", value: 500 },
     { label: t("options.prices.noLimit"), value: "" },
   ];
 
@@ -287,7 +287,7 @@ const FilterChatbot = () => {
               {filters.maxPrice && (
                 <span className="bg-white border border-stone-200 px-2 py-0.5 rounded-md flex items-center gap-1">
                   <DollarSign className="w-3 h-3 text-stone-400" />{" "}
-                  {t("badges.max")} {filters.maxPrice} TND
+                  {t("badges.max")} {filters.maxPrice} Euro
                 </span>
               )}
             </div>
@@ -363,7 +363,7 @@ const FilterChatbot = () => {
 
                           <div className="mt-2 flex items-center justify-between">
                             <span className="text-xs font-black text-gray-900">
-                              {prop.pricePerNight?.toLocaleString()} TND{" "}
+                              {prop.pricePerNight?.toLocaleString()} Euro{" "}
                               <span className="text-[10px] text-stone-400 font-medium">
                                 {t("card.perNight")}
                               </span>

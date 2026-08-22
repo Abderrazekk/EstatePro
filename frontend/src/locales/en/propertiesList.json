@@ -33,7 +33,7 @@
     "guests": "Guests (min)",
     "bedrooms": "Bedrooms (min)",
     "bathrooms": "Bathrooms (min)",
-    "price": "Price per Night (TND)",
+    "price": "Price per Night (EURO)",
     "min": "Min",
     "max": "Max",
     "amenities": "Included Amenities",

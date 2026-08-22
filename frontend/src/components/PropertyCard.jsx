@@ -69,7 +69,7 @@ const PropertyCard = ({ property, layout = "grid" }) => {
         <div className="absolute bottom-2.5 left-2.5 sm:bottom-4 sm:left-4 z-20">
           <div className="bg-black/90 backdrop-blur-md text-white px-2.5 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-neutral-800 shadow-2xl flex items-baseline gap-1">
             <span className="text-xs sm:text-lg font-black tracking-tight font-sans">
-              {property.pricePerNight?.toLocaleString()} TND
+              {property.pricePerNight?.toLocaleString()} Euro
             </span>
             <span className="text-[8px] sm:text-[10px] font-medium text-neutral-400 uppercase">
               {t("perNight")}

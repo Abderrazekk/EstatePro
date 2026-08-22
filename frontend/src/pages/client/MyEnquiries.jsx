@@ -220,7 +220,7 @@ const MyEnquiries = () => {
                         {enq.totalPrice && (
                           <div className="flex items-center gap-1.5 text-sm sm:text-base font-extrabold text-white">
                             <Receipt className="w-4 h-4 text-stone-400" />
-                            <span>{enq.totalPrice.toLocaleString()} TND</span>
+                            <span>{enq.totalPrice.toLocaleString()} EURO</span>
                           </div>
                         )}
                       </div>

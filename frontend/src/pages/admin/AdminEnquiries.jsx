@@ -457,7 +457,7 @@ const AdminEnquiries = () => {
                     {selectedEnquiry.property?.location ||
                       "Location not specified"}
                   </p>
-                  <div className="flex gap-6 mt-4 text-sm bg-white p-3 rounded-lg border border-gray-100 inline-flex">
+                  <div className="flex gap-6 mt-4 text-sm bg-white p-3 rounded-lg border border-gray-100">
                     <div>
                       <span className="text-gray-400 block text-xs uppercase font-bold tracking-wider mb-1">
                         Check-in

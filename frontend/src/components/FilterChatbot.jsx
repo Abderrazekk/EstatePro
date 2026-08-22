@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import {
@@ -13,11 +13,16 @@ import {
   ArrowRight,
   ExternalLink,
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const CITIES = ["Djerba", "Sidi Bou Said", "Hammamet", "Tozeur", "Tunis"];
 
 const FilterChatbot = () => {
   const { t } = useTranslation("filterChatbot");
+  const { user } = useAuth();
+  const location = useLocation();
+
+  // ALL HOOKS MUST BE DECLARED FIRST
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -215,6 +220,13 @@ const FilterChatbot = () => {
       },
     ]);
   };
+
+  // --- THE FIX: EARLY RETURN PLACED AFTER ALL HOOKS ---
+  // If user is an admin OR they are browsing an /admin route, don't render anything.
+  if (user?.role === "admin" || location.pathname.startsWith("/admin")) {
+    return null;
+  }
+  // ----------------------------------------------------
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end selection:bg-stone-200">

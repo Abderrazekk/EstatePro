@@ -1,0 +1,50 @@
+{
+  "toggleButton": "Trova un Alloggio",
+  "header": {
+    "title": "Assistente Residence",
+    "status": "Online • Filtro Intelligente",
+    "resetTooltip": "Reimposta"
+  },
+  "steps": {
+    "greeting": "Ciao! 🌿 Sono il tuo assistente virtuale. Ti aiuterò a trovare la pensione ideale in Tunisia.",
+    "askLocation": "Per iniziare, quale destinazione preferisci?",
+    "askType": "Ottima scelta per {{location}}! Che stile di alloggio cerchi?",
+    "askGuests": "Quante persone soggiorneranno?",
+    "askMaxPrice": "Qual è il tuo budget massimo a notte?",
+    "resetGreeting": "Ricerca azzerata! Quale destinazione preferisci?"
+  },
+  "options": {
+    "types": {
+      "guesthouse": "Pensione / Maison d'Hôte",
+      "traditionalDar": "Dar Tradizionale",
+      "charmingVilla": "Villa di Charme",
+      "ruralCottage": "Agriturismo / Gîte"
+    },
+    "guests": {
+      "g1_2": "1-2 Ospiti",
+      "g3_5": "3-5 Ospiti",
+      "g6_plus": "6+ Ospiti"
+    },
+    "prices": {
+      "noLimit": "Nessun limite"
+    }
+  },
+  "search": {
+    "searching": "Ricerca delle migliori pensioni disponibili...",
+    "resultsFound": "Ecco {{count}} struttura/e trovata/e in base ai tuoi criteri:",
+    "noResults": "Spiacenti, nessuna pensione corrisponde esattamente a questi criteri. Prova a reimpostare la ricerca o a cambiare città!",
+    "error": "Si è verificato un errore durante la ricerca. Riprova."
+  },
+  "card": {
+    "noImage": "Nessuna Immagine",
+    "perNight": "/ notte",
+    "view": "Vedi"
+  },
+  "input": {
+    "placeholder": "Es: Casa con piscina a Djerba...",
+    "loading": "Ricerca in corso..."
+  },
+  "badges": {
+    "max": "Max"
+  }
+}

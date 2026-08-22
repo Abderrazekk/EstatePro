@@ -1,0 +1,100 @@
+{
+  "amenities": {
+    "comfort": {
+      "title": "Comfort & Electronics",
+      "wifi": "High-Speed Wi-Fi (Fiber)",
+      "airCon": "Air Conditioning",
+      "heating": "Central Heating",
+      "fireplace": "Fireplace / Wood Stove",
+      "smartTv": "Smart TV (Netflix / Satellite)",
+      "workspace": "Workspace / Desk",
+      "hairdryer": "Hairdryer",
+      "linens": "Linens & Towels",
+      "laundry": "Washing Machine / Dryer"
+    },
+    "pool": {
+      "title": "Pool, Spa & Wellness",
+      "outdoorPool": "Outdoor Pool",
+      "heatedPool": "Heated / Indoor Pool",
+      "privatePool": "Private Secluded Pool",
+      "hammam": "Traditional Hammam",
+      "jacuzzi": "Jacuzzi / Spa",
+      "massage": "Massages & Treatments",
+      "sunloungers": "Sun Loungers & Umbrellas"
+    },
+    "dining": {
+      "title": "Dining & Kitchen",
+      "breakfast": "Breakfast Included",
+      "tableDhôte": "Guesthouse Dining (Upon Request)",
+      "kitchen": "Fully Equipped Kitchen",
+      "coffeeMachine": "Coffee Machine / Nespresso",
+      "bbq": "Barbecue / Grill",
+      "courtesyTray": "Courtesy Tray (Tea & Coffee)",
+      "fridge": "Refrigerator / Freezer"
+    },
+    "vip": {
+      "title": "VIP Services & Events",
+      "privateChef": "Private Chef at Home",
+      "butler": "Butler Service",
+      "dailyHousekeeping": "Daily Housekeeping",
+      "airportShuttle": "Airport Transfer / VIP Shuttle",
+      "babysitting": "Childcare / Babysitting",
+      "security": "24/7 Security",
+      "events": "Private Event / Wedding Rental"
+    },
+    "outdoor": {
+      "title": "Activities & Outdoor",
+      "cookingWorkshop": "Traditional Cooking Workshop",
+      "openAirCinema": "Open-Air Cinema",
+      "yoga": "Yoga & Meditation Space",
+      "excursions": "Quad / Buggy Excursions",
+      "horseRiding": "Horse / Camel Riding",
+      "paddle": "Paddle / Kayak Gear",
+      "telescope": "Telescope for Stargazing"
+    },
+    "eco": {
+      "title": "Eco-Responsibility",
+      "evCharger": "EV Charging Station",
+      "solarPanels": "Solar Panels",
+      "organicGarden": "Organic Pick-Your-Own Garden",
+      "ecoToiletries": "Eco-Friendly Toiletries"
+    }
+  },
+  "features": {
+    "style": {
+      "title": "Style & Architecture",
+      "traditionalDar": "Traditional Dar",
+      "centralPatio": "Central Patio with Fountain",
+      "vaults": "Skifa & Traditional Vaults",
+      "crafts": "Tunisian Handcrafted Decor",
+      "tiles": "Handmade Zellige & Tilework",
+      "cave": "Troglodyte Architecture",
+      "menzel": "Djerbian Menzel / Houch"
+    },
+    "views": {
+      "title": "Views & Location",
+      "seaView": "Panoramic Sea View",
+      "medinaView": "Medina View",
+      "oasisView": "Palm Grove / Oasis View",
+      "mountainView": "Mountain View",
+      "beachAccess": "Direct Beach Access",
+      "medinaHeart": "Located in the Heart of the Medina",
+      "nature": "Surrounded by Nature / Countryside"
+    },
+    "outdoorSpaces": {
+      "title": "Outdoor Spaces",
+      "rooftop": "Rooftop Terrace",
+      "garden": "Landscaped Garden / Orchard",
+      "innerCourtyard": "Shaded Inner Courtyard",
+      "firePit": "Outdoor Fire Pit",
+      "solarium": "Solarium"
+    },
+    "ambiance": {
+      "title": "Ambiance & Concept",
+      "tranquility": "Absolute Peace & Privacy",
+      "romantic": "Romantic Setting",
+      "fullPrivatization": "Entirely Private",
+      "yogaRetreats": "Suitable for Yoga Retreats"
+    }
+  }
+}

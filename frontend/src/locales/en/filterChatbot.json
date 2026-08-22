@@ -1,0 +1,50 @@
+{
+  "toggleButton": "Find a Stay",
+  "header": {
+    "title": "Residence Assistant",
+    "status": "Online • Smart Filter",
+    "resetTooltip": "Reset"
+  },
+  "steps": {
+    "greeting": "Hello! 🌿 I am your virtual assistant. I will help you find the ideal guesthouse in Tunisia.",
+    "askLocation": "To start, which destination do you prefer?",
+    "askType": "Great choice for {{location}}! What style of accommodation are you looking for?",
+    "askGuests": "How many guests will be staying?",
+    "askMaxPrice": "What is your maximum budget per night?",
+    "resetGreeting": "Search reset! Which destination do you prefer?"
+  },
+  "options": {
+    "types": {
+      "guesthouse": "Guesthouse",
+      "traditionalDar": "Traditional Dar",
+      "charmingVilla": "Charming Villa",
+      "ruralCottage": "Rural Cottage"
+    },
+    "guests": {
+      "g1_2": "1-2 Guests",
+      "g3_5": "3-5 Guests",
+      "g6_plus": "6+ Guests"
+    },
+    "prices": {
+      "noLimit": "No Limit"
+    }
+  },
+  "search": {
+    "searching": "Searching for the best available guesthouses...",
+    "resultsFound": "Here are {{count}} residence(s) found based on your criteria:",
+    "noResults": "Sorry, no guesthouses match these exact criteria. Try resetting the search or changing city!",
+    "error": "An error occurred during search. Please try again."
+  },
+  "card": {
+    "noImage": "No Image",
+    "perNight": "/ night",
+    "view": "View"
+  },
+  "input": {
+    "placeholder": "Ex: House with pool in Djerba...",
+    "loading": "Searching..."
+  },
+  "badges": {
+    "max": "Max"
+  }
+}

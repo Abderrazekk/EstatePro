@@ -16,6 +16,8 @@ import authPagesEn from "./locales/en/authPages.json";
 import supportPagesEn from "./locales/en/supportPages.json";
 import propertyDetailEn from "./locales/en/propertyDetail.json";
 import contactAgentModalEn from "./locales/en/contactAgentModal.json";
+import filterChatbotEn from "./locales/en/filterChatbot.json";
+import propertyOptionsEn from "./locales/en/propertyOptions.json";
 
 // Italian Translations
 import navbarIt from "./locales/it/navbar.json";
@@ -31,6 +33,8 @@ import authPagesIt from "./locales/it/authPages.json";
 import supportPagesIt from "./locales/it/supportPages.json";
 import propertyDetailIt from "./locales/it/propertyDetail.json";
 import contactAgentModalIt from "./locales/it/contactAgentModal.json";
+import filterChatbotIt from "./locales/it/filterChatbot.json";
+import propertyOptionsIt from "./locales/it/propertyOptions.json";
 
 i18n
   .use(LanguageDetector)
@@ -51,6 +55,8 @@ i18n
         supportPages: supportPagesEn,
         propertyDetail: propertyDetailEn,
         contactAgentModal: contactAgentModalEn,
+        filterChatbot: filterChatbotEn,
+        propertyOptions: propertyOptionsEn,
       },
       it: {
         navbar: navbarIt,
@@ -66,12 +72,14 @@ i18n
         supportPages: supportPagesIt,
         propertyDetail: propertyDetailIt,
         contactAgentModal: contactAgentModalIt,
+        filterChatbot: filterChatbotIt,
+        propertyOptions: propertyOptionsIt,
       },
     },
     fallbackLng: "en",
     defaultNS: "navbar",
     interpolation: {
-      escapeValue: false, // React already escapes values by default
+      escapeValue: false, // React escapes values by default
     },
     detection: {
       order: ["localStorage", "navigator"],

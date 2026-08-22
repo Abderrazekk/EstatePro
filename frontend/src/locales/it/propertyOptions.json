@@ -1,0 +1,100 @@
+{
+  "amenities": {
+    "comfort": {
+      "title": "Comfort ed Elettronica",
+      "wifi": "Wi-Fi ad Alta Velocità (Fibra)",
+      "airCon": "Aria Condizionata Reversibile",
+      "heating": "Riscaldamento Centralizzato",
+      "fireplace": "Camino / Stufa a Legna",
+      "smartTv": "Smart TV (Netflix / Satellite)",
+      "workspace": "Spazio di Lavoro / Scrivania",
+      "hairdryer": "Asciugacapelli",
+      "linens": "Biancheria da Casa e Asciugamani",
+      "laundry": "Lavatrice / Asciugatrice"
+    },
+    "pool": {
+      "title": "Piscina, Spa e Benessere",
+      "outdoorPool": "Piscina All'Aperto",
+      "heatedPool": "Piscina Riscaldata / Coperta",
+      "privatePool": "Piscina Privata Senza Vista",
+      "hammam": "Hammam Tradizionale",
+      "jacuzzi": "Idromassaggio / Spa",
+      "massage": "Massaggi e Trattamenti",
+      "sunloungers": "Lettini e Ombrelloni"
+    },
+    "dining": {
+      "title": "Ristorazione e Cucina",
+      "breakfast": "Colazione Inclusa",
+      "tableDhôte": "Cena su Ordinazione",
+      "kitchen": "Cucina Attrezzata a Disposizione",
+      "coffeeMachine": "Macchina da Caffè / Nespresso",
+      "bbq": "Barbecue / Griglia",
+      "courtesyTray": "Vassoio di Benvenuto (Tè e Caffè)",
+      "fridge": "Frigorifero / Congelatore"
+    },
+    "vip": {
+      "title": "Servizi VIP ed Eventi",
+      "privateChef": "Chef Privato a Domicilio",
+      "butler": "Servizio Maggiordomo",
+      "dailyHousekeeping": "Pulizia Giornaliera",
+      "airportShuttle": "Navetta Aeroporto / VIP",
+      "babysitting": "Servizio Babysitter",
+      "security": "Sorveglianza 24/7",
+      "events": "Privatizzazione Eventi / Matrimoni"
+    },
+    "outdoor": {
+      "title": "Attività e All'Aperto",
+      "cookingWorkshop": "Laboratorio di Cucina Tradizionale",
+      "openAirCinema": "Cinema all'Aperto",
+      "yoga": "Spazio Yoga e Meditazione",
+      "excursions": "Escursioni in Quad / Buggy",
+      "horseRiding": "Passeggiate a Cavallo / Cammello",
+      "paddle": "Attrezzatura Paddle / Kayak",
+      "telescope": "Telescopio per Osservazione Stelle"
+    },
+    "eco": {
+      "title": "Eco-Responsabilità",
+      "evCharger": "Stazione di Ricarica Elettrica",
+      "solarPanels": "Pannelli Solari",
+      "organicGarden": "Orto Biologico a Libera Raccolta",
+      "ecoToiletries": "Prodotti da Bagno Ecologici"
+    }
+  },
+  "features": {
+    "style": {
+      "title": "Stile e Architettura",
+      "traditionalDar": "Dar Tradizionale",
+      "centralPatio": "Patio Centrale con Fontana",
+      "vaults": "Skifa e Volte Tradizionali",
+      "crafts": "Decorazione Artigianale Tunisina",
+      "tiles": "Zellige e Ceramiche Fatte a Mano",
+      "cave": "Architettura Troglodita",
+      "menzel": "Menzel / Houch di Djerba"
+    },
+    "views": {
+      "title": "Viste e Posizione",
+      "seaView": "Vista Panoramica sul Mare",
+      "medinaView": "Vista sulla Medina",
+      "oasisView": "Vista sul Palmeto / Oasi",
+      "mountainView": "Vista sulla Montagna",
+      "beachAccess": "Accesso Diretto alla Spiaggia",
+      "medinaHeart": "Nel Cuore della Medina",
+      "nature": "Immerso nella Natura / Campagna"
+    },
+    "outdoorSpaces": {
+      "title": "Spazi Esterni",
+      "rooftop": "Terrazza Panoramica (Roof-top)",
+      "garden": "Giardino Alberato / Frutteto",
+      "innerCourtyard": "Cortile Interno Ombreggiato",
+      "firePit": "Braciere Esterno",
+      "solarium": "Solarium"
+    },
+    "ambiance": {
+      "title": "Atmosfera e Concept",
+      "tranquility": "Calma Assoluta e Privacy",
+      "romantic": "Ambiente Romantico",
+      "fullPrivatization": "Completamente Privatizzabile",
+      "yogaRetreats": "Adatto per Ritiri di Yoga"
+    }
+  }
+}

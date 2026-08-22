@@ -1,0 +1,32 @@
+{
+  "errors": {
+    "selectDates": "Please select your check-in and check-out dates.",
+    "invalidDates": "Check-out date must be after check-in date.",
+    "missingPhone": "Please provide a phone number.",
+    "submitFail": "Failed to send booking request."
+  },
+  "title": {
+    "success": "Request Sent",
+    "book": "Book your stay"
+  },
+  "success": {
+    "heading": "All set!",
+    "message": "Your booking request has been sent successfully.",
+    "close": "Close"
+  },
+  "form": {
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "addDate": "Add date",
+    "phone": "Phone number",
+    "messageLabel": "Message to host",
+    "messagePlaceholder": "Hello, I would like to book your guesthouse...",
+    "days": "days",
+    "selectDatesText": "Select your dates",
+    "submitting": "Sending...",
+    "confirm": "Confirm request"
+  },
+  "pricing": {
+    "currency": "TND"
+  }
+}

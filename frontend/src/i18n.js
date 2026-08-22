@@ -15,6 +15,7 @@ import userPagesEn from "./locales/en/userPages.json";
 import authPagesEn from "./locales/en/authPages.json";
 import supportPagesEn from "./locales/en/supportPages.json";
 import propertyDetailEn from "./locales/en/propertyDetail.json";
+import contactAgentModalEn from "./locales/en/contactAgentModal.json";
 
 // Italian Translations
 import navbarIt from "./locales/it/navbar.json";
@@ -29,6 +30,7 @@ import userPagesIt from "./locales/it/userPages.json";
 import authPagesIt from "./locales/it/authPages.json";
 import supportPagesIt from "./locales/it/supportPages.json";
 import propertyDetailIt from "./locales/it/propertyDetail.json";
+import contactAgentModalIt from "./locales/it/contactAgentModal.json";
 
 i18n
   .use(LanguageDetector)
@@ -48,6 +50,7 @@ i18n
         authPages: authPagesEn,
         supportPages: supportPagesEn,
         propertyDetail: propertyDetailEn,
+        contactAgentModal: contactAgentModalEn,
       },
       it: {
         navbar: navbarIt,
@@ -62,6 +65,7 @@ i18n
         authPages: authPagesIt,
         supportPages: supportPagesIt,
         propertyDetail: propertyDetailIt,
+        contactAgentModal: contactAgentModalIt,
       },
     },
     fallbackLng: "en",

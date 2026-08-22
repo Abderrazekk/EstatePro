@@ -1,0 +1,32 @@
+{
+  "errors": {
+    "selectDates": "Si prega di selezionare le date di arrivo e partenza.",
+    "invalidDates": "La data di partenza deve essere successiva a quella di arrivo.",
+    "missingPhone": "Si prega di fornire un numero di telefono.",
+    "submitFail": "Impossibile inviare la richiesta di prenotazione."
+  },
+  "title": {
+    "success": "Richiesta Inviata",
+    "book": "Prenota il tuo soggiorno"
+  },
+  "success": {
+    "heading": "Tutto pronto!",
+    "message": "La tua richiesta di prenotazione è stata inviata con successo.",
+    "close": "Chiudi"
+  },
+  "form": {
+    "checkIn": "Arrivo",
+    "checkOut": "Partenza",
+    "addDate": "Aggiungi data",
+    "phone": "Numero di telefono",
+    "messageLabel": "Messaggio per l'host",
+    "messagePlaceholder": "Salve, vorrei prenotare la vostra pensione...",
+    "days": "giorni",
+    "selectDatesText": "Seleziona le tue date",
+    "submitting": "Invio in corso...",
+    "confirm": "Conferma richiesta"
+  },
+  "pricing": {
+    "currency": "TND"
+  }
+}

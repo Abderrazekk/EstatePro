@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// NEW: Import the Phone icon from lucide-react
+import { useTranslation } from "react-i18next";
 import { X, Calendar as CalendarIcon, CheckCircle2, Phone } from "lucide-react";
 
 const ContactAgentModal = ({
@@ -11,8 +11,9 @@ const ContactAgentModal = ({
   bookedDates,
   onClose,
 }) => {
+  const { t } = useTranslation("contactAgentModal");
   const [message, setMessage] = useState("");
-  const [phone, setPhone] = useState(""); // NEW: State for phone number
+  const [phone, setPhone] = useState("");
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -21,7 +22,6 @@ const ContactAgentModal = ({
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Calculate total price dynamically
   useEffect(() => {
     if (checkIn && checkOut) {
       const start = new Date(checkIn);
@@ -44,20 +44,15 @@ const ContactAgentModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!checkIn || !checkOut) {
-      return setError(
-        "Veuillez sélectionner vos dates d'arrivée et de départ.",
-      );
+      return setError(t("errors.selectDates"));
     }
 
     if (new Date(checkIn) > new Date(checkOut)) {
-      return setError(
-        "La date de départ doit être ultérieure à la date d'arrivée.",
-      );
+      return setError(t("errors.invalidDates"));
     }
 
-    // NEW: Validation for phone number
     if (!phone.trim()) {
-      return setError("Veuillez fournir un numéro de téléphone.");
+      return setError(t("errors.missingPhone"));
     }
 
     setIsSubmitting(true);
@@ -73,17 +68,14 @@ const ContactAgentModal = ({
       await axios.post("/api/enquiries", {
         propertyId,
         message,
-        phone, // NEW: Include phone in the API payload
+        phone,
         checkIn: submitCheckIn,
         checkOut: submitCheckOut,
         totalPrice,
       });
       setSubmitted(true);
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "Échec de l'envoi de la demande de réservation.",
-      );
+      setError(err.response?.data?.message || t("errors.submitFail"));
     } finally {
       setIsSubmitting(false);
     }
@@ -91,7 +83,6 @@ const ContactAgentModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      {/* Retain all your existing style tags here */}
       <style>{`
         .modal-datepicker-popper { z-index: 100 !important; }
         .modal-datepicker-popper .react-datepicker { font-family: inherit; border: 1px solid #F3F4F6; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); padding: 1rem; background-color: #ffffff; }
@@ -115,7 +106,7 @@ const ContactAgentModal = ({
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg relative overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
           <h2 className="text-xl font-bold text-gray-900">
-            {submitted ? "Demande Envoyée" : "Réserver votre séjour"}
+            {submitted ? t("title.success") : t("title.book")}
           </h2>
           <button
             onClick={onClose}
@@ -128,7 +119,6 @@ const ContactAgentModal = ({
         <div className="p-6">
           {submitted ? (
             <div className="text-center py-8">
-              {/* Retain success message UI */}
               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle2
                   size={32}
@@ -137,16 +127,16 @@ const ContactAgentModal = ({
                 />
               </div>
               <h3 className="text-lg font-bold text-gray-900 mb-2">
-                C'est noté !
+                {t("success.heading")}
               </h3>
               <p className="text-gray-500 text-sm mb-6">
-                Votre demande de réservation a été envoyée avec succès.
+                {t("success.message")}
               </p>
               <button
                 onClick={onClose}
                 className="w-full bg-gray-900 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
               >
-                Fermer
+                {t("success.close")}
               </button>
             </div>
           ) : (
@@ -157,11 +147,10 @@ const ContactAgentModal = ({
                 </div>
               )}
 
-              {/* Retain dates container UI */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus-within:border-gray-900 focus-within:ring-1 focus-within:ring-gray-900 transition-all cursor-text relative">
                   <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">
-                    Arrivée
+                    {t("form.checkIn")}
                   </label>
                   <div className="flex items-center gap-2">
                     <CalendarIcon size={16} className="text-gray-400" />
@@ -174,7 +163,7 @@ const ContactAgentModal = ({
                       minDate={new Date()}
                       excludeDateIntervals={bookedDates}
                       className="modal-calendar-input"
-                      placeholderText="Ajouter une date"
+                      placeholderText={t("form.addDate")}
                       dateFormat="dd/MM/yyyy"
                       popperClassName="modal-datepicker-popper"
                       required
@@ -184,7 +173,7 @@ const ContactAgentModal = ({
 
                 <div className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus-within:border-gray-900 focus-within:ring-1 focus-within:ring-gray-900 transition-all cursor-text relative">
                   <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">
-                    Départ
+                    {t("form.checkOut")}
                   </label>
                   <div className="flex items-center gap-2">
                     <CalendarIcon size={16} className="text-gray-400" />
@@ -197,7 +186,7 @@ const ContactAgentModal = ({
                       minDate={checkIn || new Date()}
                       excludeDateIntervals={bookedDates}
                       className="modal-calendar-input"
-                      placeholderText="Ajouter une date"
+                      placeholderText={t("form.addDate")}
                       dateFormat="dd/MM/yyyy"
                       popperClassName="modal-datepicker-popper"
                       required
@@ -206,10 +195,9 @@ const ContactAgentModal = ({
                 </div>
               </div>
 
-              {/* NEW: Phone Number Input UI */}
               <div>
                 <label className="block text-sm font-bold text-gray-900 mb-2">
-                  Numéro de téléphone
+                  {t("form.phone")}
                 </label>
                 <div className="relative">
                   <Phone
@@ -227,10 +215,9 @@ const ContactAgentModal = ({
                 </div>
               </div>
 
-              {/* Retain message input UI */}
               <div>
                 <label className="block text-sm font-bold text-gray-900 mb-2">
-                  Message pour l'hôte
+                  {t("form.messageLabel")}
                 </label>
                 <textarea
                   rows="3"
@@ -238,31 +225,32 @@ const ContactAgentModal = ({
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
-                  placeholder="Bonjour, je souhaiterais réserver votre maison d'hôte..."
+                  placeholder={t("form.messagePlaceholder")}
                 />
               </div>
 
-              {/* Retain Price and Submit button UI */}
               {totalPrice > 0 ? (
                 <div className="py-4 border-t border-b border-gray-100 flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-600 underline decoration-gray-300 underline-offset-4">
-                    {pricePerNight} TND x{" "}
+                    {pricePerNight} {t("pricing.currency")} x{" "}
                     {Math.ceil(
                       (checkOut.getTime() - checkIn.getTime()) /
                         (1000 * 60 * 60 * 24),
                     ) + 1}{" "}
-                    jours
+                    {t("form.days")}
                   </span>
                   <span className="text-lg font-bold text-gray-900">
-                    {totalPrice.toLocaleString()} TND
+                    {totalPrice.toLocaleString()} {t("pricing.currency")}
                   </span>
                 </div>
               ) : (
                 <div className="py-4 border-t border-b border-gray-100 flex items-center justify-between opacity-50 grayscale">
                   <span className="text-sm font-medium text-gray-500">
-                    Sélectionnez vos dates
+                    {t("form.selectDatesText")}
                   </span>
-                  <span className="text-lg font-bold text-gray-400">0 TND</span>
+                  <span className="text-lg font-bold text-gray-400">
+                    0 {t("pricing.currency")}
+                  </span>
                 </div>
               )}
 
@@ -271,7 +259,7 @@ const ContactAgentModal = ({
                 disabled={isSubmitting}
                 className="w-full bg-gray-900 text-white py-3.5 rounded-xl font-semibold hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2 mt-2"
               >
-                {isSubmitting ? "Envoi en cours..." : "Confirmer la demande"}
+                {isSubmitting ? t("form.submitting") : t("form.confirm")}
               </button>
             </form>
           )}

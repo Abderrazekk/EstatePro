@@ -618,12 +618,11 @@ const PropertyDetail = () => {
               </p>
             </Section>
 
-            {/* PROFESSIONAL DYNAMIC AMENITIES & FEATURES SECTION WITH ICONS */}
+            {/* AMENITIES & FEATURES SECTION */}
             {(property.amenities?.length > 0 ||
               property.features?.length > 0) && (
               <Section title={t("sections.amenities")}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                  {/* Amenities List with Specific Icons */}
                   {property.amenities?.map((amenity, index) => {
                     const IconComponent = getOptionIcon(amenity);
                     return (
@@ -641,7 +640,6 @@ const PropertyDetail = () => {
                     );
                   })}
 
-                  {/* Features List with Specific Icons */}
                   {property.features?.map((feature, index) => {
                     const IconComponent = getOptionIcon(feature);
                     return (
@@ -678,8 +676,9 @@ const PropertyDetail = () => {
               </Section>
             )}
 
+            {/* Map Section - Increased height here from h-80 to h-[500px] */}
             <Section title={t("sections.location")}>
-              <div className="relative z-0 isolate rounded-2xl overflow-hidden border border-gray-100 shadow-sm h-80">
+              <div className="relative z-0 isolate rounded-2xl overflow-hidden border border-gray-100 shadow-sm h-[500px]">
                 <PropertyMap
                   lat={property.coordinates?.lat}
                   lng={property.coordinates?.lng}

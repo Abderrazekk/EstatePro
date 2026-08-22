@@ -163,7 +163,7 @@ const AdminDashboard = () => {
             </div>
             <p className="text-3xl font-black tracking-tight mt-4 text-white">
               {stats?.periodRevenue ? stats.periodRevenue.toLocaleString() : 0}{" "}
-              <span className="text-sm text-stone-400 font-bold">TND</span>
+              <span className="text-sm text-stone-400 font-bold">Euro</span>
             </p>
           </div>
           <div className="mt-6 pt-4 border-t border-stone-800/80 flex items-center justify-between text-xs text-stone-400">
@@ -172,7 +172,7 @@ const AdminDashboard = () => {
               {stats?.allTimeRevenue
                 ? stats.allTimeRevenue.toLocaleString()
                 : 0}{" "}
-              TND
+              Euro
             </span>
           </div>
         </div>
@@ -487,7 +487,7 @@ const AdminDashboard = () => {
                       </td>
                       <td className="p-4 text-right font-black text-stone-900">
                         {enq.totalPrice ? enq.totalPrice.toLocaleString() : 0}{" "}
-                        TND
+                        Euro
                       </td>
                     </tr>
                   ))}
@@ -551,7 +551,7 @@ const AdminDashboard = () => {
                         {prop.views || 0}
                       </p>
                       <span className="text-[10px] font-bold text-stone-500">
-                        {prop.pricePerNight} TND / night
+                        {prop.pricePerNight} Euro / night
                       </span>
                     </div>
                   </div>

@@ -282,7 +282,7 @@ const ManageProperties = () => {
             {/* Price Range */}
             <div>
               <label className="block text-[11px] font-bold text-stone-600 uppercase tracking-wider mb-1.5">
-                Price Range / Night (TND)
+                Price Range / Night (Euro)
               </label>
               <div className="flex items-center gap-2">
                 <input
@@ -407,7 +407,7 @@ const ManageProperties = () => {
               {(filters.minPrice || filters.maxPrice) && (
                 <span className="inline-flex items-center gap-1 bg-stone-100 border border-stone-200 px-2.5 py-1 rounded-full text-stone-800 font-medium">
                   Price: {filters.minPrice || "0"} - {filters.maxPrice || "∞"}{" "}
-                  TND
+                  Euro
                   <X
                     className="w-3 h-3 text-stone-500 cursor-pointer hover:text-stone-900"
                     onClick={() => {
@@ -583,7 +583,7 @@ const ManageProperties = () => {
 
                       {/* Price */}
                       <td className="py-4 px-6 font-bold text-stone-900 whitespace-nowrap">
-                        {displayPrice.toLocaleString()} TND
+                        {displayPrice.toLocaleString()} Euro
                         <span className="text-xs text-stone-400 font-normal ml-0.5">
                           / night
                         </span>

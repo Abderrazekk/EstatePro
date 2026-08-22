@@ -306,7 +306,7 @@ const AdminEnquiries = () => {
                       </span>
                     </p>
                     <p className="text-blue-600 font-bold mt-1 text-sm bg-blue-50 inline-block px-2 py-0.5 rounded">
-                      {enq.totalPrice ? enq.totalPrice.toLocaleString() : 0} TND
+                      {enq.totalPrice ? enq.totalPrice.toLocaleString() : 0} Euro
                     </p>
                   </td>
                   <td className="p-4">
@@ -482,7 +482,7 @@ const AdminEnquiries = () => {
                     {selectedEnquiry.totalPrice
                       ? selectedEnquiry.totalPrice.toLocaleString()
                       : 0}{" "}
-                    TND
+                    Euro
                   </p>
                 </div>
               </div>
